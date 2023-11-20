@@ -168,7 +168,7 @@ public class RobotDrive {
         }
     }
 
-    public void driveFullyFieldCentric(double xSpeeds, double ySpeeds, Rotation2d targetAngle) {
+    public void driveAngleFieldCentric(double xSpeeds, double ySpeeds, Rotation2d targetAngle) {
         var currentAngle = m_pigeon2.getRotation2d();
         double rotationalSpeed =
                 m_turnPid.calculate(currentAngle.getRadians(), targetAngle.getRadians());

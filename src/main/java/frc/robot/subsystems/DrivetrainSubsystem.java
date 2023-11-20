@@ -19,6 +19,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public RobotDrive m_robotDrive;
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
+    // TODO: Calibrate the PID values
     SwerveDriveTrainConstants drivetrain = new SwerveDriveTrainConstants().withPigeon2Id(1).withCANbusName("CANFD1")
         .withTurnKp(5);
     Slot0Configs steerGains = new Slot0Configs();
@@ -36,6 +37,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         false // CANcoder not reversed from the steer motor. For WCP Swerve X this should be
               // true.
     );
+    // TODO: fix the distances for the correct size of chassis. Calibrate offsets for CANCoders. Get all CAN IDs correct. 
+    // TODO: Get rid of Units and stay in metrix.
     /**
      * Note: WPI's coordinate system is X forward, Y to the left so make sure all locations are with
      * respect to this coordinate system
@@ -52,15 +55,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
     m_robotDrive = new RobotDrive(drivetrain, frontLeft, frontRight, back);
 
   }
+  
   public void driveStopMotion(){
     m_robotDrive.driveStopMotion();
   }
-  public void driveFullyFieldCentric(double _x, double _y, Rotation2d _lastTargetAngle){
-    m_robotDrive.driveFullyFieldCentric(_x, _y, _lastTargetAngle);
+  public void driveRobotCentric(ChassisSpeeds _speeds){
+    m_robotDrive.driveRobotCentric(_speeds);
   }
   public void driveFieldCentric(ChassisSpeeds _speeds){
     m_robotDrive.driveFieldCentric(_speeds);
   }
+  public void driveAngleFieldCentric(double _x, double _y, Rotation2d _lastTargetAngle){
+    m_robotDrive.driveAngleFieldCentric(_x, _y, _lastTargetAngle);
+  }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
