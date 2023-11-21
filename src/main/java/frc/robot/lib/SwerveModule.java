@@ -14,7 +14,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
+
 
 public class SwerveModule {
     private TalonFX m_driveMotor;
@@ -80,7 +80,7 @@ public class SwerveModule {
 
         /* Calculate the ratio of drive motor rotation to meter on ground */
         double rotationsPerWheelRotation = constants.DriveMotorGearRatio;
-        double metersPerWheelRotation = 2 * Math.PI * Units.inchesToMeters(constants.WheelRadius);
+        double metersPerWheelRotation = Math.PI * constants.WheelDiameter;
         m_driveRotationsPerMeter = rotationsPerWheelRotation / metersPerWheelRotation;
     }
 

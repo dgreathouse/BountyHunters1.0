@@ -17,17 +17,37 @@ public final class k {
     public static final int kDriverControllerPort = 0;
   }
   public static class DRIVE {
-    public static final String DriveMode = "DriveMode";
-    public static final double DriveGearRatio = 7.85;
-    public static final double WheelDiameter_m = .10287;
+    public static final String T_DriveMode = "DriveMode";
+    private static final double DriveMotorPinionTeeth = 10.0;
+    private static final double DriveGear1Teeth = 34.0;
+    private static final double DriveGear2DriveTeeth = 26.0;
+    private static final double DriveGear2DrivenTeeth = 20.0;
+    private static final double DriveGearBevelDriveTeeth = 15.0 ;
+    private static final double DriveGearBevelDrivenTeeth = 45.0;
+
+    public static final double DriveGearRatio = (DriveGear1Teeth/DriveMotorPinionTeeth) * (DriveGear2DrivenTeeth / DriveGear2DriveTeeth) * (DriveGearBevelDrivenTeeth / DriveGearBevelDriveTeeth);
+    public static final double WheelDiameter_m = 0.10287;
     public static final double WheelCircumference = Math.PI * WheelDiameter_m;
-    public static final double DriveMotorMaxVelocity_RotPerMin = 6380.0;
-    public static final double DriveMotorMaxVelocity_RotPerSec = DriveMotorMaxVelocity_RotPerMin / 60.0;
-    public static final double DriveWheelMaxVelocity_RotPerSec = DriveMotorMaxVelocity_RotPerSec / DriveGearRatio;
-    public static final double MotorPeakEfficiency_Percent = 85;
-    public static final double DriveMaxVelocity_MpS = WheelCircumference * DriveWheelMaxVelocity_RotPerSec;
+    private static final double DriveMotorMaxVelocity_RotPerMin = 6380.0;
+    private static final double DriveMotorMaxVelocity_RotPerSec = DriveMotorMaxVelocity_RotPerMin / 60.0;
+    private static final double DriveWheelMaxVelocity_RotPerSec = DriveMotorMaxVelocity_RotPerSec / DriveGearRatio;
+    private static final double MotorPeakEfficiency_Percent = 85.0;
+    public static final double DriveMaxVelocity_MpSec = WheelCircumference * DriveWheelMaxVelocity_RotPerSec * MotorPeakEfficiency_Percent / 100.0;
 
     public static final double WheelBaseY_m = 0.47738;
     public static final double WheelBaseX_m = 0.47851;
+    private static final double WheelBaseXYAvg_m = (WheelBaseY_m + WheelBaseX_m)/2.0;
+    private static final double WheelBaseCircumference_m = Math.PI * WheelBaseXYAvg_m;
+    private static final double WheelBase_MPerRad = WheelBaseCircumference_m/(2* Math.PI);
+    public static final double DriveMaxAngularVelocity_RadPerSec = DriveMaxVelocity_MpSec * (1/WheelBase_MPerRad);
+
+    private static final double SteerMotorPinionTeeth = 8.0;
+    private static final double SteerMotorDrivenGearTeeth = 24.0;
+    private static final double SteerGear1DriveTeeth = 14.0;
+    private static final double SteerGear1DrivenTeeth = 72.0;
+    private static final double SteerCANCoderGearRatio = 1.0;
+    public static final double SteerGearRatio = 1/((SteerMotorPinionTeeth/SteerMotorDrivenGearTeeth)*(SteerGear1DriveTeeth/SteerGear1DrivenTeeth));
+    public static final double SteerGearRatioToCANCoder = SteerGearRatio * SteerCANCoderGearRatio;
+
   }
 }

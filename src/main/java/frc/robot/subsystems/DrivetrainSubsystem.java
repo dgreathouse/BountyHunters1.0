@@ -8,6 +8,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,13 +34,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
     steerGains.kD = 0.2;
     driveGains.kP = 1;
     SwerveDriveConstantsCreator m_constantsCreator = new SwerveDriveConstantsCreator(
-        10, // 10:1 ratio for the drive motor
-        12.8, // 12.8:1 ratio for the steer motor
-        3, // 3 inch radius for the wheels
-        17, // Only apply 17 stator amps to prevent slip
+        k.DRIVE.DriveGearRatio, //  ratio for the drive motor
+        k.DRIVE.SteerGearRatioToCANCoder, // ratio for the steer motor
+        k.DRIVE.WheelDiameter_m, // 4 inch diameter for the wheels
+        20, // Only apply 17 stator amps to prevent slip
         steerGains, // Use the specified steer gains
         driveGains, // Use the specified drive gains
-        false // CANcoder not reversed from the steer motor. For WCP Swerve X this should be
+        true // CANcoder not reversed from the steer motor. For WCP Swerve X this should be
               // true.
     );
     // TODO: Calibrate offsets for CANCoders. Get all CAN IDs correct. 
@@ -63,7 +64,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   }
   public void telemetry(){
-    SmartDashboard.putString(k.DRIVE.DriveMode, m_driveMode.toString());
+    SmartDashboard.putString(k.DRIVE.T_DriveMode, m_driveMode.toString());
   }
   public void driveStopMotion(){
     m_robotDrive.driveStopMotion();

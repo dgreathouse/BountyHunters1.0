@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,19 +35,16 @@ public class DrivetrainDefaultCommand extends Command {
     double rightX = RobotContainer.s_driverController.getRightX();
     double rightY = -RobotContainer.s_driverController.getRightY();
 
-    // TODO: Do better than this deadband garbage
-    if (Math.abs(leftY) < 0.1 && Math.abs(leftX) < 0.1) {
-      leftY = 0;
-      leftX = 0;
-    }
-    if (Math.abs(rightX) < 0.1 && Math.abs(rightY) < 0.1) {
-      rightX = 0;
-      rightY = 0;
-    }
+    // Limit the inputs for a deadband related to the joystick
+    leftY = MathUtil.applyDeadband(leftY, 0.1, 1.0);
+    leftX = MathUtil.applyDeadband(leftX, 0.1, 1.0);
+    rightY = MathUtil.applyDeadband(rightY, 0.1, 1.0);
+    rightX = MathUtil.applyDeadband(rightX, 0.1, 1.0);
+
     var directions = new ChassisSpeeds();
-    directions.vxMetersPerSecond = leftY * k.DRIVE.DriveMaxVelocity_MpS;
-    directions.vyMetersPerSecond = leftX * k.DRIVE.DriveMaxVelocity_MpS;
-    directions.omegaRadiansPerSecond = rightX * -10;
+    directions.vxMetersPerSecond = leftY * k.DRIVE.DriveMaxVelocity_MpSec;
+    directions.vyMetersPerSecond = leftX * k.DRIVE.DriveMaxVelocity_MpSec;
+    directions.omegaRadiansPerSecond = rightX * -k.DRIVE.DriveMaxAngularVelocity_RadPerSec;
     if (Math.abs(rightX) > 0.8 || Math.abs(rightY) > 0.8) {
       m_lastTargetAngle = new Rotation2d(rightY, -rightX);
     }

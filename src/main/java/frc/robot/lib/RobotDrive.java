@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+
 public class RobotDrive {
     private final int ModuleCount;
 
@@ -32,7 +33,7 @@ public class RobotDrive {
     private Notifier m_telemetry;
 
     /* Put smartdashboard calls in separate thread to reduce performance impact */
-    private void telemeterize() {
+    private void telemeterize() { 
         SmartDashboard.putNumber("Successful Daqs", m_odometryThread.getSuccessfulDaqs());
         SmartDashboard.putNumber("Failed Daqs", m_odometryThread.getFailedDaqs());
         SmartDashboard.putNumber("X Pos", m_odometry.getPoseMeters().getX());
