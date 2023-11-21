@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
+import frc.robot.k;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class DrivetrainDefaultCommand extends Command {
@@ -42,21 +43,27 @@ public class DrivetrainDefaultCommand extends Command {
       rightX = 0;
       rightY = 0;
     }
-    // TODO: scale to the appropriate MPS and Rads/sec
     var directions = new ChassisSpeeds();
-    directions.vxMetersPerSecond = leftY * 1;
-    directions.vyMetersPerSecond = leftX * -1;
+    directions.vxMetersPerSecond = leftY * k.DRIVE.DriveMaxVelocity_MpS;
+    directions.vyMetersPerSecond = leftX * k.DRIVE.DriveMaxVelocity_MpS;
     directions.omegaRadiansPerSecond = rightX * -10;
-
-    // TODO: Make a better detection of being in what they call FullyFieldCentric
-    if (Math.abs(rightX) > 0.7 || Math.abs(rightY) > 0.7) {
+    if (Math.abs(rightX) > 0.8 || Math.abs(rightY) > 0.8) {
       m_lastTargetAngle = new Rotation2d(rightY, -rightX);
     }
-    // TODO: determine from the students what is the best approach for Fully or Field centric with rotation 
-    RobotContainer.m_drivetrainSubsystem.driveFieldCentric(directions);
-    //RobotContainer.m_drivetrainSubsystem.driveFullyFieldCentric(leftY * 1, leftX * -1, m_lastTargetAngle);
+    switch(RobotContainer.m_drivetrainSubsystem.getDriveMode()){
+      case FIELD_CENTRIC:
+        RobotContainer.m_drivetrainSubsystem.driveFieldCentric(directions);
+      break;
+      case ROBOT_CENTRIC:
+        RobotContainer.m_drivetrainSubsystem.driveRobotCentric(directions);
+      break;
+      case ANGLE_FIELD_CENTRIC:
+        RobotContainer.m_drivetrainSubsystem.driveAngleFieldCentric(leftY * 1, leftX * -1, m_lastTargetAngle);
+      break;
+      default:
+      break;
 
-    
+    }
 
     // Reset the Gyro Yaw
     if (RobotContainer.s_driverController.square().getAsBoolean()) {
