@@ -4,7 +4,8 @@
 
 package frc.robot;
 
-import frc.robot.commands.DrivetrainDefaultCommand;
+import frc.robot.commands.Drive.DrivetrainDefaultCommand;
+import frc.robot.lib.k;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;

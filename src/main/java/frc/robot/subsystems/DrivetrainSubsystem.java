@@ -12,12 +12,12 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.k;
 import frc.robot.lib.EDriveMode;
 import frc.robot.lib.RobotDrive;
 import frc.robot.lib.SwerveDriveConstantsCreator;
 import frc.robot.lib.SwerveDriveTrainConstants;
 import frc.robot.lib.SwerveModuleConstants;
+import frc.robot.lib.k;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   public RobotDrive m_robotDrive;
@@ -102,6 +102,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
   public EDriveMode getDriveMode(){
     return m_driveMode;
+  }
+  public double getRobotAngle(){
+    return m_robotDrive.getRobotYaw();
   }
   @Override
   public void periodic() {

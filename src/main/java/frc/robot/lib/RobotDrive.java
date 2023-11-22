@@ -206,4 +206,10 @@ public class RobotDrive {
     public double getFailedDaqs() {
         return m_odometryThread.FailedDaqs;
     }
+    public double getRobotYaw(){
+        return m_pigeon2.getYaw().getValueAsDouble();
+    }
+    public boolean isTurnPIDatSetpoint(){
+        return m_turnPid.atSetpoint();
+    }
 }
