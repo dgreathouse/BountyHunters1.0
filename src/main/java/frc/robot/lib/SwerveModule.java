@@ -94,10 +94,8 @@ public class SwerveModule {
         }
 
         /* Now latency-compensate our signals */
-        double drive_rot =
-            BaseStatusSignal.getLatencyCompensatedValue(m_drivePosition, m_driveVelocity);
-        double angle_rot =
-            BaseStatusSignal.getLatencyCompensatedValue(m_steerPosition, m_steerVelocity);
+        double drive_rot = BaseStatusSignal.getLatencyCompensatedValue(m_drivePosition, m_driveVelocity);
+        double angle_rot = BaseStatusSignal.getLatencyCompensatedValue(m_steerPosition, m_steerVelocity);
 
         /* And push them into a SwerveModuleState object to return */
         m_internalState.distanceMeters = drive_rot / m_driveRotationsPerMeter;

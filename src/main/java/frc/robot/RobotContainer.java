@@ -9,6 +9,7 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -21,9 +22,10 @@ public class RobotContainer {
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final DrivetrainDefaultCommand m_drivetrainDefaultCommand = new DrivetrainDefaultCommand(m_drivetrainSubsystem);
   
-  // Replace with CommandPS4Controller or CommandJoystick if needed
+
+  // TODO: Replace with CommandPS5Controller when WPILib gets it working.
   public static final CommandPS4Controller s_driverController = new CommandPS4Controller(k.OI.kDriverControllerPort);
-  
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_drivetrainSubsystem.setDefaultCommand(m_drivetrainDefaultCommand);

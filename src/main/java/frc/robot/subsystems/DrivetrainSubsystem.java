@@ -8,7 +8,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -77,6 +77,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
   public void driveAngleFieldCentric(double _x, double _y, Rotation2d _lastTargetAngle){
     m_robotDrive.driveAngleFieldCentric(_x, _y, _lastTargetAngle);
+  }
+  public void drivePolarFieldCentric(double _driveAngle, double _speed, double _robotAngle){
+    double x = Math.sin(_driveAngle) * _speed;
+    double y = Math.cos(_driveAngle) * _speed;
+   
+    driveAngleFieldCentric(x, y, new Rotation2d(Units.degreesToRadians(_robotAngle)));
   }
   public void changeDriveMode(){
     switch(m_driveMode){
