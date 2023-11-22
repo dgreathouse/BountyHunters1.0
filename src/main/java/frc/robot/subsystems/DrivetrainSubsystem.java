@@ -31,8 +31,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     Slot0Configs steerGains = new Slot0Configs();
     Slot0Configs driveGains = new Slot0Configs();
     steerGains.kP = 30;
+    steerGains.kI = 0.0;
     steerGains.kD = 0.2;
     driveGains.kP = 1;
+    driveGains.kI = 0;
     SwerveDriveConstantsCreator m_constantsCreator = new SwerveDriveConstantsCreator(
         k.DRIVE.DriveGearRatio, //  ratio for the drive motor
         k.DRIVE.SteerGearRatioToCANCoder, // ratio for the steer motor

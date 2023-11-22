@@ -5,9 +5,21 @@
 package frc.robot;
 
 import frc.robot.commandGroups.AutoDoNothing;
+import frc.robot.commands.Arm.ArmDefaultCommand;
+import frc.robot.commands.Climber.ClimberDefaultCommand;
 import frc.robot.commands.Drive.DrivetrainDefaultCommand;
+import frc.robot.commands.Intake.IntakeDefaultCommand;
+import frc.robot.commands.Lift.LiftDefaultCommand;
+import frc.robot.commands.Shooter.ShooterDefaultCommand;
+import frc.robot.commands.Turret.TurretDefaultCommand;
 import frc.robot.lib.k;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LiftSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TurretSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,14 +35,43 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+
+
+  public static final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+  private final ArmDefaultCommand m_armDefaultCommand = new ArmDefaultCommand(m_armSubsystem);
+
+  public static final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
+  private final ClimberDefaultCommand m_climberDefaultCommand = new ClimberDefaultCommand(m_climberSubsystem);
+
+    public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final DrivetrainDefaultCommand m_drivetrainDefaultCommand = new DrivetrainDefaultCommand(m_drivetrainSubsystem);
+
+  public static final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  private final IntakeDefaultCommand m_intakeDefaultCommand = new IntakeDefaultCommand(m_intakeSubsystem);
+
+  public static final LiftSubsystem m_liftSubsystem = new LiftSubsystem();
+  private final LiftDefaultCommand m_liftDefaultCommand = new LiftDefaultCommand(m_liftSubsystem);
+
+  public static final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
+  private final ShooterDefaultCommand m_shooterDefaultCommand = new ShooterDefaultCommand(m_shooterSubsystem);
+
+  public static final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
+  private final TurretDefaultCommand m_turretDefaultCommand = new TurretDefaultCommand(m_turretSubsystem);
+
   // TODO: Replace with CommandPS5Controller when WPILib gets it working.
   public static final CommandPS4Controller s_driverController = new CommandPS4Controller(k.OI.kDriverControllerPort);
   SendableChooser<Command> autoChooser = new SendableChooser<>();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+    m_armSubsystem.setDefaultCommand(m_armDefaultCommand);
+    m_climberSubsystem.setDefaultCommand(m_climberDefaultCommand);
     m_drivetrainSubsystem.setDefaultCommand(m_drivetrainDefaultCommand);
+    m_intakeSubsystem.setDefaultCommand(m_intakeDefaultCommand);
+    m_liftSubsystem.setDefaultCommand(m_liftDefaultCommand);
+    m_shooterSubsystem.setDefaultCommand(m_shooterDefaultCommand);
+    m_turretSubsystem.setDefaultCommand(m_turretDefaultCommand);
+    
     // Configure the trigger bindings
     configureBindings();
     autoChooser.setDefaultOption("Do Nothing", new AutoDoNothing());
@@ -48,12 +89,9 @@ public class RobotContainer {
   }
 
   /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
     return autoChooser.getSelected();
   }
 }
