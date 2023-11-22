@@ -29,3 +29,10 @@ Please add a Pull Request for changes that you would like to see
 If you have code fixes or addition you want in, please make a push request with the changes.
 More people working on code makes it better if we coordinate and agree on changes/additions.
 There are lots of ways to solve a problem when coding, so please understand if changes are not accepted.
+
+## Command Based Programming
+The approach used for this code is to use a default command that is associated with the subsystem. The schedular will call the execute() method in the command and from there the subsystem methods are called to drive the motors or whatever you want. 
+
+The other approach for this is where you control all your motors in the subsystem perodic() methods. Commands use the execute method to set variables in the subsystem which the subsystem periodic will act on.
+
+Many ways to do programming, we are accustomed to using the first approach because it seems a little easier to manage but may have more commands sometimes. Pick your approach and deal with it.

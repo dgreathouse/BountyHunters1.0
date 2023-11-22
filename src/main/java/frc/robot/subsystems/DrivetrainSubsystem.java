@@ -108,6 +108,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    // This method will be called once per scheduler run.
+    /* 
+     * This will generally have nothing in it when using commands to drive the motors.
+     * The other approach is to drive the motors in this periodic and have commands update the data in this class for the periodic to use.
+     * 
+     * This code uses the true Command-Based programming methodogy of having default commands control the motors through the methods in this class.
+     */
   }
 }

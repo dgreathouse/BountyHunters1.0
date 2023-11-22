@@ -30,7 +30,7 @@ public final class k {
 
     public static final double DriveGearRatio = (DriveGear1Teeth/DriveMotorPinionTeeth) * (DriveGear2DrivenTeeth / DriveGear2DriveTeeth) * (DriveGearBevelDrivenTeeth / DriveGearBevelDriveTeeth);
     public static final double WheelDiameter_m = 0.10287;
-    public static final double WheelCircumference = Math.PI * WheelDiameter_m;
+    private static final double WheelCircumference = Math.PI * WheelDiameter_m;
     private static final double DriveMotorMaxVelocity_RotPerMin = 6380.0;
     private static final double DriveMotorMaxVelocity_RotPerSec = DriveMotorMaxVelocity_RotPerMin / 60.0;
     private static final double DriveWheelMaxVelocity_RotPerSec = DriveMotorMaxVelocity_RotPerSec / DriveGearRatio;
@@ -49,7 +49,7 @@ public final class k {
     private static final double SteerGear1DriveTeeth = 14.0;
     private static final double SteerGear1DrivenTeeth = 72.0;
     private static final double SteerCANCoderGearRatio = 1.0;
-    public static final double SteerGearRatio = 1/((SteerMotorPinionTeeth/SteerMotorDrivenGearTeeth)*(SteerGear1DriveTeeth/SteerGear1DrivenTeeth));
+    private static final double SteerGearRatio = 1/((SteerMotorPinionTeeth/SteerMotorDrivenGearTeeth)*(SteerGear1DriveTeeth/SteerGear1DrivenTeeth));
     public static final double SteerGearRatioToCANCoder = SteerGearRatio * SteerCANCoderGearRatio;
 
   }
