@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import frc.robot.commandGroups.AutoDoNothing;
 import frc.robot.commands.Drive.DrivetrainDefaultCommand;
 import frc.robot.lib.k;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
@@ -22,16 +25,16 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final DrivetrainDefaultCommand m_drivetrainDefaultCommand = new DrivetrainDefaultCommand(m_drivetrainSubsystem);
-  
-
   // TODO: Replace with CommandPS5Controller when WPILib gets it working.
   public static final CommandPS4Controller s_driverController = new CommandPS4Controller(k.OI.kDriverControllerPort);
-
+  SendableChooser<Command> autoChooser = new SendableChooser<>();
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_drivetrainSubsystem.setDefaultCommand(m_drivetrainDefaultCommand);
     // Configure the trigger bindings
     configureBindings();
+    autoChooser.setDefaultOption("Do Nothing", new AutoDoNothing());
+    SmartDashboard.putData(autoChooser);
   }
 
   /**
@@ -51,6 +54,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return autoChooser.getSelected();
   }
 }
