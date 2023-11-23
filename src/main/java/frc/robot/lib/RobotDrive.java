@@ -13,7 +13,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -30,10 +29,10 @@ public class RobotDrive {
     private OdometryThread m_odometryThread;
     private Field2d m_field;
     private PIDController m_turnPid;
-    private Notifier m_telemetry;
+
 
     /* Put smartdashboard calls in separate thread to reduce performance impact */
-    private void telemeterize() { 
+    public void updateDashboard() { 
         SmartDashboard.putNumber("Successful Daqs", m_odometryThread.getSuccessfulDaqs());
         SmartDashboard.putNumber("Failed Daqs", m_odometryThread.getFailedDaqs());
         SmartDashboard.putNumber("X Pos", m_odometry.getPoseMeters().getX());
@@ -145,9 +144,6 @@ public class RobotDrive {
 
         m_odometryThread = new OdometryThread();
         m_odometryThread.start();
-
-        m_telemetry = new Notifier(this::telemeterize);
-        m_telemetry.startPeriodic(0.1); // Telemeterize every 100ms
     }
 
     private SwerveModulePosition[] getSwervePositions() {

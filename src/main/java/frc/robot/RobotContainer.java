@@ -20,6 +20,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -43,7 +44,7 @@ public class RobotContainer {
   public static final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   private final ClimberDefaultCommand m_climberDefaultCommand = new ClimberDefaultCommand(m_climberSubsystem);
 
-    public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final DrivetrainDefaultCommand m_drivetrainDefaultCommand = new DrivetrainDefaultCommand(m_drivetrainSubsystem);
 
   public static final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
@@ -58,9 +59,19 @@ public class RobotContainer {
   public static final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
   private final TurretDefaultCommand m_turretDefaultCommand = new TurretDefaultCommand(m_turretSubsystem);
 
+  private Notifier m_telemetry;
   // TODO: Replace with CommandPS5Controller when WPILib gets it working.
   public static final CommandPS4Controller s_driverController = new CommandPS4Controller(k.OI.kDriverControllerPort);
   SendableChooser<Command> autoChooser = new SendableChooser<>();
+  private void updateDashboard(){
+    m_drivetrainSubsystem.updateDashboard();
+    m_armSubsystem.updateDashboard();
+    m_climberSubsystem.updateDashboard();
+    m_intakeSubsystem.updateDashboard();
+    m_liftSubsystem.updateDashboard();
+    m_shooterSubsystem.updateDashboard();
+    m_turretSubsystem.updateDashboard();
+  }
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
@@ -76,6 +87,9 @@ public class RobotContainer {
     configureBindings();
     autoChooser.setDefaultOption("Do Nothing", new AutoDoNothing());
     SmartDashboard.putData(autoChooser);
+
+    m_telemetry = new Notifier(this::updateDashboard);
+    m_telemetry.startPeriodic(0.1);
   }
 
   /**

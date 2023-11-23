@@ -9,7 +9,6 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.lib.EDriveMode;
@@ -22,7 +21,7 @@ import frc.robot.lib.k;
 public class DrivetrainSubsystem extends SubsystemBase {
   public RobotDrive m_robotDrive;
   public EDriveMode m_driveMode = EDriveMode.FIELD_CENTRIC;
-  private Notifier m_telemetry;
+
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
     // TODO: Calibrate the PID values
@@ -61,12 +60,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
         4, 5, 2, -0.928467, -k.DRIVE.WheelBaseX_m / 2.0, 0.0);
 
     m_robotDrive = new RobotDrive(drivetrain, frontLeft, frontRight, back);
-    m_telemetry = new Notifier(this::telemetry);
-    m_telemetry.startPeriodic(0.1);
+
 
   }
-  public void telemetry(){
+  public void updateDashboard(){
     SmartDashboard.putString(k.DRIVE.T_DriveMode, m_driveMode.toString());
+    m_robotDrive.updateDashboard();
   }
   public void driveStopMotion(){
     m_robotDrive.driveStopMotion();

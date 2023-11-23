@@ -15,6 +15,7 @@ package frc.robot.lib;
 public final class k {
   public static class ROBOT {
     public static final double Period = 0.2;
+    public static final String CANFD_Name = "CANFD";
   }
   public static class OI {
     public static final int kDriverControllerPort = 0;

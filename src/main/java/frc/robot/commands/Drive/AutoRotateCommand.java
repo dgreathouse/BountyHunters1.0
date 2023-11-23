@@ -12,17 +12,20 @@ public class AutoRotateCommand extends Command {
   double m_robotAngle;
   Rotation2d m_rotationAngle;
 
-  /** Rotate the robot using the driveAngleFieldCentric with speeds of 0 for driving.
+  /**
+   * Rotate the robot using the driveAngleFieldCentric with speeds of 0 for
+   * driving.
    * 
-   * @param _drive An intstance of the drive subsystem
+   * @param _drive      An intstance of the drive subsystem
    * @param _robotAngle The angle in degrees to rotate to
-   * @param _timeOut A timeOut time in seconds used as safety factor to cancel this command if angle never reached.
+   * @param _timeOut    A timeOut time in seconds used as safety factor to cancel
+   *                    this command if angle never reached.
    */
   public AutoRotateCommand(DrivetrainSubsystem _drive, double _robotAngle, double _timeOut) {
     m_drivetrain = _drive;
     m_timeOut = _timeOut;
-     m_robotAngle = _robotAngle;
-     addRequirements(m_drivetrain);
+    m_robotAngle = _robotAngle;
+    addRequirements(m_drivetrain);
 
   }
 
@@ -38,15 +41,16 @@ public class AutoRotateCommand extends Command {
   public void execute() {
     m_drivetrain.driveAngleFieldCentric(0, 0, m_rotationAngle);
   }
-  
+
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(m_timer.hasElapsed(m_timeOut) || m_drivetrain.m_robotDrive.isTurnPIDatSetpoint()){
+    if (m_timer.hasElapsed(m_timeOut) || m_drivetrain.m_robotDrive.isTurnPIDatSetpoint()) {
       return true;
     }
     return false;
