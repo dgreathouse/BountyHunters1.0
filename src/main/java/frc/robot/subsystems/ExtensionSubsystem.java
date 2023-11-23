@@ -4,12 +4,12 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class TurretSubsystem extends SubsystemBase {
+public class ExtensionSubsystem extends SubsystemBase {
   public void updateDashboard() {
 
   }
-  /** Creates a new TurretSubsystem. */
-  public TurretSubsystem() {}
+  /** Creates a new ExtensionSubsystem. */
+  public ExtensionSubsystem() {}
 
   @Override
   public void periodic() {

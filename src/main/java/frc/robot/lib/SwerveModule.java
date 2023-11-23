@@ -1,3 +1,5 @@
+//Copyright (c) 2020-2023 Essexville Hampton Public Schools (FRC 8517)
+
 package frc.robot.lib;
 
 import com.ctre.phoenix6.BaseStatusSignal;
@@ -34,37 +36,37 @@ public class SwerveModule {
     private SwerveModulePosition m_internalState = new SwerveModulePosition();
 
     public SwerveModule(SwerveModuleConstants constants, String canbusName) {
-        m_driveMotor = new TalonFX(constants.DriveMotorId, canbusName);
-        m_steerMotor = new TalonFX(constants.SteerMotorId, canbusName);
-        m_cancoder = new CANcoder(constants.CANcoderId, canbusName);
+        m_driveMotor = new TalonFX(constants.m_driveMotorId, canbusName);
+        m_steerMotor = new TalonFX(constants.m_steerMotorId, canbusName);
+        m_cancoder = new CANcoder(constants.m_CANcoderId, canbusName);
 
         TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
 
-        talonConfigs.Slot0 = constants.DriveMotorGains;
-        talonConfigs.TorqueCurrent.PeakForwardTorqueCurrent = constants.SlipCurrent;
-        talonConfigs.TorqueCurrent.PeakReverseTorqueCurrent = -constants.SlipCurrent;
+        talonConfigs.Slot0 = constants.m_driveMotorGains;
+        talonConfigs.TorqueCurrent.PeakForwardTorqueCurrent = constants.m_slipCurrent_amps;
+        talonConfigs.TorqueCurrent.PeakReverseTorqueCurrent = -constants.m_slipCurrent_amps;
         m_driveMotor.getConfigurator().apply(talonConfigs);
 
         /* Undo changes for torqueCurrent */
         talonConfigs.TorqueCurrent = new TorqueCurrentConfigs();
 
-        talonConfigs.Slot0 = constants.SteerMotorGains;
+        talonConfigs.Slot0 = constants.m_steerMotorGains;
         // Modify configuration to use remote CANcoder fused
-        talonConfigs.Feedback.FeedbackRemoteSensorID = constants.CANcoderId;
+        talonConfigs.Feedback.FeedbackRemoteSensorID = constants.m_CANcoderId;
         talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-        talonConfigs.Feedback.RotorToSensorRatio = constants.SteerMotorGearRatio;
+        talonConfigs.Feedback.RotorToSensorRatio = constants.m_steerMotorGearRatio;
 
         // Enable continuous wrap for swerve modules
         talonConfigs.ClosedLoopGeneral.ContinuousWrap = true; 
 
         talonConfigs.MotorOutput.Inverted =
-                constants.SteerMotorReversed
+                constants.m_isSteerMotorReversed
                         ? InvertedValue.Clockwise_Positive
                         : InvertedValue.CounterClockwise_Positive;
         m_steerMotor.getConfigurator().apply(talonConfigs);
 
         CANcoderConfiguration cancoderConfigs = new CANcoderConfiguration();
-        cancoderConfigs.MagnetSensor.MagnetOffset = constants.CANcoderOffset;
+        cancoderConfigs.MagnetSensor.MagnetOffset = constants.m_CANcoderOffset_deg;
         m_cancoder.getConfigurator().apply(cancoderConfigs);
 
         m_drivePosition = m_driveMotor.getPosition();
@@ -79,8 +81,8 @@ public class SwerveModule {
         m_signals[3] = m_steerVelocity;
 
         /* Calculate the ratio of drive motor rotation to meter on ground */
-        double rotationsPerWheelRotation = constants.DriveMotorGearRatio;
-        double metersPerWheelRotation = Math.PI * constants.WheelDiameter;
+        double rotationsPerWheelRotation = constants.m_driveMotorGearRatio;
+        double metersPerWheelRotation = Math.PI * constants.m_wheelDiameter_m;
         m_driveRotationsPerMeter = rotationsPerWheelRotation / metersPerWheelRotation;
     }
 

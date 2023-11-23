@@ -1,3 +1,5 @@
+//Copyright (c) 2020-2023 Essexville Hampton Public Schools (FRC 8517)
+
 package frc.robot.commands.Drive;
 
 import edu.wpi.first.wpilibj.Timer;

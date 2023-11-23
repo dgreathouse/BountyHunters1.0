@@ -1,6 +1,4 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+//Copyright (c) 2020-2023 Essexville Hampton Public Schools (FRC 8517)
 
 package frc.robot;
 
@@ -8,6 +6,8 @@ import frc.robot.commandGroups.AutoDoNothing;
 import frc.robot.commands.Arm.ArmDefaultCommand;
 import frc.robot.commands.Climber.ClimberDefaultCommand;
 import frc.robot.commands.Drive.DrivetrainDefaultCommand;
+import frc.robot.commands.Elevator.ElevatorDefaultCommand;
+import frc.robot.commands.Extension.ExtensionDefaultCommand;
 import frc.robot.commands.Intake.IntakeDefaultCommand;
 import frc.robot.commands.Lift.LiftDefaultCommand;
 import frc.robot.commands.Shooter.ShooterDefaultCommand;
@@ -16,6 +16,8 @@ import frc.robot.lib.k;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ExtensionSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -47,6 +49,12 @@ public class RobotContainer {
   public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final DrivetrainDefaultCommand m_drivetrainDefaultCommand = new DrivetrainDefaultCommand(m_drivetrainSubsystem);
 
+  public static final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
+  private final ElevatorDefaultCommand m_elevatorDefaultCommand = new ElevatorDefaultCommand(m_elevatorSubsystem);
+
+  public static final ExtensionSubsystem m_extensionSubsystem = new ExtensionSubsystem();
+  private final ExtensionDefaultCommand m_extensionDefaultCommand = new ExtensionDefaultCommand(m_extensionSubsystem);
+
   public static final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
   private final IntakeDefaultCommand m_intakeDefaultCommand = new IntakeDefaultCommand(m_intakeSubsystem);
 
@@ -67,6 +75,8 @@ public class RobotContainer {
     m_drivetrainSubsystem.updateDashboard();
     m_armSubsystem.updateDashboard();
     m_climberSubsystem.updateDashboard();
+    m_elevatorSubsystem.updateDashboard();
+    m_extensionSubsystem.updateDashboard();
     m_intakeSubsystem.updateDashboard();
     m_liftSubsystem.updateDashboard();
     m_shooterSubsystem.updateDashboard();
@@ -78,6 +88,8 @@ public class RobotContainer {
     m_armSubsystem.setDefaultCommand(m_armDefaultCommand);
     m_climberSubsystem.setDefaultCommand(m_climberDefaultCommand);
     m_drivetrainSubsystem.setDefaultCommand(m_drivetrainDefaultCommand);
+    m_elevatorSubsystem.setDefaultCommand(m_elevatorDefaultCommand);
+    m_extensionSubsystem.setDefaultCommand(m_extensionDefaultCommand);
     m_intakeSubsystem.setDefaultCommand(m_intakeDefaultCommand);
     m_liftSubsystem.setDefaultCommand(m_liftDefaultCommand);
     m_shooterSubsystem.setDefaultCommand(m_shooterDefaultCommand);

@@ -1,3 +1,5 @@
+//Copyright (c) 2020-2023 Essexville Hampton Public Schools (FRC 8517)
+
 package frc.robot.lib;
 
 import com.ctre.phoenix6.BaseStatusSignal;
@@ -119,7 +121,7 @@ public class RobotDrive {
     public RobotDrive(SwerveDriveTrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         ModuleCount = modules.length;
 
-        m_pigeon2 = new Pigeon2(driveTrainConstants.Pigeon2Id, driveTrainConstants.CANbusName);
+        m_pigeon2 = new Pigeon2(driveTrainConstants.m_pigeon2Id, driveTrainConstants.m_canBusName);
 
         m_modules = new SwerveModule[ModuleCount];
         m_modulePositions = new SwerveModulePosition[ModuleCount];
@@ -127,8 +129,8 @@ public class RobotDrive {
 
         int iteration = 0;
         for (SwerveModuleConstants module : modules) {
-            m_modules[iteration] = new SwerveModule(module, driveTrainConstants.CANbusName);
-            m_moduleLocations[iteration] = new Translation2d(module.LocationX, module.LocationY);
+            m_modules[iteration] = new SwerveModule(module, driveTrainConstants.m_canBusName);
+            m_moduleLocations[iteration] = new Translation2d(module.m_locationX_m, module.m_locationY_m);
             m_modulePositions[iteration] = m_modules[iteration].getPosition(true);
 
             iteration++;
@@ -139,7 +141,7 @@ public class RobotDrive {
         m_field = new Field2d();
         SmartDashboard.putData("Field", m_field);
 
-        m_turnPid = new PIDController(driveTrainConstants.TurnKp, 0, driveTrainConstants.TurnKd);
+        m_turnPid = new PIDController(driveTrainConstants.m_rotateKp, 0, driveTrainConstants.m_rotateKd);
         m_turnPid.enableContinuousInput(-Math.PI, Math.PI);
 
         m_odometryThread = new OdometryThread();

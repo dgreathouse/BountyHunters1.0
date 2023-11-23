@@ -1,16 +1,17 @@
 //Copyright (c) 2020-2023 Essexville Hampton Public Schools (FRC 8517)
 
-package frc.robot.commands.Shooter;
+package frc.robot.commands.Extension;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ExtensionSubsystem;
 
-public class ShooterDefaultCommand extends Command {
-  ShooterSubsystem m_shooter;
-  /** Creates a new ShooterDefaultCommand. */
-  public ShooterDefaultCommand(ShooterSubsystem _subsystem) {
-    m_shooter = _subsystem;
+public class ExtensionDefaultCommand extends Command {
+  ExtensionSubsystem m_extension;
+  /** Creates a new ExtensionDefaultCommand. */
+  public ExtensionDefaultCommand(ExtensionSubsystem _subsystem) {
+    m_extension = _subsystem;
     addRequirements(_subsystem);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.

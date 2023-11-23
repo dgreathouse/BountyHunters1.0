@@ -1,3 +1,5 @@
+//Copyright (c) 2020-2023 Essexville Hampton Public Schools (FRC 8517)
+
 package frc.robot.commands.Drive;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -5,7 +7,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
-public class AutoRotateCommand extends Command {
+public class AutoDriveRotateCommand extends Command {
   DrivetrainSubsystem m_drivetrain;
   Timer m_timer = new Timer();
   double m_timeOut;
@@ -21,7 +23,7 @@ public class AutoRotateCommand extends Command {
    * @param _timeOut    A timeOut time in seconds used as safety factor to cancel
    *                    this command if angle never reached.
    */
-  public AutoRotateCommand(DrivetrainSubsystem _drive, double _robotAngle, double _timeOut) {
+  public AutoDriveRotateCommand(DrivetrainSubsystem _drive, double _robotAngle, double _timeOut) {
     m_drivetrain = _drive;
     m_timeOut = _timeOut;
     m_robotAngle = _robotAngle;

@@ -1,31 +1,39 @@
+//Copyright (c) 2020-2023 Essexville Hampton Public Schools (FRC 8517)
+
 package frc.robot.lib;
 
 public class SwerveDriveTrainConstants {
     /** CAN ID of the Pigeon2 on the drivetrain */
-    public int Pigeon2Id = 0;
+    public int m_pigeon2Id = 0;
     /** Name of CANivore the swerve drive is on */
-    public String CANbusName = k.ROBOT.CANFD_NAME;
+    public String m_canBusName = k.ROBOT.CANFD_NAME;
 
-    public double TurnKp = 0;
-    public double TurnKd = 0;
+    public double m_rotateKp = 0;
+    public double m_rotateKi = 0;
+    public double m_rotateKd = 0;
 
-    public SwerveDriveTrainConstants withPigeon2Id(int id) {
-        this.Pigeon2Id = id;
+    public SwerveDriveTrainConstants withPigeon2Id(int _id) {
+        this.m_pigeon2Id = _id;
         return this;
     }
 
-    public SwerveDriveTrainConstants withCANbusName(String name) {
-        this.CANbusName = name;
+    public SwerveDriveTrainConstants withCANbusName(String _name) {
+        this.m_canBusName = _name;
         return this;
     }
 
-    public SwerveDriveTrainConstants withTurnKp(double TurnKp) {
-        this.TurnKp = TurnKp;
+    public SwerveDriveTrainConstants withTurnKp(double _turnKp) {
+        this.m_rotateKp = _turnKp;
         return this;
     }
 
-    public SwerveDriveTrainConstants withTurnKd(double TurnKd) {
-        this.TurnKd = TurnKd;
+    public SwerveDriveTrainConstants withTurnKi(double _turnKi) {
+        this.m_rotateKi = _turnKi;
+        return this;
+    }
+
+    public SwerveDriveTrainConstants withTurnKd(double _turnKd) {
+        this.m_rotateKd = _turnKd;
         return this;
     }
 }

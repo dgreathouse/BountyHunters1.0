@@ -1,3 +1,5 @@
+//Copyright (c) 2020-2023 Essexville Hampton Public Schools (FRC 8517)
+
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -21,41 +23,43 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
     // TODO: Calibrate the PID values and SlipCurrent for stator
-    SwerveDriveTrainConstants drivetrain = new SwerveDriveTrainConstants().withPigeon2Id(1).withCANbusName(k.ROBOT.CANFD_NAME)
-          .withTurnKp(5);
-    Slot0Configs steerGains = new Slot0Configs();
-    Slot0Configs driveGains = new Slot0Configs();
-    steerGains.kP = 30;
-    steerGains.kI = 0.0;
-    steerGains.kD = 0.2;
-    driveGains.kP = 1;
-    driveGains.kI = 0;
+    SwerveDriveTrainConstants m_drivetrainConstants = new SwerveDriveTrainConstants()
+          .withPigeon2Id(1)
+          .withCANbusName(k.ROBOT.CANFD_NAME)
+          .withTurnKp(5)
+          .withTurnKi(0.1);
+    Slot0Configs m_steerGains = new Slot0Configs();
+    Slot0Configs m_driveGains = new Slot0Configs();
+    m_steerGains.kP = 30;
+    m_steerGains.kI = 0.0;
+    m_steerGains.kD = 0.2;
+    m_driveGains.kP = 1;
+    m_driveGains.kI = 0;
     SwerveDriveConstantsCreator m_constantsCreator = new SwerveDriveConstantsCreator(
         k.DRIVE.GEAR_RATIO, //  ratio for the drive motor
         k.STEER.GEAR_RATIO_TO_CANCODER, // ratio for the steer motor
         k.DRIVE.WHEEL_DIAMETER_m, // 4 inch diameter for the wheels
         17, // Only apply 24 stator amps to prevent slip
-        steerGains, // Use the specified steer gains
-        driveGains, // Use the specified drive gains
+        m_steerGains, // Use the specified steer gains
+        m_driveGains, // Use the specified drive gains
         true // CANcoder not reversed from the steer motor. For WCP Swerve X this should be
               // true.
     );
     // TODO: Calibrate offsets for CANCoders. Get all CAN IDs correct. 
-    
-    /**
+        /**
      * Note: WPI's coordinate system is X forward, Y to the left so make sure all locations are with
      * respect to this coordinate system
      * This particular drive base is 22" x 22"
      */
-    SwerveModuleConstants frontRight = m_constantsCreator.createModuleConstants(
+    SwerveModuleConstants m_frontRight = m_constantsCreator.createModuleConstants(
         0, 1, 0, -0.538818,k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, -k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
 
-    SwerveModuleConstants frontLeft = m_constantsCreator.createModuleConstants(
+    SwerveModuleConstants m_frontLeft = m_constantsCreator.createModuleConstants(
         2, 3, 1, -0.474609, k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
-    SwerveModuleConstants back = m_constantsCreator.createModuleConstants(
+    SwerveModuleConstants m_back = m_constantsCreator.createModuleConstants(
         4, 5, 2, -0.928467, -k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, 0.0);
 
-    m_robotDrive = new RobotDrive(drivetrain, frontLeft, frontRight, back);
+    m_robotDrive = new RobotDrive(m_drivetrainConstants, m_frontLeft, m_frontRight, m_back);
 
 
   }

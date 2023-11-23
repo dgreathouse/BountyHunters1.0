@@ -1,3 +1,5 @@
+//Copyright (c) 2020-2023 Essexville Hampton Public Schools (FRC 8517)
+
 package frc.robot.lib;
 
 import com.ctre.phoenix6.configs.Slot0Configs;

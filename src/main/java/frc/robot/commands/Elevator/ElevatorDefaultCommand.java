@@ -1,15 +1,16 @@
 //Copyright (c) 2020-2023 Essexville Hampton Public Schools (FRC 8517)
 
-package frc.robot.commands.Shooter;
+package frc.robot.commands.Elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 
-public class ShooterDefaultCommand extends Command {
-  ShooterSubsystem m_shooter;
-  /** Creates a new ShooterDefaultCommand. */
-  public ShooterDefaultCommand(ShooterSubsystem _subsystem) {
-    m_shooter = _subsystem;
+public class ElevatorDefaultCommand extends Command {
+  ElevatorSubsystem m_elevator;
+
+  /** Creates a new ElevatorDefaultCommand. */
+  public ElevatorDefaultCommand(ElevatorSubsystem _subsystem) {
+    m_elevator = _subsystem;
     addRequirements(_subsystem);
   }
 
