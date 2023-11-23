@@ -54,8 +54,8 @@ public class SwerveModule {
         talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
         talonConfigs.Feedback.RotorToSensorRatio = constants.SteerMotorGearRatio;
 
-        talonConfigs.ClosedLoopGeneral.ContinuousWrap =
-                true; // Enable continuous wrap for swerve modules
+        // Enable continuous wrap for swerve modules
+        talonConfigs.ClosedLoopGeneral.ContinuousWrap = true; 
 
         talonConfigs.MotorOutput.Inverted =
                 constants.SteerMotorReversed

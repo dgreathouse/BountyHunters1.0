@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -24,9 +20,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
-    // TODO: Calibrate the PID values
-    SwerveDriveTrainConstants drivetrain = new SwerveDriveTrainConstants().withPigeon2Id(1).withCANbusName("CANFD1")
-        .withTurnKp(5);
+    // TODO: Calibrate the PID values and SlipCurrent for stator
+    SwerveDriveTrainConstants drivetrain = new SwerveDriveTrainConstants().withPigeon2Id(1).withCANbusName(k.ROBOT.CANFD_Name)
+          .withTurnKp(5);
     Slot0Configs steerGains = new Slot0Configs();
     Slot0Configs driveGains = new Slot0Configs();
     steerGains.kP = 30;
@@ -38,7 +34,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         k.DRIVE.DriveGearRatio, //  ratio for the drive motor
         k.DRIVE.SteerGearRatioToCANCoder, // ratio for the steer motor
         k.DRIVE.WheelDiameter_m, // 4 inch diameter for the wheels
-        20, // Only apply 17 stator amps to prevent slip
+        17, // Only apply 24 stator amps to prevent slip
         steerGains, // Use the specified steer gains
         driveGains, // Use the specified drive gains
         true // CANcoder not reversed from the steer motor. For WCP Swerve X this should be
@@ -110,11 +106,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run.
-    /* 
-     * This will generally have nothing in it when using commands to drive the motors.
-     * The other approach is to drive the motors in this periodic and have commands update the data in this class for the periodic to use.
-     * 
-     * This code uses the true Command-Based programming methodogy of having default commands control the motors through the methods in this class.
-     */
+
   }
 }
