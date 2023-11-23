@@ -21,7 +21,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
     // TODO: Calibrate the PID values and SlipCurrent for stator
-    SwerveDriveTrainConstants drivetrain = new SwerveDriveTrainConstants().withPigeon2Id(1).withCANbusName(k.ROBOT.CANFD_Name)
+    SwerveDriveTrainConstants drivetrain = new SwerveDriveTrainConstants().withPigeon2Id(1).withCANbusName(k.ROBOT.CANFD_NAME)
           .withTurnKp(5);
     Slot0Configs steerGains = new Slot0Configs();
     Slot0Configs driveGains = new Slot0Configs();
@@ -31,9 +31,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     driveGains.kP = 1;
     driveGains.kI = 0;
     SwerveDriveConstantsCreator m_constantsCreator = new SwerveDriveConstantsCreator(
-        k.DRIVE.DriveGearRatio, //  ratio for the drive motor
-        k.DRIVE.SteerGearRatioToCANCoder, // ratio for the steer motor
-        k.DRIVE.WheelDiameter_m, // 4 inch diameter for the wheels
+        k.DRIVE.GEAR_RATIO, //  ratio for the drive motor
+        k.STEER.GEAR_RATIO_TO_CANCODER, // ratio for the steer motor
+        k.DRIVE.WHEEL_DIAMETER_m, // 4 inch diameter for the wheels
         17, // Only apply 24 stator amps to prevent slip
         steerGains, // Use the specified steer gains
         driveGains, // Use the specified drive gains
@@ -48,19 +48,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * This particular drive base is 22" x 22"
      */
     SwerveModuleConstants frontRight = m_constantsCreator.createModuleConstants(
-        0, 1, 0, -0.538818,k.DRIVE.WheelBaseX_m / 2.0, -k.DRIVE.WheelBaseY_m / 2.0);
+        0, 1, 0, -0.538818,k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, -k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
 
     SwerveModuleConstants frontLeft = m_constantsCreator.createModuleConstants(
-        2, 3, 1, -0.474609, k.DRIVE.WheelBaseX_m / 2.0, k.DRIVE.WheelBaseY_m / 2.0);
+        2, 3, 1, -0.474609, k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
     SwerveModuleConstants back = m_constantsCreator.createModuleConstants(
-        4, 5, 2, -0.928467, -k.DRIVE.WheelBaseX_m / 2.0, 0.0);
+        4, 5, 2, -0.928467, -k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, 0.0);
 
     m_robotDrive = new RobotDrive(drivetrain, frontLeft, frontRight, back);
 
 
   }
   public void updateDashboard(){
-    SmartDashboard.putString(k.DRIVE.T_DriveMode, m_driveMode.toString());
+    SmartDashboard.putString(k.DRIVE.T_DRIVER_MODE, m_driveMode.toString());
     m_robotDrive.updateDashboard();
   }
   public void driveStopMotion(){

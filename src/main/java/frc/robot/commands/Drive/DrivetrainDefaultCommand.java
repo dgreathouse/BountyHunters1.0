@@ -42,9 +42,9 @@ public class DrivetrainDefaultCommand extends Command {
     rightX = MathUtil.applyDeadband(rightX, 0.1, 1.0);
 
     var directions = new ChassisSpeeds();
-    directions.vxMetersPerSecond = leftY * k.DRIVE.DriveMaxVelocity_MpSec;
-    directions.vyMetersPerSecond = leftX * k.DRIVE.DriveMaxVelocity_MpSec;
-    directions.omegaRadiansPerSecond = rightX * -k.DRIVE.DriveMaxAngularVelocity_RadPerSec;
+    directions.vxMetersPerSecond = leftY * k.DRIVE.MAX_VELOCITY_MeterPerSec;
+    directions.vyMetersPerSecond = leftX * k.DRIVE.MAX_VELOCITY_MeterPerSec;
+    directions.omegaRadiansPerSecond = rightX * -k.DRIVE.MAX_ANGULAR_VELOCITY_RadianPerSec;
     if (Math.abs(rightX) > 0.8 || Math.abs(rightY) > 0.8) {
       m_lastTargetAngle = new Rotation2d(rightY, -rightX);
     }

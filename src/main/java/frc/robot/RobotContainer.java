@@ -61,7 +61,7 @@ public class RobotContainer {
 
   private Notifier m_telemetry;
   // TODO: Replace with CommandPS5Controller when WPILib gets it working.
-  public static final CommandPS4Controller s_driverController = new CommandPS4Controller(k.OI.kDriverControllerPort);
+  public static final CommandPS4Controller s_driverController = new CommandPS4Controller(k.OI.DRIVER_CONTROLLER_PORT);
   SendableChooser<Command> autoChooser = new SendableChooser<>();
   private void updateDashboard(){
     m_drivetrainSubsystem.updateDashboard();

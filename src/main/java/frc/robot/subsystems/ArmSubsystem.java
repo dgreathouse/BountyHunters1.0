@@ -14,7 +14,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
-    m_motor = new TalonFX(20, k.ROBOT.CANFD_Name);
+    m_motor = new TalonFX(20, k.ROBOT.CANFD_NAME);
     m_motor.setNeutralMode(NeutralModeValue.Brake);
 
   }

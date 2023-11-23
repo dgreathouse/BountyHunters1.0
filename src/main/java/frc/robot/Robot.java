@@ -20,7 +20,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
   public Robot(){
-    super(k.ROBOT.Period);
+    super(k.ROBOT.PERIOD);
   }
   /**
    * This function is run when the robot is first started up and should be used for any
