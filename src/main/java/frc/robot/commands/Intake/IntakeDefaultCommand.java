@@ -10,7 +10,7 @@ public class IntakeDefaultCommand extends Command {
   /** Creates a new IntakeDefaultCommand. */
   public IntakeDefaultCommand(IntakeSubsystem _subsystem) {
     m_intake = _subsystem;
-    addRequirements(_subsystem);
+    addRequirements(m_intake);
   }
 
   // Called when the command is initially scheduled.

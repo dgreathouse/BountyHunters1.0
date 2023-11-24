@@ -4,6 +4,7 @@ package frc.robot.lib;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
@@ -18,9 +19,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
 public class RobotDrive {
-    private final int ModuleCount;
+    private int ModuleCount;
 
     private SwerveModule[] m_modules;
     private Pigeon2 m_pigeon2;
@@ -32,9 +32,8 @@ public class RobotDrive {
     private Field2d m_field;
     private PIDController m_turnPid;
 
-
     /* Put smartdashboard calls in separate thread to reduce performance impact */
-    public void updateDashboard() { 
+    public void updateDashboard() {
         SmartDashboard.putNumber("Successful Daqs", m_odometryThread.getSuccessfulDaqs());
         SmartDashboard.putNumber("Failed Daqs", m_odometryThread.getFailedDaqs());
         SmartDashboard.putNumber("X Pos", m_odometry.getPoseMeters().getX());
@@ -92,19 +91,20 @@ public class RobotDrive {
 
                 /* Now update odometry */
                 for (int i = 0; i < ModuleCount; ++i) {
-                    /* No need to refresh since it's automatically refreshed from the waitForAll() */
+                    /*
+                     * No need to refresh since it's automatically refreshed from the waitForAll()
+                     */
                     m_modulePositions[i] = m_modules[i].getPosition(false);
                 }
                 // Assume Pigeon2 is flat-and-level so latency compensation can be performed
-                double yawDegrees =
-                        BaseStatusSignal.getLatencyCompensatedValue(
-                                m_pigeon2.getYaw(), m_pigeon2.getAngularVelocityZ());
+                double yawDegrees = BaseStatusSignal.getLatencyCompensatedValue(
+                        m_pigeon2.getYaw(), m_pigeon2.getAngularVelocityZ());
 
                 m_odometry.update(Rotation2d.fromDegrees(yawDegrees), m_modulePositions);
                 m_field.setRobotPose(m_odometry.getPoseMeters());
             }
         }
-        
+
         public double getTime() {
             return averageLoopTime;
         }
@@ -117,8 +117,41 @@ public class RobotDrive {
             return FailedDaqs;
         }
     }
-
-    public RobotDrive(SwerveDriveTrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
+    public RobotDrive() {
+        // TODO: Calibrate the PID values and SlipCurrent for stator
+        SwerveDriveTrainConstants m_drivetrainConstants = new SwerveDriveTrainConstants()
+                .withPigeon2Id(1)
+                .withCANbusName(k.ROBOT.CANVORE_CANFD_NAME)
+                .withTurnKp(5)
+                .withTurnKi(0.1);
+        Slot0Configs m_steerGains = new Slot0Configs();
+        Slot0Configs m_driveGains = new Slot0Configs();
+        m_steerGains.kP = 30;
+        m_steerGains.kI = 0.0;
+        m_steerGains.kD = 0.2;
+        m_driveGains.kP = 1;
+        m_driveGains.kI = 0;
+        SwerveDriveConstantsCreator m_constantsCreator = new SwerveDriveConstantsCreator(
+                k.DRIVE.GEAR_RATIO, // ratio for the drive motor
+                k.STEER.GEAR_RATIO_TO_CANCODER, // ratio for the steer motor
+                k.DRIVE.WHEEL_DIAMETER_m, // 4 inch diameter for the wheels
+                17, // Only apply 24 stator amps to prevent slip
+                m_steerGains, // Use the specified steer gains
+                m_driveGains, // Use the specified drive gains
+                true // CANcoder not reversed from the steer motor. For WCP Swerve X this should be
+                     // true.
+        );
+        SwerveModuleConstants m_frontRight = m_constantsCreator.createModuleConstants(
+            0, 1, 0, -0.538818,k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, -k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
+    
+        SwerveModuleConstants m_frontLeft = m_constantsCreator.createModuleConstants(
+            2, 3, 1, -0.474609, k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
+        SwerveModuleConstants m_back = m_constantsCreator.createModuleConstants(
+            4, 5, 2, -0.928467, -k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, 0.0);
+        initialize(m_drivetrainConstants, m_frontLeft, m_frontRight, m_back);    
+            
+    }
+    public void initialize(SwerveDriveTrainConstants driveTrainConstants, SwerveModuleConstants... modules){
         ModuleCount = modules.length;
 
         m_pigeon2 = new Pigeon2(driveTrainConstants.m_pigeon2Id, driveTrainConstants.m_canBusName);
@@ -136,8 +169,7 @@ public class RobotDrive {
             iteration++;
         }
         m_kinematics = new SwerveDriveKinematics(m_moduleLocations);
-        m_odometry =
-                new SwerveDriveOdometry(m_kinematics, m_pigeon2.getRotation2d(), getSwervePositions());
+        m_odometry = new SwerveDriveOdometry(m_kinematics, m_pigeon2.getRotation2d(), getSwervePositions());
         m_field = new Field2d();
         SmartDashboard.putData("Field", m_field);
 
@@ -147,7 +179,6 @@ public class RobotDrive {
         m_odometryThread = new OdometryThread();
         m_odometryThread.start();
     }
-
     private SwerveModulePosition[] getSwervePositions() {
         return m_modulePositions;
     }
@@ -169,12 +200,10 @@ public class RobotDrive {
 
     public void driveAngleFieldCentric(double xSpeeds, double ySpeeds, Rotation2d targetAngle) {
         var currentAngle = m_pigeon2.getRotation2d();
-        double rotationalSpeed =
-                m_turnPid.calculate(currentAngle.getRadians(), targetAngle.getRadians());
+        double rotationalSpeed = m_turnPid.calculate(currentAngle.getRadians(), targetAngle.getRadians());
 
-        var roboCentric =
-                ChassisSpeeds.fromFieldRelativeSpeeds(
-                        xSpeeds, ySpeeds, rotationalSpeed, m_pigeon2.getRotation2d());
+        var roboCentric = ChassisSpeeds.fromFieldRelativeSpeeds(
+                xSpeeds, ySpeeds, rotationalSpeed, m_pigeon2.getRotation2d());
         var swerveStates = m_kinematics.toSwerveModuleStates(roboCentric);
         for (int i = 0; i < ModuleCount; ++i) {
             m_modules[i].apply(swerveStates[i]);
@@ -204,10 +233,12 @@ public class RobotDrive {
     public double getFailedDaqs() {
         return m_odometryThread.FailedDaqs;
     }
-    public double getRobotYaw(){
+
+    public double getRobotYaw() {
         return m_pigeon2.getYaw().getValueAsDouble();
     }
-    public boolean isTurnPIDatSetpoint(){
+
+    public boolean isTurnPIDatSetpoint() {
         return m_turnPid.atSetpoint();
     }
 }

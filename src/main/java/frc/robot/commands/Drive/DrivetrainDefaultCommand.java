@@ -13,10 +13,12 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 public class DrivetrainDefaultCommand extends Command {
 
   public Rotation2d m_lastTargetAngle = new Rotation2d();
-
+  private DrivetrainSubsystem m_drive;
   /** Creates a new DrivetrainDefaultCommand. */
   public DrivetrainDefaultCommand(DrivetrainSubsystem _drivetrain) {
-    addRequirements(_drivetrain);
+    m_drive = _drivetrain;
+    addRequirements(m_drive);
+
   }
 
   // Called when the command is initially scheduled.
@@ -46,15 +48,15 @@ public class DrivetrainDefaultCommand extends Command {
     if (Math.abs(rightX) > 0.8 || Math.abs(rightY) > 0.8) {
       m_lastTargetAngle = new Rotation2d(rightY, -rightX);
     }
-    switch(RobotContainer.m_drivetrainSubsystem.getDriveMode()){
+    switch(m_drive.getDriveMode()){
       case FIELD_CENTRIC:
-        RobotContainer.m_drivetrainSubsystem.driveFieldCentric(directions);
+        m_drive.driveFieldCentric(directions);
       break;
       case ROBOT_CENTRIC:
-        RobotContainer.m_drivetrainSubsystem.driveRobotCentric(directions);
+        m_drive.driveRobotCentric(directions);
       break;
       case ANGLE_FIELD_CENTRIC:
-        RobotContainer.m_drivetrainSubsystem.driveAngleFieldCentric(leftY * 1, leftX * -1, m_lastTargetAngle);
+        m_drive.driveAngleFieldCentric(leftY * 1, leftX * -1, m_lastTargetAngle);
       break;
       default:
       break;
@@ -63,7 +65,7 @@ public class DrivetrainDefaultCommand extends Command {
 
     // Reset the Gyro Yaw
     if (RobotContainer.s_driverController.square().getAsBoolean()) {
-      RobotContainer.m_drivetrainSubsystem.m_robotDrive.seedFieldRelative();
+      m_drive.m_robotDrive.seedFieldRelative();
       // Make us target forward now to avoid jumps
       m_lastTargetAngle = new Rotation2d();
     }

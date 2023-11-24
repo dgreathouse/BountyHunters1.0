@@ -10,7 +10,7 @@ public class ExtensionDefaultCommand extends Command {
   /** Creates a new ExtensionDefaultCommand. */
   public ExtensionDefaultCommand(ExtensionSubsystem _subsystem) {
     m_extension = _subsystem;
-    addRequirements(_subsystem);
+    addRequirements(m_extension);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

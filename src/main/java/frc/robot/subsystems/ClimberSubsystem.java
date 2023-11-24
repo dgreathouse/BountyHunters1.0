@@ -16,7 +16,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   /** Creates a new ClimberSubsystem. */
   public ClimberSubsystem() {
-    m_motor = new TalonFX(20, k.ROBOT.CANFD_NAME);
+    m_motor = new TalonFX(20, k.ROBOT.CANVORE_CANFD_NAME);
     m_motor.setNeutralMode(NeutralModeValue.Brake);
 
 

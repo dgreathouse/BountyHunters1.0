@@ -10,7 +10,7 @@ public class ArmDefaultCommand extends Command {
   /** Creates a new ArmDefaultCommand. */
   public ArmDefaultCommand(ArmSubsystem _subsystem) {
     m_arm = _subsystem;
-    addRequirements(_subsystem);
+    addRequirements(m_arm);
   }
 
   // Called when the command is initially scheduled.

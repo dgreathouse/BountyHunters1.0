@@ -11,7 +11,7 @@ public class ClimberDefaultCommand extends Command {
   /** Creates a new ClimberDefaultCommand. */
   public ClimberDefaultCommand(ClimberSubsystem _subsystem) {
     m_climber = _subsystem;
-    addRequirements(_subsystem);
+    addRequirements(m_climber);
   }
 
   // Called when the command is initially scheduled.

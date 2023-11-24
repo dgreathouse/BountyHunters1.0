@@ -6,7 +6,7 @@ public class SwerveDriveTrainConstants {
     /** CAN ID of the Pigeon2 on the drivetrain */
     public int m_pigeon2Id = 0;
     /** Name of CANivore the swerve drive is on */
-    public String m_canBusName = k.ROBOT.CANFD_NAME;
+    public String m_canBusName = k.ROBOT.CANVORE_CANFD_NAME;
 
     public double m_rotateKp = 0;
     public double m_rotateKi = 0;

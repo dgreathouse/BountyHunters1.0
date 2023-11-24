@@ -10,7 +10,7 @@ public class TurretDefaultCommand extends Command {
   /** Creates a new TurretDefaultCommand. */
   public TurretDefaultCommand(TurretSubsystem _subsystem) {
     m_turret = _subsystem;
-    addRequirements(_subsystem);
+    addRequirements(m_turret);
   }
 
   // Called when the command is initially scheduled.

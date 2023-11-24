@@ -10,7 +10,7 @@ public class ShooterDefaultCommand extends Command {
   /** Creates a new ShooterDefaultCommand. */
   public ShooterDefaultCommand(ShooterSubsystem _subsystem) {
     m_shooter = _subsystem;
-    addRequirements(_subsystem);
+    addRequirements(m_shooter);
   }
 
   // Called when the command is initially scheduled.

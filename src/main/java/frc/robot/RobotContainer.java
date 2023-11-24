@@ -12,6 +12,7 @@ import frc.robot.commands.Intake.IntakeDefaultCommand;
 import frc.robot.commands.Lift.LiftDefaultCommand;
 import frc.robot.commands.Shooter.ShooterDefaultCommand;
 import frc.robot.commands.Turret.TurretDefaultCommand;
+import frc.robot.lib.GD;
 import frc.robot.lib.k;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -27,51 +28,53 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
-
+import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
+ * In command-based projects, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Subsystems, commands, and trigger mappings should be defined here.
+ * 
  */
 public class RobotContainer {
 
-
-  public static final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+  private static final ArmSubsystem m_armSubsystem = new ArmSubsystem();
   private final ArmDefaultCommand m_armDefaultCommand = new ArmDefaultCommand(m_armSubsystem);
 
-  public static final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
+  private static final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   private final ClimberDefaultCommand m_climberDefaultCommand = new ClimberDefaultCommand(m_climberSubsystem);
 
-  public static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
+  private static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final DrivetrainDefaultCommand m_drivetrainDefaultCommand = new DrivetrainDefaultCommand(m_drivetrainSubsystem);
 
-  public static final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
+  private static final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
   private final ElevatorDefaultCommand m_elevatorDefaultCommand = new ElevatorDefaultCommand(m_elevatorSubsystem);
 
-  public static final ExtensionSubsystem m_extensionSubsystem = new ExtensionSubsystem();
+  private static final ExtensionSubsystem m_extensionSubsystem = new ExtensionSubsystem();
   private final ExtensionDefaultCommand m_extensionDefaultCommand = new ExtensionDefaultCommand(m_extensionSubsystem);
 
-  public static final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  private static final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
   private final IntakeDefaultCommand m_intakeDefaultCommand = new IntakeDefaultCommand(m_intakeSubsystem);
 
-  public static final LiftSubsystem m_liftSubsystem = new LiftSubsystem();
+  private static final LiftSubsystem m_liftSubsystem = new LiftSubsystem();
   private final LiftDefaultCommand m_liftDefaultCommand = new LiftDefaultCommand(m_liftSubsystem);
 
-  public static final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
+  private static final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   private final ShooterDefaultCommand m_shooterDefaultCommand = new ShooterDefaultCommand(m_shooterSubsystem);
 
-  public static final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
+  private static final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
   private final TurretDefaultCommand m_turretDefaultCommand = new TurretDefaultCommand(m_turretSubsystem);
 
   private Notifier m_telemetry;
-  // TODO: Replace with CommandPS5Controller when WPILib gets it working.
-  public static final CommandPS4Controller s_driverController = new CommandPS4Controller(k.OI.DRIVER_CONTROLLER_PORT);
+
+  
+  public static final CommandPS5Controller s_driverController = new CommandPS5Controller(k.OI.DRIVER_CONTROLLER_PORT);
+  public static final CommandPS5Controller s_operatorController = new CommandPS5Controller(k.OI.OPERATOR_CONTROLLER_PORT);
+
   SendableChooser<Command> autoChooser = new SendableChooser<>();
+
   private void updateDashboard(){
+    SmartDashboard.putString("RobotMode", GD.G_RobotMode.toString());
     m_drivetrainSubsystem.updateDashboard();
     m_armSubsystem.updateDashboard();
     m_climberSubsystem.updateDashboard();
@@ -82,9 +85,9 @@ public class RobotContainer {
     m_shooterSubsystem.updateDashboard();
     m_turretSubsystem.updateDashboard();
   }
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  /** This is the constructor for the class. Setup of the subsystems, 
+   * buttons and autonomous options should be done here */
   public RobotContainer() {
-
     m_armSubsystem.setDefaultCommand(m_armDefaultCommand);
     m_climberSubsystem.setDefaultCommand(m_climberDefaultCommand);
     m_drivetrainSubsystem.setDefaultCommand(m_drivetrainDefaultCommand);
@@ -97,13 +100,16 @@ public class RobotContainer {
     
     // Configure the trigger bindings
     configureBindings();
+
+    // Add all autonomous command groups to the list on the Smartdashboard
     autoChooser.setDefaultOption("Do Nothing", new AutoDoNothing());
     SmartDashboard.putData(autoChooser);
 
+    // Setup the dashboard notifier that runs at a slower rate than our main robot periodic.
     m_telemetry = new Notifier(this::updateDashboard);
     m_telemetry.startPeriodic(0.1);
   }
-
+ 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -115,7 +121,7 @@ public class RobotContainer {
   }
 
   /**
-   * @return the command to run in autonomous
+   * @return the command to run in autonomous routine
    */
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();

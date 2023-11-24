@@ -10,7 +10,7 @@ public class LiftDefaultCommand extends Command {
   /** Creates a new LiftDefaultCommand. */
   public LiftDefaultCommand(LiftSubsystem _subsystem) {
     m_lift = _subsystem;
-    addRequirements(_subsystem);
+    addRequirements(m_lift);
   }
 
   // Called when the command is initially scheduled.

@@ -11,7 +11,7 @@ public class ElevatorDefaultCommand extends Command {
   /** Creates a new ElevatorDefaultCommand. */
   public ElevatorDefaultCommand(ElevatorSubsystem _subsystem) {
     m_elevator = _subsystem;
-    addRequirements(_subsystem);
+    addRequirements(m_elevator);
   }
 
   // Called when the command is initially scheduled.

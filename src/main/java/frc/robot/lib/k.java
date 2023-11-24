@@ -11,12 +11,34 @@ package frc.robot.lib;
  * constants are needed, to reduce verbosity.
  */
 public final class k {
+  public static class CONVERT{
+    public static final double DEGREES_TO_RADIANS = 0.017453292519943295;
+    public static final double RADIANS_TO_DEGREES = 57.29577951308232;
+  }
   public static class ROBOT {
     public static final double PERIOD = 0.2;
-    public static String CANFD_NAME = "CANFD";
+    public static final String CANVORE_CANFD_NAME = "CANFD";
+    public static final String ROBORIO_CAN_NAME = "rio";
+    public static final int DRIVE_LEFT_CANID = 10;
+    public static final int DRIVE_RIGHT_CANID = 11;
+    public static final int DRIVE_BACK_CANID = 12;
+    
+    
+    public static final int STEER_LEFT_CANID = 13;
+    public static final int STEER_RIGHT_CANID = 14;
+    public static final int STEER_BACK_CANID = 15;
+
+    public static final int CANCODER_LEFT_CANID = 1;
+    public static final int CANCODER_RIGHT_CANID = 2;
+    public static final int CANCODER_BACK_CANID = 3;
+
+    public static final int PIGEON2_CANID = 20;
+    public static final int PD_CANID = 1;  // Power Distribution, Rev or CTRE
+  
   }
   public static class OI {
     public static final int DRIVER_CONTROLLER_PORT = 0;
+    public static final int OPERATOR_CONTROLLER_PORT = 1;
   }
   public static class DRIVEBASE {
     public static final double WHEEL_BASE_Y_m = 0.47738;
@@ -54,5 +76,22 @@ public final class k {
     private static final double CANCODER_GEAR_RATIO = 1.0;
     private static final double GEAR_RATIO = 1/((MOTOR_PINION_TEETH/MOTOR_DRIVE_GEAR_TEETH)*(GEAR_1_DRIVE_TEETH/GEAR_1_DRIVEN_TEETH));
     public static final double GEAR_RATIO_TO_CANCODER = GEAR_RATIO * CANCODER_GEAR_RATIO;
+  }
+  public static class ARM {
+    public static final double ROTATION_PID_Kp = 0.0;
+    public static final double ROTATION_PID_Ki = 0.0;
+    public static final double ROTATION_PID_Kd = 0.0;
+
+    public static final double FF_Ks = 0.0;
+    public static final double FF_Kg = 0.0;
+    public static final double FF_Kv = 0.0;
+    public static final double FF_Ka = 0.0;
+
+    public static final double OFFSET_FROM_ZERO_deg = 0.0;
+    public static final double GEAR_RATIO = 100.0;
+    public static final double MOTOR_RPM = 6380.0;
+    // TODO: Check calculation with actual data through testing   
+    public static final double MAX_ANGULAR_VELOCITY_RadianPerSec = (MOTOR_RPM / 60.0 / GEAR_RATIO) * 360 * k.CONVERT.DEGREES_TO_RADIANS ;
+
   }
 }
