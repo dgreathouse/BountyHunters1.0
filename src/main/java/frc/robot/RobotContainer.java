@@ -4,6 +4,7 @@ package frc.robot;
 
 import frc.robot.commandGroups.AutoDoNothing;
 import frc.robot.commands.Arm.ArmDefaultCommand;
+import frc.robot.commands.Claw.ClawDefaultCommand;
 import frc.robot.commands.Climber.ClimberDefaultCommand;
 import frc.robot.commands.Drive.DrivetrainDefaultCommand;
 import frc.robot.commands.Elevator.ElevatorDefaultCommand;
@@ -15,6 +16,7 @@ import frc.robot.commands.Turret.TurretDefaultCommand;
 import frc.robot.lib.GD;
 import frc.robot.lib.k;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -43,6 +45,9 @@ public class RobotContainer {
 
   private static final ClimberSubsystem m_climberSubsystem = new ClimberSubsystem();
   private final ClimberDefaultCommand m_climberDefaultCommand = new ClimberDefaultCommand(m_climberSubsystem);
+
+  private static final ClawSubsystem m_clawSubsystem = new ClawSubsystem();
+  private final ClawDefaultCommand m_clawDefaultCommand = new ClawDefaultCommand(m_clawSubsystem);
 
   private static final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   private final DrivetrainDefaultCommand m_drivetrainDefaultCommand = new DrivetrainDefaultCommand(m_drivetrainSubsystem);
@@ -78,6 +83,7 @@ public class RobotContainer {
     m_drivetrainSubsystem.updateDashboard();
     m_armSubsystem.updateDashboard();
     m_climberSubsystem.updateDashboard();
+    m_clawSubsystem.updateDashboard();
     m_elevatorSubsystem.updateDashboard();
     m_extensionSubsystem.updateDashboard();
     m_intakeSubsystem.updateDashboard();
@@ -90,6 +96,7 @@ public class RobotContainer {
   public RobotContainer() {
     m_armSubsystem.setDefaultCommand(m_armDefaultCommand);
     m_climberSubsystem.setDefaultCommand(m_climberDefaultCommand);
+    m_clawSubsystem.setDefaultCommand(m_clawDefaultCommand);
     m_drivetrainSubsystem.setDefaultCommand(m_drivetrainDefaultCommand);
     m_elevatorSubsystem.setDefaultCommand(m_elevatorDefaultCommand);
     m_extensionSubsystem.setDefaultCommand(m_extensionDefaultCommand);
