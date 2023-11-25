@@ -14,6 +14,7 @@ import frc.robot.commands.Lift.LiftDefaultCommand;
 import frc.robot.commands.Shooter.ShooterDefaultCommand;
 import frc.robot.commands.Turret.TurretDefaultCommand;
 import frc.robot.lib.GD;
+import frc.robot.lib.ISubsystem;
 import frc.robot.lib.k;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
@@ -25,6 +26,11 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,6 +45,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * 
  */
 public class RobotContainer {
+  public static Set<ISubsystem> subsystems = new HashSet<>();
 
   private static final ArmSubsystem m_armSubsystem = new ArmSubsystem();
   private final ArmDefaultCommand m_armDefaultCommand = new ArmDefaultCommand(m_armSubsystem);
@@ -77,19 +84,14 @@ public class RobotContainer {
   public static final CommandPS5Controller s_operatorController = new CommandPS5Controller(k.OI.OPERATOR_CONTROLLER_PORT);
 
   SendableChooser<Command> autoChooser = new SendableChooser<>();
+  
 
   private void updateDashboard(){
     SmartDashboard.putString("RobotMode", GD.G_RobotMode.toString());
-    m_drivetrainSubsystem.updateDashboard();
-    m_armSubsystem.updateDashboard();
-    m_climberSubsystem.updateDashboard();
-    m_clawSubsystem.updateDashboard();
-    m_elevatorSubsystem.updateDashboard();
-    m_extensionSubsystem.updateDashboard();
-    m_intakeSubsystem.updateDashboard();
-    m_liftSubsystem.updateDashboard();
-    m_shooterSubsystem.updateDashboard();
-    m_turretSubsystem.updateDashboard();
+    Iterator<ISubsystem> it = subsystems.iterator();
+    while(it.hasNext()){
+      it.next().updateDashboard();
+    }
   }
   /** This is the constructor for the class. Setup of the subsystems, 
    * buttons and autonomous options should be done here */

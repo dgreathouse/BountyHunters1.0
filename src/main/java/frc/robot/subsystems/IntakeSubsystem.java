@@ -3,13 +3,23 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
+import frc.robot.lib.ISubsystem;
 
-public class IntakeSubsystem extends SubsystemBase {
+public class IntakeSubsystem extends SubsystemBase implements ISubsystem {
   public void updateDashboard() {
 
   }
+
   /** Creates a new IntakeSubsystem. */
-  public IntakeSubsystem() {}
+  public IntakeSubsystem() {
+
+    initialize();
+  }
+
+  public void initialize() {
+    RobotContainer.subsystems.add(this);
+  }
 
   @Override
   public void periodic() {

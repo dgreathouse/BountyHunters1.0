@@ -41,31 +41,30 @@ public class DrivetrainDefaultCommand extends Command {
     rightY = MathUtil.applyDeadband(rightY, 0.1, 1.0);
     rightX = MathUtil.applyDeadband(rightX, 0.1, 1.0);
 
-    var directions = new ChassisSpeeds();
-    directions.vxMetersPerSecond = leftY * k.DRIVE.MAX_VELOCITY_MeterPerSec;
-    directions.vyMetersPerSecond = leftX * k.DRIVE.MAX_VELOCITY_MeterPerSec;
-    directions.omegaRadiansPerSecond = rightX * -k.DRIVE.MAX_ANGULAR_VELOCITY_RadianPerSec;
+    var speeds = new ChassisSpeeds();
+    speeds.vxMetersPerSecond = leftY * k.DRIVE.MAX_VELOCITY_MeterPerSec;
+    speeds.vyMetersPerSecond = leftX * k.DRIVE.MAX_VELOCITY_MeterPerSec;
+    speeds.omegaRadiansPerSecond = rightX * -k.DRIVE.MAX_ANGULAR_VELOCITY_RadianPerSec;
     if (Math.abs(rightX) > 0.8 || Math.abs(rightY) > 0.8) {
       m_lastTargetAngle = new Rotation2d(rightY, -rightX);
     }
     switch(m_drive.getDriveMode()){
       case FIELD_CENTRIC:
-        m_drive.driveFieldCentric(directions);
+        m_drive.driveFieldCentric(speeds);
       break;
       case ROBOT_CENTRIC:
-        m_drive.driveRobotCentric(directions);
+        m_drive.driveRobotCentric(speeds);
       break;
       case ANGLE_FIELD_CENTRIC:
-        m_drive.driveAngleFieldCentric(leftY * 1, leftX * -1, m_lastTargetAngle);
+        m_drive.driveAngleFieldCentric(leftY * k.DRIVE.MAX_VELOCITY_MeterPerSec, leftX * -k.DRIVE.MAX_VELOCITY_MeterPerSec, m_lastTargetAngle);
       break;
       default:
       break;
-
     }
 
     // Reset the Gyro Yaw
     if (RobotContainer.s_driverController.square().getAsBoolean()) {
-      m_drive.m_robotDrive.seedFieldRelative();
+      m_drive.m_robotDrive.resetYaw();
       // Make us target forward now to avoid jumps
       m_lastTargetAngle = new Rotation2d();
     }

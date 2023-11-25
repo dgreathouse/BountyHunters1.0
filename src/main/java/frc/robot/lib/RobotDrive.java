@@ -151,18 +151,18 @@ public class RobotDrive {
         initialize(m_drivetrainConstants, m_frontLeft, m_frontRight, m_back);    
             
     }
-    public void initialize(SwerveDriveTrainConstants driveTrainConstants, SwerveModuleConstants... modules){
-        ModuleCount = modules.length;
+    public void initialize(SwerveDriveTrainConstants _driveTrainConstants, SwerveModuleConstants... _modules){
+        ModuleCount = _modules.length;
 
-        m_pigeon2 = new Pigeon2(driveTrainConstants.m_pigeon2Id, driveTrainConstants.m_canBusName);
+        m_pigeon2 = new Pigeon2(_driveTrainConstants.m_pigeon2Id, _driveTrainConstants.m_canBusName);
 
         m_modules = new SwerveModule[ModuleCount];
         m_modulePositions = new SwerveModulePosition[ModuleCount];
         m_moduleLocations = new Translation2d[ModuleCount];
 
         int iteration = 0;
-        for (SwerveModuleConstants module : modules) {
-            m_modules[iteration] = new SwerveModule(module, driveTrainConstants.m_canBusName);
+        for (SwerveModuleConstants module : _modules) {
+            m_modules[iteration] = new SwerveModule(module, _driveTrainConstants.m_canBusName);
             m_moduleLocations[iteration] = new Translation2d(module.m_locationX_m, module.m_locationY_m);
             m_modulePositions[iteration] = m_modules[iteration].getPosition(true);
 
@@ -173,7 +173,7 @@ public class RobotDrive {
         m_field = new Field2d();
         SmartDashboard.putData("Field", m_field);
 
-        m_turnPid = new PIDController(driveTrainConstants.m_rotateKp, 0, driveTrainConstants.m_rotateKd);
+        m_turnPid = new PIDController(_driveTrainConstants.m_rotateKp, 0, _driveTrainConstants.m_rotateKd);
         m_turnPid.enableContinuousInput(-Math.PI, Math.PI);
 
         m_odometryThread = new OdometryThread();
@@ -183,27 +183,27 @@ public class RobotDrive {
         return m_modulePositions;
     }
 
-    public void driveRobotCentric(ChassisSpeeds speeds) {
-        var swerveStates = m_kinematics.toSwerveModuleStates(speeds);
+    public void driveRobotCentric(ChassisSpeeds _speeds) {
+        var swerveStates = m_kinematics.toSwerveModuleStates(_speeds);
         for (int i = 0; i < ModuleCount; ++i) {
             m_modules[i].apply(swerveStates[i]);
         }
     }
 
-    public void driveFieldCentric(ChassisSpeeds speeds) {
-        var roboCentric = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, m_pigeon2.getRotation2d());
+    public void driveFieldCentric(ChassisSpeeds _speeds) {
+        var roboCentric = ChassisSpeeds.fromFieldRelativeSpeeds(_speeds, m_pigeon2.getRotation2d());
         var swerveStates = m_kinematics.toSwerveModuleStates(roboCentric);
         for (int i = 0; i < ModuleCount; ++i) {
             m_modules[i].apply(swerveStates[i]);
         }
     }
 
-    public void driveAngleFieldCentric(double xSpeeds, double ySpeeds, Rotation2d targetAngle) {
+    public void driveAngleFieldCentric(double _xSpeeds, double _ySpeeds, Rotation2d _targetAngle) {
         var currentAngle = m_pigeon2.getRotation2d();
-        double rotationalSpeed = m_turnPid.calculate(currentAngle.getRadians(), targetAngle.getRadians());
+        double rotationalSpeed = m_turnPid.calculate(currentAngle.getRadians(), _targetAngle.getRadians());
 
         var roboCentric = ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeeds, ySpeeds, rotationalSpeed, m_pigeon2.getRotation2d());
+                _xSpeeds, _ySpeeds, rotationalSpeed, m_pigeon2.getRotation2d());
         var swerveStates = m_kinematics.toSwerveModuleStates(roboCentric);
         for (int i = 0; i < ModuleCount; ++i) {
             m_modules[i].apply(swerveStates[i]);
@@ -218,7 +218,7 @@ public class RobotDrive {
         }
     }
 
-    public void seedFieldRelative() {
+    public void resetYaw() {
         m_pigeon2.setYaw(0);
     }
 

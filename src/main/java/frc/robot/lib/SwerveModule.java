@@ -35,38 +35,38 @@ public class SwerveModule {
 
     private SwerveModulePosition m_internalState = new SwerveModulePosition();
 
-    public SwerveModule(SwerveModuleConstants constants, String canbusName) {
-        m_driveMotor = new TalonFX(constants.m_driveMotorId, canbusName);
-        m_steerMotor = new TalonFX(constants.m_steerMotorId, canbusName);
-        m_cancoder = new CANcoder(constants.m_CANcoderId, canbusName);
+    public SwerveModule(SwerveModuleConstants _constants, String _canbusName) {
+        m_driveMotor = new TalonFX(_constants.m_driveMotorId, _canbusName);
+        m_steerMotor = new TalonFX(_constants.m_steerMotorId, _canbusName);
+        m_cancoder = new CANcoder(_constants.m_CANcoderId, _canbusName);
 
         TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
 
-        talonConfigs.Slot0 = constants.m_driveMotorGains;
-        talonConfigs.TorqueCurrent.PeakForwardTorqueCurrent = constants.m_slipCurrent_amps;
-        talonConfigs.TorqueCurrent.PeakReverseTorqueCurrent = -constants.m_slipCurrent_amps;
+        talonConfigs.Slot0 = _constants.m_driveMotorGains;
+        talonConfigs.TorqueCurrent.PeakForwardTorqueCurrent = _constants.m_slipCurrent_amps;
+        talonConfigs.TorqueCurrent.PeakReverseTorqueCurrent = -_constants.m_slipCurrent_amps;
         m_driveMotor.getConfigurator().apply(talonConfigs);
 
         /* Undo changes for torqueCurrent */
         talonConfigs.TorqueCurrent = new TorqueCurrentConfigs();
 
-        talonConfigs.Slot0 = constants.m_steerMotorGains;
+        talonConfigs.Slot0 = _constants.m_steerMotorGains;
         // Modify configuration to use remote CANcoder fused
-        talonConfigs.Feedback.FeedbackRemoteSensorID = constants.m_CANcoderId;
+        talonConfigs.Feedback.FeedbackRemoteSensorID = _constants.m_CANcoderId;
         talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-        talonConfigs.Feedback.RotorToSensorRatio = constants.m_steerMotorGearRatio;
+        talonConfigs.Feedback.RotorToSensorRatio = _constants.m_steerMotorGearRatio;
 
         // Enable continuous wrap for swerve modules
         talonConfigs.ClosedLoopGeneral.ContinuousWrap = true; 
 
         talonConfigs.MotorOutput.Inverted =
-                constants.m_isSteerMotorReversed
+                _constants.m_isSteerMotorReversed
                         ? InvertedValue.Clockwise_Positive
                         : InvertedValue.CounterClockwise_Positive;
         m_steerMotor.getConfigurator().apply(talonConfigs);
 
         CANcoderConfiguration cancoderConfigs = new CANcoderConfiguration();
-        cancoderConfigs.MagnetSensor.MagnetOffset = constants.m_CANcoderOffset_deg;
+        cancoderConfigs.MagnetSensor.MagnetOffset = _constants.m_CANcoderOffset_deg;
         m_cancoder.getConfigurator().apply(cancoderConfigs);
 
         m_drivePosition = m_driveMotor.getPosition();
@@ -81,13 +81,13 @@ public class SwerveModule {
         m_signals[3] = m_steerVelocity;
 
         /* Calculate the ratio of drive motor rotation to meter on ground */
-        double rotationsPerWheelRotation = constants.m_driveMotorGearRatio;
-        double metersPerWheelRotation = Math.PI * constants.m_wheelDiameter_m;
+        double rotationsPerWheelRotation = _constants.m_driveMotorGearRatio;
+        double metersPerWheelRotation = Math.PI * _constants.m_wheelDiameter_m;
         m_driveRotationsPerMeter = rotationsPerWheelRotation / metersPerWheelRotation;
     }
 
-    public SwerveModulePosition getPosition(boolean refresh) {
-        if (refresh) {
+    public SwerveModulePosition getPosition(boolean _refresh) {
+        if (_refresh) {
             /* Refresh all signals */
             m_drivePosition.refresh();
             m_driveVelocity.refresh();
@@ -107,8 +107,8 @@ public class SwerveModule {
         return m_internalState;
     }
 
-    public void apply(SwerveModuleState state) {
-        var optimized = SwerveModuleState.optimize(state, m_internalState.angle);
+    public void apply(SwerveModuleState _state) {
+        var optimized = SwerveModuleState.optimize(_state, m_internalState.angle);
 
         double angleToSetDeg = optimized.angle.getRotations();
         m_steerMotor.setControl(m_angleSetter.withPosition(angleToSetDeg));

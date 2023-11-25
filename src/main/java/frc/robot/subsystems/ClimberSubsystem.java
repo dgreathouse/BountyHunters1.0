@@ -5,9 +5,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
+import frc.robot.lib.ISubsystem;
 import frc.robot.lib.k;
 
-public class ClimberSubsystem extends SubsystemBase {
+public class ClimberSubsystem extends SubsystemBase  implements ISubsystem{
   TalonFX m_motor;
 
   public void updateDashboard() {
@@ -19,9 +21,11 @@ public class ClimberSubsystem extends SubsystemBase {
     m_motor = new TalonFX(20, k.ROBOT.CANVORE_CANFD_NAME);
     m_motor.setNeutralMode(NeutralModeValue.Brake);
 
-
+    initialize();
   }
-
+  private void initialize(){
+    RobotContainer.subsystems.add(this);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

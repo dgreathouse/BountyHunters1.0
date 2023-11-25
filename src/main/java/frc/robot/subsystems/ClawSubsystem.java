@@ -5,8 +5,10 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
+import frc.robot.lib.ISubsystem;
 
-public class ClawSubsystem extends SubsystemBase {
+public class ClawSubsystem extends SubsystemBase  implements ISubsystem {
   public void updateDashboard() {
 
   }
@@ -17,7 +19,7 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
   private void initialize() {
-
+    RobotContainer.subsystems.add(this);
   }
 
   @Override

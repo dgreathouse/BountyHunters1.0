@@ -7,17 +7,23 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.lib.EDriveMode;
+import frc.robot.lib.ISubsystem;
 import frc.robot.lib.RobotDrive;
 import frc.robot.lib.k;
 
-public class DrivetrainSubsystem extends SubsystemBase {
+public class DrivetrainSubsystem extends SubsystemBase  implements ISubsystem{
   public RobotDrive m_robotDrive;
   public EDriveMode m_driveMode = EDriveMode.FIELD_CENTRIC;
 
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
      m_robotDrive = new RobotDrive();
+    initialize(); 
+  }
+  public void initialize(){
+    RobotContainer.subsystems.add(this);
   }
   public void updateDashboard(){
     SmartDashboard.putString(k.DRIVE.T_DRIVER_MODE, m_driveMode.toString());

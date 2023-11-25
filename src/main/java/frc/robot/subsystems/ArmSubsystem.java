@@ -11,6 +11,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
+import frc.robot.lib.ISubsystem;
 import frc.robot.lib.k;
 
 /**  Arm Subsystem.<p>
@@ -18,15 +20,15 @@ import frc.robot.lib.k;
  * Voltage mode of the motor is used and not a specific control method in the TalonFX controller.
  * For the algorithms to work a arm is assumed to be at 0 degrees when horizontal.
  * A 0 degree horizontal arm is usually not what is used in robotics since the arm starts at a different location.
- * There are two ways to deal with this, offset the arm at initialization of offset it when doing this calculation.
- * This approach offsets the angle at intialization.
+ * There are two ways to deal with this, offset the motor at initialization or offset it when doing this calculation.
+ * This approach offsets the motor angle at intialization.
  */
-public class ArmSubsystem extends SubsystemBase {
+public class ArmSubsystem extends SubsystemBase  implements ISubsystem{
   TalonFX m_motor;
   PIDController m_rotPid;
   VoltageOut m_VoltageOut;
   double m_currentAngle;
-
+  
   public void updateDashboard() {
 
   }
@@ -43,7 +45,7 @@ public class ArmSubsystem extends SubsystemBase {
     // Offset the motor by the distance from zero in degrees
     // Motor position is in rotations
     m_motor.setPosition(360.0 * k.ARM.OFFSET_FROM_ZERO_deg / k.ARM.GEAR_RATIO);
-
+    RobotContainer.subsystems.add(this);
 
   }
   /**
