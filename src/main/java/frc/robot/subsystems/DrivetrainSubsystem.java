@@ -69,6 +69,9 @@ public class DrivetrainSubsystem extends SubsystemBase  implements ISubsystem{
   public double getRobotAngle(){
     return m_robotDrive.getRobotYaw();
   }
+  public void setTestVoltage(double _volts){
+    
+  }
   @Override
   public void periodic() {
     

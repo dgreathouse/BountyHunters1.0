@@ -12,6 +12,7 @@ import frc.robot.commands.Extension.ExtensionDefaultCommand;
 import frc.robot.commands.Intake.IntakeDefaultCommand;
 import frc.robot.commands.Lift.LiftDefaultCommand;
 import frc.robot.commands.Shooter.ShooterDefaultCommand;
+import frc.robot.commands.Test.TestCommand;
 import frc.robot.commands.Turret.TurretDefaultCommand;
 import frc.robot.lib.GD;
 import frc.robot.lib.ISubsystem;
@@ -84,7 +85,7 @@ public class RobotContainer {
   public static final CommandPS5Controller s_operatorController = new CommandPS5Controller(k.OI.OPERATOR_CONTROLLER_PORT);
 
   SendableChooser<Command> autoChooser = new SendableChooser<>();
-  
+  SendableChooser<ISubsystem> testChooser = new SendableChooser<>();
 
   private void updateDashboard(){
     SmartDashboard.putString("RobotMode", GD.G_RobotMode.toString());
@@ -107,6 +108,18 @@ public class RobotContainer {
     m_shooterSubsystem.setDefaultCommand(m_shooterDefaultCommand);
     m_turretSubsystem.setDefaultCommand(m_turretDefaultCommand);
     
+    SmartDashboard.putNumber("Test Voltage", 0);
+    testChooser.setDefaultOption("None", null);
+    testChooser.addOption("Arm", m_armSubsystem);
+    testChooser.addOption("Climber", m_climberSubsystem);
+    testChooser.addOption("Claw", m_clawSubsystem);
+    testChooser.addOption("Drive", m_drivetrainSubsystem);
+    testChooser.addOption("Elevator",m_elevatorSubsystem);
+    testChooser.addOption("Extension", m_extensionSubsystem);
+    testChooser.addOption("Intake", m_intakeSubsystem);
+    testChooser.addOption("Lift", m_liftSubsystem);
+    testChooser.addOption("Shooter", m_shooterSubsystem);
+    testChooser.addOption("Turret", m_turretSubsystem);
     // Configure the trigger bindings
     configureBindings();
 
@@ -127,6 +140,7 @@ public class RobotContainer {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     //new Trigger(RobotContainer.m_drivetrainSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
     s_driverController.square().onTrue(new InstantCommand(m_drivetrainSubsystem::changeDriveMode, m_drivetrainSubsystem));
+    s_driverController.circle().toggleOnTrue(new TestCommand(testChooser.getSelected()));
   }
 
   /**

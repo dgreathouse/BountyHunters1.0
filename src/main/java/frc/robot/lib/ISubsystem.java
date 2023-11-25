@@ -7,4 +7,5 @@ package frc.robot.lib;
 /** Add your docs here. */
 public interface ISubsystem {
     public void updateDashboard();
+    public void setTestVoltage(double _volts);
 }

@@ -74,7 +74,9 @@ public class ArmSubsystem extends SubsystemBase  implements ISubsystem{
     
     m_motor.setControl(m_VoltageOut.withOutput(ff + rotPID));
   }
-
+  public void setTestVoltage(double _volts){
+    m_motor.setVoltage(_volts);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

@@ -19,7 +19,9 @@ public class ElevatorSubsystem extends SubsystemBase implements ISubsystem {
   public void initialize() {
     RobotContainer.subsystems.add(this);
   }
-
+  public void setTestVoltage(double _volts){
+    
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
