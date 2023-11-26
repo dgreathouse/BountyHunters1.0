@@ -1,6 +1,6 @@
 //Copyright (c) 2020-2023 Essexville Hampton Public Schools (FRC 8517)
 
-package frc.robot.lib;
+package frc.robot.lib.Swerve;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.Utils;
@@ -18,8 +18,9 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.lib.k;
 
-public class RobotDrive {
+public class SwerveDrive {
     private int ModuleCount;
 
     private SwerveModule[] m_modules;
@@ -117,7 +118,7 @@ public class RobotDrive {
             return FailedDaqs;
         }
     }
-    public RobotDrive() {
+    public SwerveDrive() {
         // TODO: Calibrate the PID values and SlipCurrent for stator
         SwerveDriveTrainConstants m_drivetrainConstants = new SwerveDriveTrainConstants()
                 .withPigeon2Id(1)

@@ -1,6 +1,8 @@
 //Copyright (c) 2020-2023 Essexville Hampton Public Schools (FRC 8517)
 
-package frc.robot.lib;
+package frc.robot.lib.Swerve;
+
+import frc.robot.lib.k;
 
 public class SwerveDriveTrainConstants {
     /** CAN ID of the Pigeon2 on the drivetrain */

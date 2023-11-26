@@ -1,6 +1,6 @@
 //Copyright (c) 2020-2023 Essexville Hampton Public Schools (FRC 8517)
 
-package frc.robot.lib;
+package frc.robot.lib.Swerve;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;

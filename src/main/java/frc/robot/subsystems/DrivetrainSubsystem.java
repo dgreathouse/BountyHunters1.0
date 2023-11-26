@@ -10,16 +10,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.lib.EDriveMode;
 import frc.robot.lib.ISubsystem;
-import frc.robot.lib.RobotDrive;
 import frc.robot.lib.k;
+import frc.robot.lib.Swerve.SwerveDrive;
 
-public class DrivetrainSubsystem extends SubsystemBase  implements ISubsystem{
-  public RobotDrive m_robotDrive;
-  public EDriveMode m_driveMode = EDriveMode.FIELD_CENTRIC;
+public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
+  public SwerveDrive m_robotDrive;
+  public EDriveMode m_driveMode = EDriveMode.ANGLE_FIELD_CENTRIC;
 
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
-     m_robotDrive = new RobotDrive();
+     m_robotDrive = new SwerveDrive();
     initialize(); 
   }
   public void initialize(){
@@ -41,12 +41,13 @@ public class DrivetrainSubsystem extends SubsystemBase  implements ISubsystem{
   public void driveAngleFieldCentric(double _x, double _y, Rotation2d _lastTargetAngle){
     m_robotDrive.driveAngleFieldCentric(_x, _y, _lastTargetAngle);
   }
-  public void drivePolarFieldCentric(double _driveAngle, double _speed, double _robotAngle){
-    double x = Math.sin(_driveAngle) * _speed;
-    double y = Math.cos(_driveAngle) * _speed;
+  public void drivePolarFieldCentric(double _driveAngle_deg, double _speed, double _robotAngle_deg){
+    double x = Math.sin(Units.degreesToRadians(_driveAngle_deg)) * _speed;
+    double y = Math.cos(Units.degreesToRadians(_driveAngle_deg)) * _speed;
    
-    driveAngleFieldCentric(x, y, new Rotation2d(Units.degreesToRadians(_robotAngle)));
+    driveAngleFieldCentric(x, y, new Rotation2d(Units.degreesToRadians(_robotAngle_deg)));
   }
+
   public void changeDriveMode(){
     switch(m_driveMode){
       case FIELD_CENTRIC:
