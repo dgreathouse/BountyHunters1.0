@@ -1,4 +1,5 @@
-# BountyHunters Team FRC 8517
+![](src/main/java/frc/robot/lib/MythDigLogoPlainPath.svg)
+
 ## Overview
 This code is a remake of the CTRE swerve module code. The code has been integrated into the command based programming framework.
 
