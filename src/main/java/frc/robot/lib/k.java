@@ -17,7 +17,7 @@ public final class k {
   }
   public static class ROBOT {
     public static final double PERIOD = 0.2;
-    public static final String CANVORE_CANFD_NAME = "CANFD";
+    public static final String CANVORE_CANFD_NAME = "CANivore";
     public static final String ROBORIO_CAN_NAME = "rio";
     public static final int DRIVE_LEFT_CANID = 10;
     public static final int DRIVE_RIGHT_CANID = 11;

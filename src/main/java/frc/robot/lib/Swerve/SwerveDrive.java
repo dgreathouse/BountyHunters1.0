@@ -143,12 +143,12 @@ public class SwerveDrive {
                      // true.
         );
         SwerveModuleConstants m_frontRight = m_constantsCreator.createModuleConstants(
-            0, 1, 0, -0.538818,k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, -k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
+            23, 13, 3, -0.538818,k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, -k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
     
         SwerveModuleConstants m_frontLeft = m_constantsCreator.createModuleConstants(
-            2, 3, 1, -0.474609, k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
+            22, 12, 2, -0.474609, k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
         SwerveModuleConstants m_back = m_constantsCreator.createModuleConstants(
-            4, 5, 2, -0.928467, -k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, 0.0);
+            21, 11, 1, -0.928467, -k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, 0.0);
         initialize(m_drivetrainConstants, m_frontLeft, m_frontRight, m_back);    
             
     }

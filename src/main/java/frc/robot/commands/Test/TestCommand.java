@@ -14,7 +14,7 @@ public class TestCommand extends Command {
 
   /** Creates a new TestCommand. */
   public TestCommand(ISubsystem _subsystem) {
-    addRequirements((Subsystem) _subsystem);
+   // addRequirements((Subsystem) _subsystem);
     m_subsystem = _subsystem;
   }
 

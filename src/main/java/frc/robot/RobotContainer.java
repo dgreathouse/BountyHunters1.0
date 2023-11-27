@@ -109,17 +109,17 @@ public class RobotContainer {
     m_turretSubsystem.setDefaultCommand(m_turretDefaultCommand);
     
     SmartDashboard.putNumber("Test Voltage", 0);
-    testChooser.setDefaultOption("None", null);
-    testChooser.addOption("Arm", m_armSubsystem);
-    testChooser.addOption("Climber", m_climberSubsystem);
-    testChooser.addOption("Claw", m_clawSubsystem);
-    testChooser.addOption("Drive", m_drivetrainSubsystem);
-    testChooser.addOption("Elevator",m_elevatorSubsystem);
-    testChooser.addOption("Extension", m_extensionSubsystem);
-    testChooser.addOption("Intake", m_intakeSubsystem);
-    testChooser.addOption("Lift", m_liftSubsystem);
-    testChooser.addOption("Shooter", m_shooterSubsystem);
-    testChooser.addOption("Turret", m_turretSubsystem);
+
+    // testChooser.addOption("Arm", m_armSubsystem);
+    // testChooser.addOption("Climber", m_climberSubsystem);
+    // testChooser.addOption("Claw", m_clawSubsystem);
+    // testChooser.addOption("Drive", m_drivetrainSubsystem);
+    // testChooser.addOption("Elevator",m_elevatorSubsystem);
+    // testChooser.addOption("Extension", m_extensionSubsystem);
+    // testChooser.addOption("Intake", m_intakeSubsystem);
+    // testChooser.addOption("Lift", m_liftSubsystem);
+    // testChooser.addOption("Shooter", m_shooterSubsystem);
+    // testChooser.addOption("Turret", m_turretSubsystem);
     // Configure the trigger bindings
     configureBindings();
 
