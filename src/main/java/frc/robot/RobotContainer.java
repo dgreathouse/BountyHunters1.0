@@ -13,6 +13,7 @@ import frc.robot.commands.Intake.IntakeDefaultCommand;
 import frc.robot.commands.Lift.LiftDefaultCommand;
 import frc.robot.commands.Shooter.ShooterDefaultCommand;
 import frc.robot.commands.Test.TestCommand;
+import frc.robot.commands.Test.TestDefaultCommand;
 import frc.robot.commands.Turret.TurretDefaultCommand;
 import frc.robot.lib.GD;
 import frc.robot.lib.ISubsystem;
@@ -26,6 +27,7 @@ import frc.robot.subsystems.ExtensionSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.TestSubsystem;
 import frc.robot.subsystems.TurretSubsystem;
 
 import java.util.HashSet;
@@ -78,6 +80,8 @@ public class RobotContainer {
   private static final TurretSubsystem m_turretSubsystem = new TurretSubsystem();
   private final TurretDefaultCommand m_turretDefaultCommand = new TurretDefaultCommand(m_turretSubsystem);
 
+  private static final TestSubsystem m_testSubsystem = new TestSubsystem();
+  private final TestDefaultCommand m_testDefaultCommand = new TestDefaultCommand(m_testSubsystem);
   private Notifier m_telemetry;
 
   
@@ -94,8 +98,7 @@ public class RobotContainer {
       it.next().updateDashboard();
     }
   }
-  /** This is the constructor for the class. Setup of the subsystems, 
-   * buttons and autonomous options should be done here */
+  /** This is the constructor for the class. */
   public RobotContainer() {
     m_armSubsystem.setDefaultCommand(m_armDefaultCommand);
     m_climberSubsystem.setDefaultCommand(m_climberDefaultCommand);
@@ -107,9 +110,10 @@ public class RobotContainer {
     m_liftSubsystem.setDefaultCommand(m_liftDefaultCommand);
     m_shooterSubsystem.setDefaultCommand(m_shooterDefaultCommand);
     m_turretSubsystem.setDefaultCommand(m_turretDefaultCommand);
+    m_testSubsystem.setDefaultCommand(m_testDefaultCommand);
     
     SmartDashboard.putNumber("Test Voltage", 0);
-    testChooser.setDefaultOption("None", null);
+    testChooser.setDefaultOption("None", m_testSubsystem);
     testChooser.addOption("Arm", m_armSubsystem);
     testChooser.addOption("Climber", m_climberSubsystem);
     testChooser.addOption("Claw", m_clawSubsystem);
@@ -120,9 +124,9 @@ public class RobotContainer {
     testChooser.addOption("Lift", m_liftSubsystem);
     testChooser.addOption("Shooter", m_shooterSubsystem);
     testChooser.addOption("Turret", m_turretSubsystem);
-    // Configure the trigger bindings
-    configureBindings();
 
+    SmartDashboard.putData(testChooser);
+   
     // Add all autonomous command groups to the list on the Smartdashboard
     autoChooser.setDefaultOption("Do Nothing", new AutoDoNothing());
     SmartDashboard.putData(autoChooser);
@@ -130,6 +134,9 @@ public class RobotContainer {
     // Setup the dashboard notifier that runs at a slower rate than our main robot periodic.
     m_telemetry = new Notifier(this::updateDashboard);
     m_telemetry.startPeriodic(0.1);
+
+    // Configure the trigger bindings
+    configureBindings();
   }
  
   /**
@@ -137,7 +144,6 @@ public class RobotContainer {
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     //new Trigger(RobotContainer.m_drivetrainSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
     s_driverController.square().onTrue(new InstantCommand(m_drivetrainSubsystem::changeDriveMode, m_drivetrainSubsystem));
     s_driverController.circle().toggleOnTrue(new TestCommand(testChooser.getSelected()));
