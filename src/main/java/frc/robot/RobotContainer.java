@@ -113,7 +113,7 @@ public class RobotContainer {
     m_testSubsystem.setDefaultCommand(m_testDefaultCommand);
     
     SmartDashboard.putNumber("Test Voltage", 0);
-    testChooser.setDefaultOption("None", null);
+    testChooser.setDefaultOption("None", m_testSubsystem);
     testChooser.addOption("Arm", m_armSubsystem);
     testChooser.addOption("Climber", m_climberSubsystem);
     testChooser.addOption("Claw", m_clawSubsystem);

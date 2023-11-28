@@ -110,8 +110,8 @@ public class SwerveModule {
     public void apply(SwerveModuleState _state) {
         var optimized = SwerveModuleState.optimize(_state, m_internalState.angle);
 
-        double angleToSetDeg = optimized.angle.getRotations();
-        m_steerMotor.setControl(m_angleSetter.withPosition(angleToSetDeg));
+        double angleToSet_rot = optimized.angle.getRotations();
+        m_steerMotor.setControl(m_angleSetter.withPosition(angleToSet_rot));
         double velocityToSet = optimized.speedMetersPerSecond * m_driveRotationsPerMeter;
         m_driveMotor.setControl(m_velocitySetter.withVelocity(velocityToSet));
     }
