@@ -121,7 +121,7 @@ public class SwerveDrive {
     public SwerveDrive() {
         // TODO: Calibrate the PID values and SlipCurrent for stator
         SwerveDriveTrainConstants m_drivetrainConstants = new SwerveDriveTrainConstants()
-                .withPigeon2Id(1)
+                .withPigeon2Id(5)
                 .withCANbusName(k.ROBOT.CANVORE_CANFD_NAME)
                 .withTurnKp(5)
                 .withTurnKi(0.1);
