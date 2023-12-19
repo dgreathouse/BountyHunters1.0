@@ -16,7 +16,7 @@ public final class k {
     public static final double RADIANS_TO_DEGREES = 57.29577951308232;
   }
   public static class ROBOT {
-    public static final double PERIOD = 0.2;
+    public static final double PERIOD = 0.02;
     public static final String CANVORE_CANFD_NAME = "CANivore";
     public static final String ROBORIO_CAN_NAME = "rio";
     public static final int DRIVE_LEFT_CANID = 10;

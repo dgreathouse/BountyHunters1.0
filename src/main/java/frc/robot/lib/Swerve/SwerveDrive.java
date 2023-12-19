@@ -177,6 +177,7 @@ public class SwerveDrive {
         m_turnPid = new PIDController(_driveTrainConstants.m_rotateKp, 0, _driveTrainConstants.m_rotateKd);
         m_turnPid.enableContinuousInput(-Math.PI, Math.PI);
         m_turnPid.setTolerance(Math.toRadians(1));
+        
         m_odometryThread = new OdometryThread();
         m_odometryThread.start();
     }
