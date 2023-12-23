@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TorqueCurrentConfigs;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -31,7 +32,8 @@ public class SwerveModule {
     private double m_driveRotationsPerMeter = 0;
 
     private PositionVoltage m_angleSetter = new PositionVoltage(0);
-    private VelocityTorqueCurrentFOC m_velocitySetter = new VelocityTorqueCurrentFOC(0);
+    //private VelocityTorqueCurrentFOC m_velocitySetter = new VelocityTorqueCurrentFOC(0);
+    private VelocityVoltage m_velocitySetter = new VelocityVoltage(0);
 
     private SwerveModulePosition m_internalState = new SwerveModulePosition();
 
@@ -40,30 +42,31 @@ public class SwerveModule {
         m_steerMotor = new TalonFX(_constants.m_steerMotorId, _canbusName);
         m_cancoder = new CANcoder(_constants.m_CANcoderId, _canbusName);
 
-        TalonFXConfiguration talonConfigs = new TalonFXConfiguration();
+        // Configure Drive Motor
+        TalonFXConfiguration talonDriveConfigs = new TalonFXConfiguration();
 
-        talonConfigs.Slot0 = _constants.m_driveMotorGains;
-        talonConfigs.TorqueCurrent.PeakForwardTorqueCurrent = _constants.m_slipCurrent_amps;
-        talonConfigs.TorqueCurrent.PeakReverseTorqueCurrent = -_constants.m_slipCurrent_amps;
-        m_driveMotor.getConfigurator().apply(talonConfigs);
+        talonDriveConfigs.Slot0 = _constants.m_driveMotorGains;
+        
+        //talonDriveConfigs.TorqueCurrent.PeakForwardTorqueCurrent = _constants.m_slipCurrent_amps;
+        //talonDriveConfigs.TorqueCurrent.PeakReverseTorqueCurrent = -_constants.m_slipCurrent_amps;
+        m_driveMotor.getConfigurator().apply(talonDriveConfigs);
 
-        /* Undo changes for torqueCurrent */
-        talonConfigs.TorqueCurrent = new TorqueCurrentConfigs();
-
-        talonConfigs.Slot0 = _constants.m_steerMotorGains;
+        // Configure Steer Motor
+        TalonFXConfiguration talonSteerConfigs = new TalonFXConfiguration();
+        talonSteerConfigs.Slot0 = _constants.m_steerMotorGains;
         // Modify configuration to use remote CANcoder fused
-        talonConfigs.Feedback.FeedbackRemoteSensorID = _constants.m_CANcoderId;
-        talonConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-        talonConfigs.Feedback.RotorToSensorRatio = _constants.m_steerMotorGearRatio;
+        talonSteerConfigs.Feedback.FeedbackRemoteSensorID = _constants.m_CANcoderId;
+        talonSteerConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+        talonSteerConfigs.Feedback.RotorToSensorRatio = _constants.m_steerMotorGearRatio;
 
         // Enable continuous wrap for swerve modules
-        talonConfigs.ClosedLoopGeneral.ContinuousWrap = true; 
+        talonSteerConfigs.ClosedLoopGeneral.ContinuousWrap = true; 
 
-        talonConfigs.MotorOutput.Inverted =
+        talonSteerConfigs.MotorOutput.Inverted =
                 _constants.m_isSteerMotorReversed
                         ? InvertedValue.Clockwise_Positive
                         : InvertedValue.CounterClockwise_Positive;
-        m_steerMotor.getConfigurator().apply(talonConfigs);
+        m_steerMotor.getConfigurator().apply(talonSteerConfigs);
 
         CANcoderConfiguration cancoderConfigs = new CANcoderConfiguration();
         cancoderConfigs.MagnetSensor.MagnetOffset = _constants.m_CANcoderOffset_deg;
@@ -113,7 +116,11 @@ public class SwerveModule {
         double angleToSet_rot = optimized.angle.getRotations();
         m_steerMotor.setControl(m_angleSetter.withPosition(angleToSet_rot));
         double velocityToSet = optimized.speedMetersPerSecond * m_driveRotationsPerMeter;
-        m_driveMotor.setControl(m_velocitySetter.withVelocity(velocityToSet));
+        m_driveMotor.setControl(m_velocitySetter.
+                                withVelocity(velocityToSet).
+                                withEnableFOC(true).
+                                withFeedForward(velocityToSet*12/4.32).// FIXME: Feedforward is in volts. So rps * volts/rps
+                                withAcceleration(4.32*m_driveRotationsPerMeter/2)); // FIXME: 1/2 of max speed as acceleration. 
     }
 
     BaseStatusSignal[] getSignals() {

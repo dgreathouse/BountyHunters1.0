@@ -40,6 +40,7 @@ public class ArmSubsystem extends SubsystemBase  implements ISubsystem{
     m_rotPid = new PIDController(k.ARM.ROTATION_PID_Kp, k.ARM.ROTATION_PID_Ki, k.ARM.ROTATION_PID_Kd);
     initialize();
   }
+  
   private void initialize(){
     m_motor.setNeutralMode(NeutralModeValue.Brake);
     // Offset the motor by the distance from zero in degrees

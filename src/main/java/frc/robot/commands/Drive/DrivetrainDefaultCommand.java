@@ -14,6 +14,8 @@ public class DrivetrainDefaultCommand extends Command {
 
   public Rotation2d m_lastTargetAngle = new Rotation2d();
   private DrivetrainSubsystem m_drive;
+  ChassisSpeeds m_speeds = new ChassisSpeeds();
+
   /** Creates a new DrivetrainDefaultCommand. */
   public DrivetrainDefaultCommand(DrivetrainSubsystem _drivetrain) {
     m_drive = _drivetrain;
@@ -30,36 +32,43 @@ public class DrivetrainDefaultCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // Set local variables to game thumbstick axis values
     double leftY = -RobotContainer.s_driverController.getLeftY();
     double leftX = RobotContainer.s_driverController.getLeftX();
     double rightX = RobotContainer.s_driverController.getRightX();
     double rightY = -RobotContainer.s_driverController.getRightY();
 
     // Limit the inputs for a deadband related to the joystick
-    leftY = MathUtil.applyDeadband(leftY, 0.1, 1.0);
-    leftX = MathUtil.applyDeadband(leftX, 0.1, 1.0);
-    rightY = MathUtil.applyDeadband(rightY, 0.1, 1.0);
-    rightX = MathUtil.applyDeadband(rightX, 0.1, 1.0);
+    leftY = MathUtil.applyDeadband(leftY, 0.02, 1.0);
+    leftX = MathUtil.applyDeadband(leftX, 0.02, 1.0);
+    rightY = MathUtil.applyDeadband(rightY, 0.02, 1.0);
+    rightX = MathUtil.applyDeadband(rightX, 0.02, 1.0);
 
-    var speeds = new ChassisSpeeds();
-    speeds.vxMetersPerSecond = leftY * k.DRIVE.MAX_VELOCITY_MeterPerSec;
-    speeds.vyMetersPerSecond = leftX * k.DRIVE.MAX_VELOCITY_MeterPerSec;
-    speeds.omegaRadiansPerSecond = rightX * -k.DRIVE.MAX_ANGULAR_VELOCITY_RadianPerSec;
+    // Set the class variable ChassisSpeeds to the local variables in their
+    // appropriate units.
+    m_speeds.vxMetersPerSecond = leftY * k.DRIVE.MAX_VELOCITY_MeterPerSec;
+    m_speeds.vyMetersPerSecond = leftX * k.DRIVE.MAX_VELOCITY_MeterPerSec;
+    m_speeds.omegaRadiansPerSecond = rightX * -k.DRIVE.MAX_ANGULAR_VELOCITY_RadianPerSec;
+
+    // Get a new angle if the right x&y are greater than a certain point.
     if (Math.abs(rightX) > 0.8 || Math.abs(rightY) > 0.8) {
       m_lastTargetAngle = new Rotation2d(rightY, -rightX);
     }
-    switch(m_drive.getDriveMode()){
+
+    // Call the appropriate drive mode. Selected by the driver controller Square
+    // button.
+    switch (m_drive.getDriveMode()) {
       case FIELD_CENTRIC:
-        m_drive.driveFieldCentric(speeds);
-      break;
+        m_drive.driveFieldCentric(m_speeds);
+        break;
       case ROBOT_CENTRIC:
-        m_drive.driveRobotCentric(speeds);
-      break;
+        m_drive.driveRobotCentric(m_speeds);
+        break;
       case ANGLE_FIELD_CENTRIC:
-        m_drive.driveAngleFieldCentric(leftY * k.DRIVE.MAX_VELOCITY_MeterPerSec, leftX * -k.DRIVE.MAX_VELOCITY_MeterPerSec, m_lastTargetAngle);
-      break;
+        m_drive.driveAngleFieldCentric(m_speeds.vxMetersPerSecond, m_speeds.vyMetersPerSecond, m_lastTargetAngle);
+        break;
       default:
-      break;
+        break;
     }
 
     // Reset the Gyro Yaw
