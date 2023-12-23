@@ -72,7 +72,7 @@ public class DrivetrainDefaultCommand extends Command {
     }
 
     // Reset the Gyro Yaw
-    if (RobotContainer.s_driverController.square().getAsBoolean()) {
+    if (RobotContainer.s_driverController.triangle().getAsBoolean()) {
       m_drive.m_robotDrive.resetYaw();
       // Make us target forward now to avoid jumps
       m_lastTargetAngle = new Rotation2d();

@@ -124,12 +124,13 @@ public class RobotContainer {
     testChooser.addOption("Lift", m_liftSubsystem);
     testChooser.addOption("Shooter", m_shooterSubsystem);
     testChooser.addOption("Turret", m_turretSubsystem);
+    SmartDashboard.putData("Test Chooser",testChooser);
     // Configure the trigger bindings
     configureBindings();
 
     // Add all autonomous command groups to the list on the Smartdashboard
     autoChooser.setDefaultOption("Do Nothing", new AutoDoNothing());
-    SmartDashboard.putData(autoChooser);
+    SmartDashboard.putData("Autonomous Play",autoChooser);
 
     // Setup the dashboard notifier that runs at a slower rate than our main robot periodic.
     m_telemetry = new Notifier(this::updateDashboard);

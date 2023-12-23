@@ -114,13 +114,14 @@ public class SwerveModule {
         var optimized = SwerveModuleState.optimize(_state, m_internalState.angle);
 
         double angleToSet_rot = optimized.angle.getRotations();
-        m_steerMotor.setControl(m_angleSetter.withPosition(angleToSet_rot));
+        //m_steerMotor.setControl(m_angleSetter.withPosition(angleToSet_rot));
         double velocityToSet = optimized.speedMetersPerSecond * m_driveRotationsPerMeter;
-        m_driveMotor.setControl(m_velocitySetter.
-                                withVelocity(velocityToSet).
-                                withEnableFOC(true).
-                                withFeedForward(velocityToSet*12/4.32).// FIXME: Feedforward is in volts. So rps * volts/rps
-                                withAcceleration(4.32*m_driveRotationsPerMeter/2)); // FIXME: 1/2 of max speed as acceleration. 
+        
+        // m_driveMotor.setControl(m_velocitySetter.
+        //                         withVelocity(velocityToSet).
+        //                         withEnableFOC(true).
+        //                         withFeedForward(velocityToSet*12/4.32).// FIXME: Feedforward is in volts. So rps * volts/rps
+        //                         withAcceleration(4.32*m_driveRotationsPerMeter/2)); // FIXME: 1/2 of max speed as acceleration. 
     }
 
     BaseStatusSignal[] getSignals() {

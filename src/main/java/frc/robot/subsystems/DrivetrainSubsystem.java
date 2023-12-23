@@ -49,6 +49,7 @@ public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
   }
 
   public void changeDriveMode(){
+
     switch(m_driveMode){
       case FIELD_CENTRIC:
         m_driveMode = EDriveMode.ANGLE_FIELD_CENTRIC;
