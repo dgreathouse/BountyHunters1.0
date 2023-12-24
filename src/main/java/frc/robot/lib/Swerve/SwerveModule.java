@@ -31,7 +31,7 @@ public class SwerveModule {
     private StatusSignal<Double> m_steerVelocity;
     private BaseStatusSignal[] m_signals;
     private double m_driveRotationsPerMeter = 0;
-
+    private double m_velocityToSet = 0;
     private PositionVoltage m_angleSetter = new PositionVoltage(0);
     //private VelocityTorqueCurrentFOC m_velocitySetter = new VelocityTorqueCurrentFOC(0);
     private VelocityVoltage m_velocitySetter = new VelocityVoltage(0);
@@ -116,14 +116,17 @@ public class SwerveModule {
 
         double angleToSet_rot = optimized.angle.getRotations();
         //m_steerMotor.setControl(m_angleSetter.withPosition(angleToSet_rot));
-        double velocityToSet = optimized.speedMetersPerSecond * m_driveRotationsPerMeter;
-        SmartDashboard.putNumber(m_name, velocityToSet);
+        m_velocityToSet = optimized.speedMetersPerSecond * m_driveRotationsPerMeter;
+        
         m_driveMotor.setControl(m_velocitySetter.
-                                withVelocity(velocityToSet).
-                                withEnableFOC(true).
-                                withFeedForward(velocityToSet*1.0/9.0)); // FIXME: 1/2 of max speed as acceleration. 
+                                withVelocity(m_velocityToSet).
+                                withEnableFOC(false). // FIXME: get the FOC license 
+                                withFeedForward(m_velocityToSet*1.0/9.0)); // FIXME: 1/2 of max speed as acceleration. 
     }
-
+    void updateDashboard(){
+        SmartDashboard.putNumber(m_name+"_set_mps", m_velocitySetter.Velocity);
+        SmartDashboard.putNumber(m_name+"_set_ff", m_velocitySetter.FeedForward);
+    }
     BaseStatusSignal[] getSignals() {
         return m_signals;
     }

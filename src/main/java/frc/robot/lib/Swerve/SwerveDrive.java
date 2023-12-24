@@ -41,6 +41,9 @@ public class SwerveDrive {
         SmartDashboard.putNumber("Y Pos", m_odometry.getPoseMeters().getY());
         SmartDashboard.putNumber("Angle", m_odometry.getPoseMeters().getRotation().getDegrees());
         SmartDashboard.putNumber("Odometry Loop Time", m_odometryThread.getTime());
+        for (int i = 0; i < ModuleCount; ++i) {
+            m_modules[i].updateDashboard();
+        }
     }
 
     /* Perform swerve module updates in a separate thread to minimize latency */
@@ -119,7 +122,6 @@ public class SwerveDrive {
         }
     }
     public SwerveDrive() {
-        // TODO: Calibrate the PID values and SlipCurrent for stator
         SwerveDriveTrainConstants m_drivetrainConstants = new SwerveDriveTrainConstants()
                 .withPigeon2Id(5)
                 .withCANbusName(k.ROBOT.CANVORE_CANFD_NAME)
