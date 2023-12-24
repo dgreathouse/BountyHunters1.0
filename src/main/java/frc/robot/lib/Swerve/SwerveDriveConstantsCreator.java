@@ -41,6 +41,7 @@ public class SwerveDriveConstantsCreator {
     }
 
     public SwerveModuleConstants createModuleConstants(
+            String name,
             int steerId,
             int driveId,
             int cancoderId,
@@ -48,6 +49,7 @@ public class SwerveDriveConstantsCreator {
             double locationX,
             double locationY) {
         return new SwerveModuleConstants()
+                .withName(name)
                 .withSteerMotorId(steerId)
                 .withDriveMotorId(driveId)
                 .withCANcoderId(cancoderId)

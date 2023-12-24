@@ -5,6 +5,7 @@ package frc.robot.lib.Swerve;
 import com.ctre.phoenix6.configs.Slot0Configs;
 
 public class SwerveModuleConstants {
+    public String m_name ="";
     /** CAN ID of the drive motor */
     public int m_driveMotorId = 0;
     /** CAN ID of the steer motor */
@@ -40,7 +41,10 @@ public class SwerveModuleConstants {
 
     /** True if the steering motor is reversed from the CANcoder */
     public boolean m_isSteerMotorReversed = false;
-
+    public SwerveModuleConstants withName(String _name){
+        this.m_name = _name;
+        return this;
+    }
     public SwerveModuleConstants withDriveMotorId(int _id) {
         this.m_driveMotorId = _id;
         return this;

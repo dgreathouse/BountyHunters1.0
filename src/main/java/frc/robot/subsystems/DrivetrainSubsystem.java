@@ -80,10 +80,10 @@ public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
   }
   public void setTestVoltage(double _volts){
 
-    var speeds = new ChassisSpeeds();
-    speeds.vyMetersPerSecond = 0;
-    speeds.vxMetersPerSecond = _volts / 12.0;
-    driveFieldCentric(speeds);
+    // var speeds = new ChassisSpeeds();
+    // speeds.vyMetersPerSecond = 0;
+    // speeds.vxMetersPerSecond = _volts / 12.0;
+    // driveFieldCentric(speeds);
   }
   @Override
   public void periodic() {

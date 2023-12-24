@@ -127,11 +127,11 @@ public class SwerveDrive {
                 .withTurnKi(0.1);
         Slot0Configs m_steerGains = new Slot0Configs();
         Slot0Configs m_driveGains = new Slot0Configs();
-        m_steerGains.kP = 30;
-        m_steerGains.kI = 0.0;
-        m_steerGains.kD = 0.2;
-        m_driveGains.kP = 1;
-        m_driveGains.kI = 0;
+        m_steerGains.kP = 1;
+        m_steerGains.kI = 0.01;
+        m_steerGains.kD = 0.0;
+        m_driveGains.kP = 0.35;
+        m_driveGains.kI = 0.5;
         SwerveDriveConstantsCreator m_constantsCreator = new SwerveDriveConstantsCreator(
                 k.DRIVE.GEAR_RATIO, // ratio for the drive motor
                 k.STEER.GEAR_RATIO_TO_CANCODER, // ratio for the steer motor
@@ -142,12 +142,12 @@ public class SwerveDrive {
                 true // CANcoder not reversed from the steer motor. For WCP Swerve X this should be
                      // true.
         );
-        SwerveModuleConstants m_frontRight = m_constantsCreator.createModuleConstants(
+        SwerveModuleConstants m_frontRight = m_constantsCreator.createModuleConstants( "fr",
             23, 13, 3, -0.538818,k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, -k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
     
-        SwerveModuleConstants m_frontLeft = m_constantsCreator.createModuleConstants(
+        SwerveModuleConstants m_frontLeft = m_constantsCreator.createModuleConstants( "fl",
             22, 12, 2, -0.474609, k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
-        SwerveModuleConstants m_back = m_constantsCreator.createModuleConstants(
+        SwerveModuleConstants m_back = m_constantsCreator.createModuleConstants( "b",
             21, 11, 1, -0.928467, -k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, 0.0);
         initialize(m_drivetrainConstants, m_frontLeft, m_frontRight, m_back);    
             
@@ -210,6 +210,7 @@ public class SwerveDrive {
         for (int i = 0; i < ModuleCount; ++i) {
             m_modules[i].apply(swerveStates[i]);
         }
+
     }
 
     public void driveStopMotion() {

@@ -17,13 +17,14 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class SwerveModule {
     private TalonFX m_driveMotor;
     private TalonFX m_steerMotor;
     private CANcoder m_cancoder;
-
+    private String m_name;
     private StatusSignal<Double> m_drivePosition;
     private StatusSignal<Double> m_driveVelocity;
     private StatusSignal<Double> m_steerPosition;
@@ -41,7 +42,7 @@ public class SwerveModule {
         m_driveMotor = new TalonFX(_constants.m_driveMotorId, _canbusName);
         m_steerMotor = new TalonFX(_constants.m_steerMotorId, _canbusName);
         m_cancoder = new CANcoder(_constants.m_CANcoderId, _canbusName);
-
+        m_name = _constants.m_name;
         // Configure Drive Motor
         TalonFXConfiguration talonDriveConfigs = new TalonFXConfiguration();
 
@@ -116,12 +117,11 @@ public class SwerveModule {
         double angleToSet_rot = optimized.angle.getRotations();
         //m_steerMotor.setControl(m_angleSetter.withPosition(angleToSet_rot));
         double velocityToSet = optimized.speedMetersPerSecond * m_driveRotationsPerMeter;
-        
-        // m_driveMotor.setControl(m_velocitySetter.
-        //                         withVelocity(velocityToSet).
-        //                         withEnableFOC(true).
-        //                         withFeedForward(velocityToSet*12/4.32).// FIXME: Feedforward is in volts. So rps * volts/rps
-        //                         withAcceleration(4.32*m_driveRotationsPerMeter/2)); // FIXME: 1/2 of max speed as acceleration. 
+        SmartDashboard.putNumber(m_name, velocityToSet);
+        m_driveMotor.setControl(m_velocitySetter.
+                                withVelocity(velocityToSet).
+                                withEnableFOC(true).
+                                withFeedForward(velocityToSet*1.0/9.0)); // FIXME: 1/2 of max speed as acceleration. 
     }
 
     BaseStatusSignal[] getSignals() {

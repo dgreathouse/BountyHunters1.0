@@ -28,11 +28,11 @@ public class TestCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double volts = SmartDashboard.getNumber("Test Voltage", 0);
-    SmartDashboard.putString("TestCommand", ((Subsystem)m_subsystem).getName());
-    if (m_subsystem != null) {
-      ((ISubsystem)m_subsystem).setTestVoltage(volts);
-    }
+    // double volts = SmartDashboard.getNumber("Test Voltage", 0);
+    // SmartDashboard.putString("TestCommand", ((Subsystem)m_subsystem).getName());
+    // if (m_subsystem != null) {
+    //   ((ISubsystem)m_subsystem).setTestVoltage(volts);
+    // }
   }
 
   // Called once the command ends or is interrupted.

@@ -5,6 +5,7 @@ package frc.robot.commands.Drive;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.lib.k;
@@ -58,6 +59,7 @@ public class DrivetrainDefaultCommand extends Command {
 
     // Call the appropriate drive mode. Selected by the driver controller Square
     // button.
+    
     switch (m_drive.getDriveMode()) {
       case FIELD_CENTRIC:
         m_drive.driveFieldCentric(m_speeds);
@@ -72,12 +74,12 @@ public class DrivetrainDefaultCommand extends Command {
         break;
     }
 
-    // Reset the Gyro Yaw
-    if (RobotContainer.s_driverController.triangle().getAsBoolean()) {
-      m_drive.m_robotDrive.resetYaw();
-      // Make us target forward now to avoid jumps
-      m_lastTargetAngle = new Rotation2d();
-    }
+    // // Reset the Gyro Yaw
+    // if (RobotContainer.s_driverController.triangle().getAsBoolean()) {
+    //   m_drive.m_robotDrive.resetYaw();
+    //   // Make us target forward now to avoid jumps
+    //   m_lastTargetAngle = new Rotation2d();
+    // }
 
   }
 
