@@ -20,6 +20,7 @@ public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
      m_robotDrive = new SwerveDrive();
+     
     initialize(); 
   }
   public void initialize(){
@@ -27,6 +28,12 @@ public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
   }
   public void updateDashboard(){
     SmartDashboard.putString(k.DRIVE.T_DRIVER_MODE, m_driveMode.toString());
+    if(this.getCurrentCommand() != null){
+      String ds = this.getCurrentCommand().getName();
+      SmartDashboard.putString("DriveCommand", ds);
+    }
+    
+
     m_robotDrive.updateDashboard();
   }
   public void driveStopMotion(){
@@ -72,7 +79,11 @@ public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
     return m_robotDrive.getRobotYaw();
   }
   public void setTestVoltage(double _volts){
+
     var speeds = new ChassisSpeeds();
+    speeds.vyMetersPerSecond = 0;
+    speeds.vxMetersPerSecond = _volts / 12.0;
+    driveFieldCentric(speeds);
   }
   @Override
   public void periodic() {

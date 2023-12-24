@@ -39,6 +39,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -147,9 +148,11 @@ public class RobotContainer {
   private void configureBindings() {
     //new Trigger(RobotContainer.m_drivetrainSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
     s_driverController.square().onTrue(new InstantCommand(m_drivetrainSubsystem::changeDriveMode, m_drivetrainSubsystem));
-    s_driverController.circle().toggleOnTrue(new TestCommand(testChooser.getSelected()));
+    s_driverController.circle().toggleOnTrue(new TestCommand(getTestSubsystem()));
   }
-
+  public Subsystem getTestSubsystem(){
+    return (Subsystem)testChooser.getSelected();
+  }
   /**
    * @return the command to run in autonomous routine
    */

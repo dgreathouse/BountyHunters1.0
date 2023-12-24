@@ -19,6 +19,7 @@ public class DrivetrainDefaultCommand extends Command {
   /** Creates a new DrivetrainDefaultCommand. */
   public DrivetrainDefaultCommand(DrivetrainSubsystem _drivetrain) {
     m_drive = _drivetrain;
+    this.setName("DriveDefaultCommand");
     addRequirements(m_drive);
 
   }

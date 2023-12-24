@@ -6,14 +6,17 @@ package frc.robot.commands.Test;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.lib.ISubsystem;
 
 public class TestCommand extends Command {
-  ISubsystem m_subsystem;
+
+  Subsystem m_subsystem;
 
   /** Creates a new TestCommand. */
-  public TestCommand(ISubsystem _subsystem) {
-   // addRequirements((Subsystem) _subsystem);
+  public TestCommand(Subsystem _subsystem) {
+    this.setName("TestCommand");
+    addRequirements((Subsystem) _subsystem);
     m_subsystem = _subsystem;
   }
 
@@ -26,8 +29,9 @@ public class TestCommand extends Command {
   @Override
   public void execute() {
     double volts = SmartDashboard.getNumber("Test Voltage", 0);
+    SmartDashboard.putString("TestCommand", ((Subsystem)m_subsystem).getName());
     if (m_subsystem != null) {
-      m_subsystem.setTestVoltage(volts);
+      ((ISubsystem)m_subsystem).setTestVoltage(volts);
     }
   }
 
