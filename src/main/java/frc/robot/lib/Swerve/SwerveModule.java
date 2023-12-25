@@ -126,6 +126,7 @@ public class SwerveModule {
     void updateDashboard(){
         SmartDashboard.putNumber(m_name+"_set_mps", m_velocitySetter.Velocity);
         SmartDashboard.putNumber(m_name+"_set_ff", m_velocitySetter.FeedForward);
+        
     }
     BaseStatusSignal[] getSignals() {
         return m_signals;

@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.lib.k;
 
 public class SwerveDrive {
-    private int ModuleCount;
+    private int m_moduleCount;
 
     private SwerveModule[] m_modules;
     private Pigeon2 m_pigeon2;
@@ -41,7 +41,7 @@ public class SwerveDrive {
         SmartDashboard.putNumber("Y Pos", m_odometry.getPoseMeters().getY());
         SmartDashboard.putNumber("Angle", m_odometry.getPoseMeters().getRotation().getDegrees());
         SmartDashboard.putNumber("Odometry Loop Time", m_odometryThread.getTime());
-        for (int i = 0; i < ModuleCount; ++i) {
+        for (int i = 0; i < m_moduleCount; ++i) {
             m_modules[i].updateDashboard();
         }
     }
@@ -51,7 +51,7 @@ public class SwerveDrive {
         private BaseStatusSignal[] m_allSignals;
         public int SuccessfulDaqs = 0;
         public int FailedDaqs = 0;
-
+        
         private LinearFilter lowpass = LinearFilter.movingAverage(50);
         private double lastTime = 0;
         private double currentTime = 0;
@@ -59,9 +59,10 @@ public class SwerveDrive {
 
         public OdometryThread() {
             super();
+            
             // 4 signals for each module + 2 for Pigeon2
-            m_allSignals = new BaseStatusSignal[(ModuleCount * 4) + 2];
-            for (int i = 0; i < ModuleCount; ++i) {
+            m_allSignals = new BaseStatusSignal[(m_moduleCount * 4) + 2];
+            for (int i = 0; i < m_moduleCount; ++i) {
                 var signals = m_modules[i].getSignals();
                 m_allSignals[(i * 4) + 0] = signals[0];
                 m_allSignals[(i * 4) + 1] = signals[1];
@@ -94,7 +95,7 @@ public class SwerveDrive {
                 }
 
                 /* Now update odometry */
-                for (int i = 0; i < ModuleCount; ++i) {
+                for (int i = 0; i < m_moduleCount; ++i) {
                     /*
                      * No need to refresh since it's automatically refreshed from the waitForAll()
                      */
@@ -155,13 +156,13 @@ public class SwerveDrive {
             
     }
     public void initialize(SwerveDriveTrainConstants _driveTrainConstants, SwerveModuleConstants... _modules){
-        ModuleCount = _modules.length;
+        m_moduleCount = _modules.length;
 
         m_pigeon2 = new Pigeon2(_driveTrainConstants.m_pigeon2Id, _driveTrainConstants.m_canBusName);
 
-        m_modules = new SwerveModule[ModuleCount];
-        m_modulePositions = new SwerveModulePosition[ModuleCount];
-        m_moduleLocations = new Translation2d[ModuleCount];
+        m_modules = new SwerveModule[m_moduleCount];
+        m_modulePositions = new SwerveModulePosition[m_moduleCount];
+        m_moduleLocations = new Translation2d[m_moduleCount];
 
         int iteration = 0;
         for (SwerveModuleConstants module : _modules) {
@@ -189,7 +190,7 @@ public class SwerveDrive {
 
     public void driveRobotCentric(ChassisSpeeds _speeds) {
         var swerveStates = m_kinematics.toSwerveModuleStates(_speeds);
-        for (int i = 0; i < ModuleCount; ++i) {
+        for (int i = 0; i < m_moduleCount; ++i) {
             m_modules[i].apply(swerveStates[i]);
         }
     }
@@ -197,7 +198,7 @@ public class SwerveDrive {
     public void driveFieldCentric(ChassisSpeeds _speeds) {
         var roboCentric = ChassisSpeeds.fromFieldRelativeSpeeds(_speeds, m_pigeon2.getRotation2d());
         var swerveStates = m_kinematics.toSwerveModuleStates(roboCentric);
-        for (int i = 0; i < ModuleCount; ++i) {
+        for (int i = 0; i < m_moduleCount; ++i) {
             m_modules[i].apply(swerveStates[i]);
         }
     }
@@ -209,7 +210,7 @@ public class SwerveDrive {
         var roboCentric = ChassisSpeeds.fromFieldRelativeSpeeds(
                 _xSpeeds, _ySpeeds, rotationalSpeed, m_pigeon2.getRotation2d());
         var swerveStates = m_kinematics.toSwerveModuleStates(roboCentric);
-        for (int i = 0; i < ModuleCount; ++i) {
+        for (int i = 0; i < m_moduleCount; ++i) {
             m_modules[i].apply(swerveStates[i]);
         }
 
@@ -217,7 +218,7 @@ public class SwerveDrive {
 
     public void driveStopMotion() {
         /* Point every module toward (0,0) to make it close to a X configuration */
-        for (int i = 0; i < ModuleCount; ++i) {
+        for (int i = 0; i < m_moduleCount; ++i) {
             var angle = m_moduleLocations[i].getAngle();
             m_modules[i].apply(new SwerveModuleState(0, angle));
         }
