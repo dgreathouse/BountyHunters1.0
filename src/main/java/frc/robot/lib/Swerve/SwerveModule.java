@@ -6,17 +6,10 @@ import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.TorqueCurrentConfigs;
-import com.ctre.phoenix6.configs.VoltageConfigs;
-import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -53,10 +46,8 @@ public class SwerveModule {
     // TODO Determine FF kv,ks for Volts per mps. First no load single motor test showed .11 volts per RPS
     // TODO Test by setting various voltages and measuring drive velocity to get kv. ks is the amount it takes to move the robot 
     private SimpleMotorFeedforward m_driveFF = new SimpleMotorFeedforward(k.DRIVE.PID_Ks, k.DRIVE.PID_Kv);
-
     private VoltageOut m_angleVoltageOut = new VoltageOut(0.0);
     private VoltageOut m_driveVoltageOut = new VoltageOut(0.0);
-
     private SwerveModulePosition m_internalState = new SwerveModulePosition();
 
     public SwerveModule(SwerveModuleConstants _constants, String _canbusName) {
@@ -122,7 +113,7 @@ public class SwerveModule {
         return m_internalState;
     }
 
-    public void apply(SwerveModuleState _state) {
+    public void setDesiredState(SwerveModuleState _state) {
         // Optimize the angle so the wheel will not rotate more than 90 deg
         SwerveModuleState optimized = SwerveModuleState.optimize(_state, m_internalState.angle);
         
@@ -136,15 +127,17 @@ public class SwerveModule {
         // Calculate the PID value for the angle in Degrees
         m_steerVolts = m_steerProPID.calculate(m_steerActualAngle_deg,m_steerSetAngle_deg);
         // Limit the voltage for the steer
-        m_steerVolts = MathUtil.clamp(m_steerVolts, -5, 5);  // TODO test this on the real robot
+        m_steerVolts = MathUtil.clamp(m_steerVolts, -5, 5);  // TODO test this on the real robot when fully weighted 
         m_steerMotor.setControl(m_angleVoltageOut.withOutput(m_steerVolts));
 
         // Calculate the PID value of velocity in MPS
         m_driveVolts = m_drivePID.calculate(m_driveActualVelocity_mps, m_driveSetVelocity_mps);
         m_driveVolts = MathUtil.clamp(m_driveVolts, -4, 4); // Limit the amount the PID can contribute
+        // Add the Feedforward to the PID volts
         m_driveVolts = m_driveVolts + m_driveFF.calculate(m_driveSetVelocity_mps);
         m_driveMotor.setControl(m_driveVoltageOut.withOutput(m_driveVolts));
     }
+
     void updateDashboard(){
         SmartDashboard.putNumber(m_name+"_set_deg", m_steerSetAngle_deg);
         SmartDashboard.putNumber(m_name+"_set_mps", m_driveSetVelocity_mps);
@@ -153,8 +146,8 @@ public class SwerveModule {
         SmartDashboard.putNumber(m_name+"_CC_rot", m_steerPosition.getValueAsDouble());
         SmartDashboard.putNumber(m_name + "_steerVolts", m_steerVolts);
         SmartDashboard.putNumber(m_name + "_driveVolts", m_driveVolts);
-        
     }
+
     BaseStatusSignal[] getSignals() {
         return m_signals;
     }

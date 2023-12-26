@@ -4,7 +4,6 @@ package frc.robot.lib.Swerve;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.Utils;
-import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.LinearFilter;
@@ -157,14 +156,14 @@ public class SwerveDrive {
         m_modulePositions = new SwerveModulePosition[m_moduleCount];
         m_moduleLocations = new Translation2d[m_moduleCount];
 
-        int iteration = 0;
-        for (SwerveModuleConstants module : _modules) {
-            m_modules[iteration] = new SwerveModule(module, _driveTrainConstants.m_canBusName);
-            m_moduleLocations[iteration] = new Translation2d(module.m_locationX_m, module.m_locationY_m);
-            m_modulePositions[iteration] = m_modules[iteration].getPosition(true);
-
-            iteration++;
+  
+        //for (SwerveModuleConstants module : _modules) {
+        for(int i = 0; i < m_moduleCount; i++)  {
+            m_modules[i] = new SwerveModule(_modules[i], _driveTrainConstants.m_canBusName);
+            m_moduleLocations[i] = new Translation2d(_modules[i].m_locationX_m, _modules[i].m_locationY_m);
+            m_modulePositions[i] = m_modules[i].getPosition(true);
         }
+
         m_kinematics = new SwerveDriveKinematics(m_moduleLocations);
         m_odometry = new SwerveDriveOdometry(m_kinematics, m_pigeon2.getRotation2d(), getSwervePositions());
         m_field = new Field2d();
@@ -186,7 +185,7 @@ public class SwerveDrive {
     public void driveRobotCentric(ChassisSpeeds _speeds) {
         var swerveStates = m_kinematics.toSwerveModuleStates(_speeds);
         for (int i = 0; i < m_moduleCount; ++i) {
-            m_modules[i].apply(swerveStates[i]);
+            m_modules[i].setDesiredState(swerveStates[i]);
         }
     }
 
@@ -194,7 +193,7 @@ public class SwerveDrive {
         var roboCentric = ChassisSpeeds.fromFieldRelativeSpeeds(_speeds, m_pigeon2.getRotation2d());
         var swerveStates = m_kinematics.toSwerveModuleStates(roboCentric);
         for (int i = 0; i < m_moduleCount; ++i) {
-            m_modules[i].apply(swerveStates[i]);
+            m_modules[i].setDesiredState(swerveStates[i]);
         }
     }
 
@@ -206,16 +205,15 @@ public class SwerveDrive {
                 _xSpeeds, _ySpeeds, rotationalSpeed, m_pigeon2.getRotation2d());
         var swerveStates = m_kinematics.toSwerveModuleStates(roboCentric);
         for (int i = 0; i < m_moduleCount; ++i) {
-            m_modules[i].apply(swerveStates[i]);
+            m_modules[i].setDesiredState(swerveStates[i]);
         }
-
     }
 
     public void driveStopMotion() {
         /* Point every module toward (0,0) to make it close to a X configuration */
         for (int i = 0; i < m_moduleCount; ++i) {
             var angle = m_moduleLocations[i].getAngle();
-            m_modules[i].apply(new SwerveModuleState(0, angle));
+            m_modules[i].setDesiredState(new SwerveModuleState(0, angle));
         }
     }
 

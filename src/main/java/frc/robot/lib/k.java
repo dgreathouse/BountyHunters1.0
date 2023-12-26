@@ -98,7 +98,6 @@ public final class k {
     public static final double OFFSET_FROM_ZERO_deg = 0.0;
     public static final double GEAR_RATIO = 100.0;
     public static final double MOTOR_RPM = 6380.0;
-    // TODO: Check calculation with actual data through testing   
     public static final double MAX_ANGULAR_VELOCITY_RadianPerSec = (MOTOR_RPM / 60.0 / GEAR_RATIO) * 360 * k.CONVERT.DEGREES_TO_RADIANS ;
 
   }

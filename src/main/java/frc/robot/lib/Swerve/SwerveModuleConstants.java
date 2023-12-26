@@ -2,8 +2,6 @@
 
 package frc.robot.lib.Swerve;
 
-import com.ctre.phoenix6.configs.Slot0Configs;
-
 public class SwerveModuleConstants {
     public String m_name ="";
     /** CAN ID of the drive motor */
