@@ -79,8 +79,8 @@ public final class k {
     private static final double CANCODER_GEAR_RATIO = 1.0;
     public static final double GEAR_RATIO = 1/((MOTOR_PINION_TEETH/MOTOR_DRIVE_GEAR_TEETH)*(GEAR_1_DRIVE_TEETH/GEAR_1_DRIVEN_TEETH));
     public static final double GEAR_RATIO_TO_CANCODER = GEAR_RATIO * CANCODER_GEAR_RATIO;
-    public static final double PID_Kp = 0.0;
-    public static final double PID_Ki = 0.0;
+    public static final double PID_Kp = 0.05;
+    public static final double PID_Ki = 0.01;
     public static final double PID_MaxV = 0.0;
     public static final double PID_MaxA = 0.0;
 

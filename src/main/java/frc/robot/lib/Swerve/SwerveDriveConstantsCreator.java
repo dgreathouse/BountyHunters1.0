@@ -56,7 +56,6 @@ public class SwerveDriveConstantsCreator {
                 .withDriveMotorGearRatio(DriveMotorGearRatio)
                 .withSteerMotorGearRatio(SteerMotorGearRatio)
                 .withWheelRadius(WheelRadius)
-                .withSlipCurrent(SlipCurrent)
                 .withSteerMotorReversed(SteerMotorReversed)
                 .withDriveMotorReversed(DriveMotorReversed);
     }

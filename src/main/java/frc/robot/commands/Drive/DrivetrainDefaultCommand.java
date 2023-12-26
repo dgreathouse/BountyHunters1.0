@@ -49,7 +49,7 @@ public class DrivetrainDefaultCommand extends Command {
     // Set the class variable ChassisSpeeds to the local variables in their
     // appropriate units.
     m_speeds.vxMetersPerSecond = leftY * k.DRIVE.MAX_VELOCITY_MeterPerSec;
-    m_speeds.vyMetersPerSecond = leftX * k.DRIVE.MAX_VELOCITY_MeterPerSec;
+    m_speeds.vyMetersPerSecond = -leftX * k.DRIVE.MAX_VELOCITY_MeterPerSec;
     m_speeds.omegaRadiansPerSecond = rightX * -k.DRIVE.MAX_ANGULAR_VELOCITY_RadianPerSec;
 
     // Get a new angle if the right x&y are greater than a certain point.

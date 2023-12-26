@@ -128,13 +128,7 @@ public class SwerveDrive {
                 .withCANbusName(k.ROBOT.CANVORE_CANFD_NAME)
                 .withTurnKp(5)
                 .withTurnKi(0.1);
-        Slot0Configs m_steerGains = new Slot0Configs();
-        Slot0Configs m_driveGains = new Slot0Configs();
-        m_steerGains.kP = 1;
-        m_steerGains.kI = 0.01;
-        m_steerGains.kD = 0.0;
-        m_driveGains.kP = 0.35;
-        m_driveGains.kI = 0.5;
+
         SwerveDriveConstantsCreator m_constantsCreator = new SwerveDriveConstantsCreator(
                 k.DRIVE.GEAR_RATIO, // ratio for the drive motor
                 k.STEER.GEAR_RATIO_TO_CANCODER, // ratio for the steer motor

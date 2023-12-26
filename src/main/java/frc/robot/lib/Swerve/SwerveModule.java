@@ -44,6 +44,8 @@ public class SwerveModule {
     private double m_steerSetAngle_deg = 0;
     private double m_driveActualVelocity_mps = 0;
     private double m_steerActualAngle_deg = 0;
+    private double m_steerVolts = 0.0;
+    private double m_driveVolts = 0.0;
     //TODO Determine PID and Constraints for PID in volts
     private ProfiledPIDController m_steerProPID = new ProfiledPIDController(k.STEER.PID_Kp, k.STEER.PID_Ki, 0, new TrapezoidProfile.Constraints(k.STEER.PID_MaxV,k.STEER.PID_MaxA));
     // TODO Determine PID for mps to volts
@@ -132,16 +134,16 @@ public class SwerveModule {
         m_steerActualAngle_deg = m_steerMotor.getPosition().getValueAsDouble() * 360.0 / k.STEER.GEAR_RATIO;
         
         // Calculate the PID value for the angle in Degrees
-        double angleVolts = m_steerProPID.calculate(m_steerActualAngle_deg,m_steerSetAngle_deg);
+        m_steerVolts = m_steerProPID.calculate(m_steerActualAngle_deg,m_steerSetAngle_deg);
         // Limit the voltage for the steer
-        angleVolts = MathUtil.clamp(angleVolts, -5, 5);  // TODO test this on the real robot
-        m_steerMotor.setControl(m_angleVoltageOut.withOutput(0));
+        m_steerVolts = MathUtil.clamp(m_steerVolts, -5, 5);  // TODO test this on the real robot
+        m_steerMotor.setControl(m_angleVoltageOut.withOutput(m_steerVolts));
 
         // Calculate the PID value of velocity in MPS
-        double driveVolts = m_drivePID.calculate(m_driveActualVelocity_mps, m_driveSetVelocity_mps);
-        driveVolts = MathUtil.clamp(driveVolts, -4, 4); // Limit the amount the PID can contribute
-        driveVolts = driveVolts + m_driveFF.calculate(m_driveActualVelocity_mps);
-        m_driveMotor.setControl(m_driveVoltageOut.withOutput(SmartDashboard.getNumber("Volts", 0)));
+        m_driveVolts = m_drivePID.calculate(m_driveActualVelocity_mps, m_driveSetVelocity_mps);
+        m_driveVolts = MathUtil.clamp(m_driveVolts, -4, 4); // Limit the amount the PID can contribute
+        m_driveVolts = m_driveVolts + m_driveFF.calculate(m_driveSetVelocity_mps);
+        m_driveMotor.setControl(m_driveVoltageOut.withOutput(m_driveVolts));
     }
     void updateDashboard(){
         SmartDashboard.putNumber(m_name+"_set_deg", m_steerSetAngle_deg);
@@ -149,6 +151,8 @@ public class SwerveModule {
         SmartDashboard.putNumber(m_name+"_act_deg", m_steerActualAngle_deg);
         SmartDashboard.putNumber(m_name+"_act_mps", m_driveActualVelocity_mps);
         SmartDashboard.putNumber(m_name+"_CC_rot", m_steerPosition.getValueAsDouble());
+        SmartDashboard.putNumber(m_name + "_steerVolts", m_steerVolts);
+        SmartDashboard.putNumber(m_name + "_driveVolts", m_driveVolts);
         
     }
     BaseStatusSignal[] getSignals() {
