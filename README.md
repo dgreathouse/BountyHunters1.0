@@ -2,6 +2,9 @@
 
 ## Overview
 This code is a remake of the CTRE swerve module code. The code has been integrated into the command based programming framework.
+This remake drastically changes the CTRE swerve code. Most importantly the PID loops for the Drive and Steer were taken out of the Motor controllers.
+All PIDs are calcualted in Degrees->Volts and MPS->Volts with a Feedforward term. CTRE changes were not updated soon enough to test the code before kickoff.
+Since time was limited the appoach was to use CTRE VoltageOut mode with the above PIDs and Feedforward values. 
 
 ## Robot 
 The robot used for this code is our typical 3 wheel swerve drive using Swerve Xs from WCProducts.net. All motors are Falcon FXs with CANCoders.
