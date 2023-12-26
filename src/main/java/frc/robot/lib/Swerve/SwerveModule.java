@@ -17,6 +17,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -44,14 +45,14 @@ public class SwerveModule {
     private double m_driveActualVelocity_mps = 0;
     private double m_steerActualAngle_deg = 0;
     //TODO Determine PID and Constraints for PID in volts
-    private ProfiledPIDController m_angleProPID = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0,0));
+    private ProfiledPIDController m_steerProPID = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0,0));
     //private ProfiledPIDController m_driveProPID = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0,0));
     //private PIDController m_anglePID = new PIDController(.125, .1, 0.0);
     // TODO Determine PID for mps to volts
     private PIDController m_drivePID = new PIDController(.125, .1, 0.0);
     // TODO Determine FF kv,ks for Volts per mps. First no load single motor test showed .11 volts per RPS
     // TODO Test by setting various voltages and measuring drive velocity to get kv. ks is the amount it takes to move the robot 
-    private SimpleMotorFeedforward m_driveFF = new SimpleMotorFeedforward(0.18, .11);
+    private SimpleMotorFeedforward m_driveFF = new SimpleMotorFeedforward(0.18, k.ROBOT.BATTERY_MAX_VOLTS/k.DRIVE.MAX_VELOCITY_MeterPerSec);
     /* 
      * Volts    1       2
      * MPS      0.37   0.74
@@ -71,7 +72,6 @@ public class SwerveModule {
         m_name = _constants.m_name;
         // Configure Drive Motor
         TalonFXConfiguration talonDriveConfigs = new TalonFXConfiguration();
-
         talonDriveConfigs.Slot0 = _constants.m_driveMotorGains;
         
         //talonDriveConfigs.TorqueCurrent.PeakForwardTorqueCurrent = _constants.m_slipCurrent_amps;
@@ -80,7 +80,7 @@ public class SwerveModule {
         m_driveMotor.getConfigurator().apply(talonDriveConfigs);
 
         // Configure Steer Motor
-        m_angleProPID.enableContinuousInput(-180.0, +180.0);
+        m_steerProPID.enableContinuousInput(-180.0, +180.0);
         TalonFXConfiguration talonSteerConfigs = new TalonFXConfiguration();
         talonSteerConfigs.Slot0 = _constants.m_steerMotorGains;
         // Modify configuration to use remote CANcoder fused
@@ -144,21 +144,26 @@ public class SwerveModule {
     }
 
     public void apply(SwerveModuleState _state) {
-        var optimized = SwerveModuleState.optimize(_state, m_internalState.angle);
+        // Optimize the angle so the wheel will not rotate more than 90 deg
+        SwerveModuleState optimized = SwerveModuleState.optimize(_state, m_internalState.angle);
+        
+        m_steerSetAngle_deg = optimized.angle.getDegrees(); // Get the angle in degrees that we want to set
+        m_driveSetVelocity_mps = optimized.speedMetersPerSecond; // Get the velocity we want to set
 
-        m_steerSetAngle_deg = optimized.angle.getDegrees();
-        m_driveSetVelocity_mps = optimized.speedMetersPerSecond;
-
+        // Get the actual angles and velocity that the motors are at.
         m_driveActualVelocity_mps = m_driveMotor.getVelocity().getValueAsDouble() / m_driveRotationsPerMeter;
         m_steerActualAngle_deg = m_steerMotor.getPosition().getValueAsDouble() * 360.0 / k.STEER.GEAR_RATIO;
         
         // Calculate the PID value for the angle in Degrees
-        double angleVolts = m_angleProPID.calculate(m_steerActualAngle_deg,m_steerSetAngle_deg);
+        double angleVolts = m_steerProPID.calculate(m_steerActualAngle_deg,m_steerSetAngle_deg);
+        // Limit the voltage for the steer
+        angleVolts = MathUtil.clamp(angleVolts, -5, 5);  // TODO test this on the real robot
         m_steerMotor.setControl(m_angleVoltageOut.withOutput(0));
 
         // Calculate the PID value of velocity in MPS
         double driveVolts = m_drivePID.calculate(m_driveActualVelocity_mps, m_driveSetVelocity_mps);
-        driveVolts += m_driveFF.calculate(m_driveActualVelocity_mps);
+        driveVolts = MathUtil.clamp(driveVolts, -4, 4); // Limit the amount the PID can contribute
+        driveVolts = driveVolts + m_driveFF.calculate(m_driveActualVelocity_mps);
         m_driveMotor.setControl(m_driveVoltageOut.withOutput(SmartDashboard.getNumber("Volts", 0)));
     }
     void updateDashboard(){

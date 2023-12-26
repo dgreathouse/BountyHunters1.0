@@ -23,7 +23,7 @@ public final class k {
     public static final int DRIVE_RIGHT_CANID = 11;
     public static final int DRIVE_BACK_CANID = 12;
     
-    
+    public static final double BATTERY_MAX_VOLTS = 12.0;
     public static final int STEER_LEFT_CANID = 13;
     public static final int STEER_RIGHT_CANID = 14;
     public static final int STEER_BACK_CANID = 15;
