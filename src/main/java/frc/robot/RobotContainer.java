@@ -113,14 +113,9 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //new Trigger(RobotContainer.m_drivetrainSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
-    s_driverController.button(1).onTrue(new InstantCommand(m_drivetrainSubsystem::changeDriveMode, m_drivetrainSubsystem));
-
+    s_driverController.square().onTrue(new InstantCommand(m_drivetrainSubsystem::changeDriveMode, m_drivetrainSubsystem));
+    s_driverController.triangle().onTrue(new InstantCommand(m_drivetrainSubsystem::resetYaw, m_drivetrainSubsystem));
   }
-
-  // public Command getTestSubsystem(){
-
-  //   return new ProxyCommand(() -> ((ISubsystem)testChooser.getSelected()).setTestVoltage(0));
-  // }
   /**
    * @return the command to run in autonomous routine
    */

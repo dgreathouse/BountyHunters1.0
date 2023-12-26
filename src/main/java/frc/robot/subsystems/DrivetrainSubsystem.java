@@ -16,7 +16,7 @@ import frc.robot.lib.Swerve.SwerveDrive;
 public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
   public SwerveDrive m_robotDrive;
   public EDriveMode m_driveMode = EDriveMode.ANGLE_FIELD_CENTRIC;
-
+  public Rotation2d m_lastTargetAngle = new Rotation2d();
   /** Creates a new DrivetrainSubsystem. */
   public DrivetrainSubsystem() {
      m_robotDrive = new SwerveDrive();
@@ -45,14 +45,14 @@ public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
   public void driveFieldCentric(ChassisSpeeds _speeds){
     m_robotDrive.driveFieldCentric(_speeds);
   }
-  public void driveAngleFieldCentric(double _x, double _y, Rotation2d _lastTargetAngle){
-    m_robotDrive.driveAngleFieldCentric(_x, _y, _lastTargetAngle);
+  public void driveAngleFieldCentric(double _x, double _y){
+    m_robotDrive.driveAngleFieldCentric(_x, _y, m_lastTargetAngle);
   }
   public void drivePolarFieldCentric(double _driveAngle_deg, double _speed, double _robotAngle_deg){
     double x = Math.sin(Units.degreesToRadians(_driveAngle_deg)) * _speed;
     double y = Math.cos(Units.degreesToRadians(_driveAngle_deg)) * _speed;
-   
-    driveAngleFieldCentric(x, y, new Rotation2d(Units.degreesToRadians(_robotAngle_deg)));
+    m_lastTargetAngle = new Rotation2d(Units.degreesToRadians(_robotAngle_deg));
+    driveAngleFieldCentric(x, y);
   }
 
   public void changeDriveMode(){
@@ -78,12 +78,12 @@ public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
   public double getRobotAngle(){
     return m_robotDrive.getRobotYaw();
   }
-  public void setTestVoltage(double _volts){
-
-    // var speeds = new ChassisSpeeds();
-    // speeds.vyMetersPerSecond = 0;
-    // speeds.vxMetersPerSecond = _volts / 12.0;
-    // driveFieldCentric(speeds);
+  public void resetYaw(){
+    m_robotDrive.resetYaw();
+  }
+  public void setTestVoltage(double _volts){}
+  public void setLastTargetAngle(Rotation2d _targetAngle){
+    m_lastTargetAngle = _targetAngle;
   }
   @Override
   public void periodic() {

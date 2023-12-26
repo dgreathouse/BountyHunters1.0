@@ -12,7 +12,6 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class DrivetrainDefaultCommand extends Command {
 
-  public Rotation2d m_lastTargetAngle = new Rotation2d();
   private DrivetrainSubsystem m_drive;
   ChassisSpeeds m_speeds = new ChassisSpeeds();
 
@@ -35,8 +34,8 @@ public class DrivetrainDefaultCommand extends Command {
   public void execute() {
     // Set local variables to game thumbstick axis values
     double leftY = -RobotContainer.s_driverController.getLeftY();
-    double leftX = RobotContainer.s_driverController.getLeftX();
-    double rightX = RobotContainer.s_driverController.getRightX();
+    double leftX = -RobotContainer.s_driverController.getLeftX();
+    double rightX = -RobotContainer.s_driverController.getRightX();
     double rightY = -RobotContainer.s_driverController.getRightY();
 
     // Limit the inputs for a deadband related to the joystick
@@ -48,16 +47,15 @@ public class DrivetrainDefaultCommand extends Command {
     // Set the class variable ChassisSpeeds to the local variables in their
     // appropriate units.
     m_speeds.vxMetersPerSecond = leftY * k.DRIVE.MAX_VELOCITY_MeterPerSec;
-    m_speeds.vyMetersPerSecond = -leftX * k.DRIVE.MAX_VELOCITY_MeterPerSec;
-    m_speeds.omegaRadiansPerSecond = rightX * -k.DRIVE.MAX_ANGULAR_VELOCITY_RadianPerSec;
+    m_speeds.vyMetersPerSecond = leftX * k.DRIVE.MAX_VELOCITY_MeterPerSec;
+    m_speeds.omegaRadiansPerSecond = rightX * k.DRIVE.MAX_ANGULAR_VELOCITY_RadianPerSec;
 
     // Get a new angle if the right x&y are greater than a certain point.
     if (Math.abs(rightX) > 0.8 || Math.abs(rightY) > 0.8) {
-      m_lastTargetAngle = new Rotation2d(rightY, -rightX);
+      m_drive.setLastTargetAngle(new Rotation2d(rightY, rightX));
     }
 
-    // Call the appropriate drive mode. Selected by the driver controller Square
-    // button.
+    // Call the appropriate drive mode. Selected by the driver controller Square button.
     
     switch (m_drive.getDriveMode()) {
       case FIELD_CENTRIC:
@@ -67,19 +65,11 @@ public class DrivetrainDefaultCommand extends Command {
         m_drive.driveRobotCentric(m_speeds);
         break;
       case ANGLE_FIELD_CENTRIC:
-        m_drive.driveAngleFieldCentric(m_speeds.vxMetersPerSecond, m_speeds.vyMetersPerSecond, m_lastTargetAngle);
+        m_drive.driveAngleFieldCentric(m_speeds.vxMetersPerSecond, m_speeds.vyMetersPerSecond);
         break;
       default:
         break;
     }
-
-    // // Reset the Gyro Yaw
-    // if (RobotContainer.s_driverController.triangle().getAsBoolean()) {
-    //   m_drive.m_robotDrive.resetYaw();
-    //   // Make us target forward now to avoid jumps
-    //   m_lastTargetAngle = new Rotation2d();
-    // }
-
   }
 
   // Called once the command ends or is interrupted.

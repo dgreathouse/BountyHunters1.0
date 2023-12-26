@@ -35,13 +35,14 @@ public class AutoDriveRotateCommand extends Command {
   @Override
   public void initialize() {
     m_timer.start();
-    m_rotationAngle = new Rotation2d(m_robotAngle);
+    m_drivetrain.setLastTargetAngle(new Rotation2d(m_robotAngle));
+   //m_rotationAngle = new Rotation2d(m_robotAngle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.driveAngleFieldCentric(0, 0, m_rotationAngle);
+    m_drivetrain.driveAngleFieldCentric(0, 0);
   }
 
   // Called once the command ends or is interrupted.
