@@ -139,9 +139,6 @@ public class SwerveDrive {
                 k.DRIVE.GEAR_RATIO, // ratio for the drive motor
                 k.STEER.GEAR_RATIO_TO_CANCODER, // ratio for the steer motor
                 k.DRIVE.WHEEL_DIAMETER_m, // 4 inch diameter for the wheels
-                17, // Only apply 24 stator amps to prevent slip
-                m_steerGains, // Use the specified steer gains
-                m_driveGains, // Use the specified drive gains
                 true,
                 false // CANcoder not reversed from the steer motor. For WCP Swerve X this should be
                      // true.

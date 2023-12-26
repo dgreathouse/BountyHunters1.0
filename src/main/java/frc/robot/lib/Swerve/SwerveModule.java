@@ -45,23 +45,15 @@ public class SwerveModule {
     private double m_driveActualVelocity_mps = 0;
     private double m_steerActualAngle_deg = 0;
     //TODO Determine PID and Constraints for PID in volts
-    private ProfiledPIDController m_steerProPID = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0,0));
-    //private ProfiledPIDController m_driveProPID = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0,0));
-    //private PIDController m_anglePID = new PIDController(.125, .1, 0.0);
+    private ProfiledPIDController m_steerProPID = new ProfiledPIDController(k.STEER.PID_Kp, k.STEER.PID_Ki, 0, new TrapezoidProfile.Constraints(k.STEER.PID_MaxV,k.STEER.PID_MaxA));
     // TODO Determine PID for mps to volts
-    private PIDController m_drivePID = new PIDController(.125, .1, 0.0);
+    private PIDController m_drivePID = new PIDController(k.DRIVE.PID_Kp,k.DRIVE.PID_Ki, 0.0);
     // TODO Determine FF kv,ks for Volts per mps. First no load single motor test showed .11 volts per RPS
     // TODO Test by setting various voltages and measuring drive velocity to get kv. ks is the amount it takes to move the robot 
-    private SimpleMotorFeedforward m_driveFF = new SimpleMotorFeedforward(0.18, k.ROBOT.BATTERY_MAX_VOLTS/k.DRIVE.MAX_VELOCITY_MeterPerSec);
-    /* 
-     * Volts    1       2
-     * MPS      0.37   0.74
-     */
+    private SimpleMotorFeedforward m_driveFF = new SimpleMotorFeedforward(k.DRIVE.PID_Ks, k.DRIVE.PID_Kv);
+
     private VoltageOut m_angleVoltageOut = new VoltageOut(0.0);
     private VoltageOut m_driveVoltageOut = new VoltageOut(0.0);
-    // private PositionVoltage m_angleSetter = new PositionVoltage(0);
-    // //private VelocityTorqueCurrentFOC m_velocitySetter = new VelocityTorqueCurrentFOC(0);
-    // private VelocityVoltage m_velocitySetter = new VelocityVoltage(0);
 
     private SwerveModulePosition m_internalState = new SwerveModulePosition();
 
@@ -72,32 +64,17 @@ public class SwerveModule {
         m_name = _constants.m_name;
         // Configure Drive Motor
         TalonFXConfiguration talonDriveConfigs = new TalonFXConfiguration();
-        talonDriveConfigs.Slot0 = _constants.m_driveMotorGains;
-        
-        //talonDriveConfigs.TorqueCurrent.PeakForwardTorqueCurrent = _constants.m_slipCurrent_amps;
-        //talonDriveConfigs.TorqueCurrent.PeakReverseTorqueCurrent = -_constants.m_slipCurrent_amps;
         talonDriveConfigs.MotorOutput.Inverted = _constants.m_isDriveMotorReversed ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
         m_driveMotor.getConfigurator().apply(talonDriveConfigs);
 
         // Configure Steer Motor
         m_steerProPID.enableContinuousInput(-180.0, +180.0);
         TalonFXConfiguration talonSteerConfigs = new TalonFXConfiguration();
-        talonSteerConfigs.Slot0 = _constants.m_steerMotorGains;
+
         // Modify configuration to use remote CANcoder fused
-        // TODO Get rid of fused cancoder. Just rely on the motor encoder.
-        //talonSteerConfigs.Feedback.FeedbackRemoteSensorID = _constants.m_CANcoderId;
-        //talonSteerConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
         talonSteerConfigs.Feedback.RotorToSensorRatio = _constants.m_steerMotorGearRatio;
 
-
-        // Enable continuous wrap for swerve modules
-        // TODO: This means nothing since we are using voltage open loop and closing the loop in software not the motor.
-        talonSteerConfigs.ClosedLoopGeneral.ContinuousWrap = true; 
-
-        talonSteerConfigs.MotorOutput.Inverted =
-                _constants.m_isSteerMotorReversed
-                        ? InvertedValue.Clockwise_Positive
-                        : InvertedValue.CounterClockwise_Positive;
+        talonSteerConfigs.MotorOutput.Inverted = _constants.m_isSteerMotorReversed ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
         m_steerMotor.getConfigurator().apply(talonSteerConfigs);
 
         CANcoderConfiguration cancoderConfigs = new CANcoderConfiguration();

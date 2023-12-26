@@ -26,18 +26,13 @@ public class SwerveDriveConstantsCreator {
             double swerveModuleDriveRatio,
             double swerveModuleSteerRatio,
             double swerveModuleWheelRadius,
-            double swerveModuleSlipCurrent,
-            Slot0Configs swerveModuleSteerGains,
-            Slot0Configs swerveModuleDriveGains,
             boolean SteerMotorReversed,
             boolean DriveMotorReversed) {
         this.DriveMotorGearRatio = swerveModuleDriveRatio;
         this.SteerMotorGearRatio = swerveModuleSteerRatio;
         this.WheelRadius = swerveModuleWheelRadius;
-        this.SlipCurrent = swerveModuleSlipCurrent;
 
-        this.SteerMotorGains = swerveModuleSteerGains;
-        this.DriveMotorGains = swerveModuleDriveGains;
+
         this.SteerMotorReversed = SteerMotorReversed;
         this.DriveMotorReversed = DriveMotorReversed;
     }
@@ -62,8 +57,6 @@ public class SwerveDriveConstantsCreator {
                 .withSteerMotorGearRatio(SteerMotorGearRatio)
                 .withWheelRadius(WheelRadius)
                 .withSlipCurrent(SlipCurrent)
-                .withSteerMotorGains(SteerMotorGains)
-                .withDriveMotorGains(DriveMotorGains)
                 .withSteerMotorReversed(SteerMotorReversed)
                 .withDriveMotorReversed(DriveMotorReversed);
     }

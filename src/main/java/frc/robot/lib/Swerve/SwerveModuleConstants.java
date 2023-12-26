@@ -31,14 +31,6 @@ public class SwerveModuleConstants {
      */
     public double m_locationY_m = 0;
 
-    /** The steer motor gains */
-    public Slot0Configs m_steerMotorGains = new Slot0Configs();
-    /** The drive motor gains */
-    public Slot0Configs m_driveMotorGains = new Slot0Configs();
-
-    /** The maximum amount of current the drive motors can apply without slippage */
-    public double m_slipCurrent_amps = 400;
-
     /** True if the steering motor is reversed from the CANcoder */
     public boolean m_isSteerMotorReversed = false;
     public boolean m_isDriveMotorReversed = false;
@@ -88,21 +80,6 @@ public class SwerveModuleConstants {
 
     public SwerveModuleConstants withLocationY(double locationY_m) {
         this.m_locationY_m = locationY_m;
-        return this;
-    }
-
-    public SwerveModuleConstants withSteerMotorGains(Slot0Configs _gains) {
-        this.m_steerMotorGains = _gains;
-        return this;
-    }
-
-    public SwerveModuleConstants withDriveMotorGains(Slot0Configs _gains) {
-        this.m_driveMotorGains = _gains;
-        return this;
-    }
-
-    public SwerveModuleConstants withSlipCurrent(double _slipCurrent_amps) {
-        this.m_slipCurrent_amps = _slipCurrent_amps;
         return this;
     }
 
