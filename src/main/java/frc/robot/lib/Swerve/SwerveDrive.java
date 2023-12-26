@@ -183,6 +183,8 @@ public class SwerveDrive {
         
         m_odometryThread = new OdometryThread();
         m_odometryThread.start();
+
+        SmartDashboard.putNumber("Volts", 0.0);
     }
     private SwerveModulePosition[] getSwervePositions() {
         return m_modulePositions;

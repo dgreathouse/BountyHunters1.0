@@ -74,7 +74,7 @@ public final class k {
     private static final double GEAR_1_DRIVE_TEETH = 14.0;
     private static final double GEAR_1_DRIVEN_TEETH = 72.0;
     private static final double CANCODER_GEAR_RATIO = 1.0;
-    private static final double GEAR_RATIO = 1/((MOTOR_PINION_TEETH/MOTOR_DRIVE_GEAR_TEETH)*(GEAR_1_DRIVE_TEETH/GEAR_1_DRIVEN_TEETH));
+    public static final double GEAR_RATIO = 1/((MOTOR_PINION_TEETH/MOTOR_DRIVE_GEAR_TEETH)*(GEAR_1_DRIVE_TEETH/GEAR_1_DRIVEN_TEETH));
     public static final double GEAR_RATIO_TO_CANCODER = GEAR_RATIO * CANCODER_GEAR_RATIO;
   }
   public static class ARM {

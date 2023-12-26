@@ -7,17 +7,25 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TorqueCurrentConfigs;
+import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.lib.k;
 
 
 public class SwerveModule {
@@ -31,10 +39,24 @@ public class SwerveModule {
     private StatusSignal<Double> m_steerVelocity;
     private BaseStatusSignal[] m_signals;
     private double m_driveRotationsPerMeter = 0;
-    private double m_velocityToSet = 0;
-    private PositionVoltage m_angleSetter = new PositionVoltage(0);
-    //private VelocityTorqueCurrentFOC m_velocitySetter = new VelocityTorqueCurrentFOC(0);
-    private VelocityVoltage m_velocitySetter = new VelocityVoltage(0);
+    private double m_driveSetVelocity_mps = 0;
+    private double m_steerSetAngle_deg = 0;
+    private double m_driveActualVelocity_mps = 0;
+    private double m_steerActualAngle_deg = 0;
+    //TODO Determine PID and Constraints for PID in volts
+    private ProfiledPIDController m_angleProPID = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0,0));
+    //private ProfiledPIDController m_driveProPID = new ProfiledPIDController(0, 0, 0, new TrapezoidProfile.Constraints(0,0));
+    //private PIDController m_anglePID = new PIDController(.125, .1, 0.0);
+    // TODO Determine PID for mps to volts
+    private PIDController m_drivePID = new PIDController(.125, .1, 0.0);
+    // TODO Determine FF kv,ks for Volts per mps. First no load single motor test showed .11 volts per RPS
+    // TODO Test by setting various voltages and measuring drive velocity to get kv. ks is the amount it takes to move the robot 
+    private SimpleMotorFeedforward m_driveFF = new SimpleMotorFeedforward(0.2, .11);
+    private VoltageOut m_angleVoltageOut = new VoltageOut(0.0);
+    private VoltageOut m_driveVoltageOut = new VoltageOut(0.0);
+    // private PositionVoltage m_angleSetter = new PositionVoltage(0);
+    // //private VelocityTorqueCurrentFOC m_velocitySetter = new VelocityTorqueCurrentFOC(0);
+    // private VelocityVoltage m_velocitySetter = new VelocityVoltage(0);
 
     private SwerveModulePosition m_internalState = new SwerveModulePosition();
 
@@ -53,14 +75,18 @@ public class SwerveModule {
         m_driveMotor.getConfigurator().apply(talonDriveConfigs);
 
         // Configure Steer Motor
+        m_angleProPID.enableContinuousInput(-180.0, +180.0);
         TalonFXConfiguration talonSteerConfigs = new TalonFXConfiguration();
         talonSteerConfigs.Slot0 = _constants.m_steerMotorGains;
         // Modify configuration to use remote CANcoder fused
-        talonSteerConfigs.Feedback.FeedbackRemoteSensorID = _constants.m_CANcoderId;
-        talonSteerConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+        // TODO Get rid of fused cancoder. Just rely on the motor encoder.
+        //talonSteerConfigs.Feedback.FeedbackRemoteSensorID = _constants.m_CANcoderId;
+        //talonSteerConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
         talonSteerConfigs.Feedback.RotorToSensorRatio = _constants.m_steerMotorGearRatio;
 
+
         // Enable continuous wrap for swerve modules
+        // TODO: This means nothing since we are using voltage open loop and closing the loop in software not the motor.
         talonSteerConfigs.ClosedLoopGeneral.ContinuousWrap = true; 
 
         talonSteerConfigs.MotorOutput.Inverted =
@@ -114,18 +140,26 @@ public class SwerveModule {
     public void apply(SwerveModuleState _state) {
         var optimized = SwerveModuleState.optimize(_state, m_internalState.angle);
 
-        double angleToSet_rot = optimized.angle.getRotations();
-        //m_steerMotor.setControl(m_angleSetter.withPosition(angleToSet_rot));
-        m_velocityToSet = optimized.speedMetersPerSecond * m_driveRotationsPerMeter;
+        m_steerSetAngle_deg = optimized.angle.getDegrees();
+        m_driveSetVelocity_mps = optimized.speedMetersPerSecond;
+
+        m_driveActualVelocity_mps = m_driveMotor.getVelocity().getValueAsDouble() / m_driveRotationsPerMeter;
+        m_steerActualAngle_deg = m_steerMotor.getPosition().getValueAsDouble() * 360.0 / k.STEER.GEAR_RATIO;
         
-        m_driveMotor.setControl(m_velocitySetter.
-                                withVelocity(m_velocityToSet).
-                                withEnableFOC(false). // FIXME: get the FOC license 
-                                withFeedForward(m_velocityToSet*1.0/9.0)); // FIXME: 1/2 of max speed as acceleration. 
+        // Calculate the PID value for the angle in Degrees
+        double angleVolts = m_angleProPID.calculate(m_steerActualAngle_deg,m_steerSetAngle_deg);
+        m_steerMotor.setControl(m_angleVoltageOut.withOutput(0));
+
+        // Calculate the PID value of velocity in MPS
+        double driveVolts = m_drivePID.calculate(m_driveActualVelocity_mps, m_driveSetVelocity_mps);
+        driveVolts += m_driveFF.calculate(m_driveActualVelocity_mps);
+        m_driveMotor.setControl(m_driveVoltageOut.withOutput(SmartDashboard.getNumber("Volts", 0)));
     }
     void updateDashboard(){
-        SmartDashboard.putNumber(m_name+"_set_mps", m_velocitySetter.Velocity);
-        SmartDashboard.putNumber(m_name+"_set_ff", m_velocitySetter.FeedForward);
+        SmartDashboard.putNumber(m_name+"_set_deg", m_steerSetAngle_deg);
+        SmartDashboard.putNumber(m_name+"_set_mps", m_driveSetVelocity_mps);
+        SmartDashboard.putNumber(m_name+"_act_deg", m_steerActualAngle_deg);
+        SmartDashboard.putNumber(m_name+"_act_mps", m_driveActualVelocity_mps);
         
     }
     BaseStatusSignal[] getSignals() {
