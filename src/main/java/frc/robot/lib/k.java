@@ -60,6 +60,7 @@ public final class k {
     public static final double GEAR_RATIO = (GEAR_1_TEETH/MOTOR_PINION_TEETH) * (GEAR_2_DRIVEN_TEETH / GEAR_2_DRIVE_TEETH) * (GEAR_BEVEL_DRIVEN_TEETH / GEAR_BEVEL_DRIVE_TEETH);
     public static final double WHEEL_DIAMETER_m = 0.10287;
     private static final double WHEEL_CIRCUMFERENCE_m = Math.PI * WHEEL_DIAMETER_m;
+    public static final double WHEEL_RotPerMeter = GEAR_RATIO / WHEEL_CIRCUMFERENCE_m;
     private static final double MOTOR_MAX_VELOCITY_RotPerMin = 6380.0;
     private static final double MOTOR_MAX_VELOCITY_RotPerSec = MOTOR_MAX_VELOCITY_RotPerMin / 60.0;
     private static final double WHEEL_MAX_VELOCITY_RotPerSec = MOTOR_MAX_VELOCITY_RotPerSec / GEAR_RATIO;

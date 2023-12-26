@@ -13,11 +13,11 @@ public class SwerveModuleConstants {
     /** Offset of the CANcoder in degrees */
     public double m_CANcoderOffset_deg = 0;
     /** Gear ratio between drive motor and wheel */
-    public double m_driveMotorGearRatio = 0;
-    /** Gear ratio between steer motor and CANcoder An example ratio for the SDS Mk4: 12.8 */
-    public double m_steerMotorGearRatio = 0;
-    /** Wheel diameter of the driving wheel in meters */
-    public double m_wheelDiameter_m = 0;
+    // public double m_driveMotorGearRatio = 0;
+    // /** Gear ratio between steer motor and CANcoder An example ratio for the SDS Mk4: 12.8 */
+    // public double m_steerMotorGearRatio = 0;
+    // /** Wheel diameter of the driving wheel in meters */
+    // public double m_wheelDiameter_m = 0;
     /**
      * The location of this module's wheels relative to the physical center of the robot in meters
      * along the X axis of the robot
@@ -56,20 +56,20 @@ public class SwerveModuleConstants {
         return this;
     }
 
-    public SwerveModuleConstants withDriveMotorGearRatio(double _ratio) {
-        this.m_driveMotorGearRatio = _ratio;
-        return this;
-    }
+    // public SwerveModuleConstants withDriveMotorGearRatio(double _ratio) {
+    //     this.m_driveMotorGearRatio = _ratio;
+    //     return this;
+    // }
 
-    public SwerveModuleConstants withSteerMotorGearRatio(double _ratio) {
-        this.m_steerMotorGearRatio = _ratio;
-        return this;
-    }
+    // public SwerveModuleConstants withSteerMotorGearRatio(double _ratio) {
+    //     this.m_steerMotorGearRatio = _ratio;
+    //     return this;
+    // }
 
-    public SwerveModuleConstants withWheelRadius(double _diameter_m) {
-        this.m_wheelDiameter_m = _diameter_m;
-        return this;
-    }
+    // public SwerveModuleConstants withWheelRadius(double _diameter_m) {
+    //     this.m_wheelDiameter_m = _diameter_m;
+    //     return this;
+    // }
 
     public SwerveModuleConstants withLocationX(double _locationX_m) {
         this.m_locationX_m = _locationX_m;

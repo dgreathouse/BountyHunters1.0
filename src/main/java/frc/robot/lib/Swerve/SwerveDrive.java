@@ -121,6 +121,7 @@ public class SwerveDrive {
             return FailedDaqs;
         }
     }
+   
     public SwerveDrive() {
         SwerveDriveTrainConstants m_drivetrainConstants = new SwerveDriveTrainConstants()
                 .withPigeon2Id(5)
@@ -129,9 +130,9 @@ public class SwerveDrive {
                 .withTurnKi(0.1);
 
         SwerveDriveConstantsCreator m_constantsCreator = new SwerveDriveConstantsCreator(
-                k.DRIVE.GEAR_RATIO, // ratio for the drive motor
-                k.STEER.GEAR_RATIO_TO_CANCODER, // ratio for the steer motor
-                k.DRIVE.WHEEL_DIAMETER_m, // 4 inch diameter for the wheels
+                // k.DRIVE.GEAR_RATIO, // ratio for the drive motor
+                // k.STEER.GEAR_RATIO_TO_CANCODER, // ratio for the steer motor
+                // k.DRIVE.WHEEL_DIAMETER_m, // 4 inch diameter for the wheels
                 true,
                 false // CANcoder not reversed from the steer motor. For WCP Swerve X this should be
                      // true.
@@ -139,14 +140,13 @@ public class SwerveDrive {
         SwerveModuleConstants m_frontRight = m_constantsCreator.createModuleConstants( "fr",
             23, 13, 3, -0.15942,k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, -k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0)
             .withDriveMotorReversed(true);
-    
         SwerveModuleConstants m_frontLeft = m_constantsCreator.createModuleConstants( "fl",
             22, 12, 2, -0.033936, k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
         SwerveModuleConstants m_back = m_constantsCreator.createModuleConstants( "b",
             21, 11, 1, -0.085205, -k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, 0.0);
         initialize(m_drivetrainConstants, m_frontLeft, m_frontRight, m_back);    
-            
     }
+ 
     public void initialize(SwerveDriveTrainConstants _driveTrainConstants, SwerveModuleConstants... _modules){
         m_moduleCount = _modules.length;
 

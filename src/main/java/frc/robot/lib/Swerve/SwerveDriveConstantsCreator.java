@@ -23,14 +23,14 @@ public class SwerveDriveConstantsCreator {
     public boolean SteerMotorReversed;
     public boolean DriveMotorReversed;
     public SwerveDriveConstantsCreator(
-            double swerveModuleDriveRatio,
-            double swerveModuleSteerRatio,
-            double swerveModuleWheelRadius,
+            // double swerveModuleDriveRatio,
+            // double swerveModuleSteerRatio,
+            // double swerveModuleWheelRadius,
             boolean SteerMotorReversed,
             boolean DriveMotorReversed) {
-        this.DriveMotorGearRatio = swerveModuleDriveRatio;
-        this.SteerMotorGearRatio = swerveModuleSteerRatio;
-        this.WheelRadius = swerveModuleWheelRadius;
+        // this.DriveMotorGearRatio = swerveModuleDriveRatio;
+        // this.SteerMotorGearRatio = swerveModuleSteerRatio;
+        // this.WheelRadius = swerveModuleWheelRadius;
 
 
         this.SteerMotorReversed = SteerMotorReversed;
@@ -53,9 +53,9 @@ public class SwerveDriveConstantsCreator {
                 .withCANcoderOffset(cancoderOffset)
                 .withLocationX(locationX)
                 .withLocationY(locationY)
-                .withDriveMotorGearRatio(DriveMotorGearRatio)
-                .withSteerMotorGearRatio(SteerMotorGearRatio)
-                .withWheelRadius(WheelRadius)
+                // .withDriveMotorGearRatio(DriveMotorGearRatio)
+                // .withSteerMotorGearRatio(SteerMotorGearRatio)
+                // .withWheelRadius(WheelRadius)
                 .withSteerMotorReversed(SteerMotorReversed)
                 .withDriveMotorReversed(DriveMotorReversed);
     }
