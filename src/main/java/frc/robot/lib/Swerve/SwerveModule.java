@@ -51,7 +51,11 @@ public class SwerveModule {
     private PIDController m_drivePID = new PIDController(.125, .1, 0.0);
     // TODO Determine FF kv,ks for Volts per mps. First no load single motor test showed .11 volts per RPS
     // TODO Test by setting various voltages and measuring drive velocity to get kv. ks is the amount it takes to move the robot 
-    private SimpleMotorFeedforward m_driveFF = new SimpleMotorFeedforward(0.2, .11);
+    private SimpleMotorFeedforward m_driveFF = new SimpleMotorFeedforward(0.18, .11);
+    /* 
+     * Volts    1       2
+     * MPS      0.37   0.74
+     */
     private VoltageOut m_angleVoltageOut = new VoltageOut(0.0);
     private VoltageOut m_driveVoltageOut = new VoltageOut(0.0);
     // private PositionVoltage m_angleSetter = new PositionVoltage(0);
@@ -72,6 +76,7 @@ public class SwerveModule {
         
         //talonDriveConfigs.TorqueCurrent.PeakForwardTorqueCurrent = _constants.m_slipCurrent_amps;
         //talonDriveConfigs.TorqueCurrent.PeakReverseTorqueCurrent = -_constants.m_slipCurrent_amps;
+        talonDriveConfigs.MotorOutput.Inverted = _constants.m_isDriveMotorReversed ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
         m_driveMotor.getConfigurator().apply(talonDriveConfigs);
 
         // Configure Steer Motor
@@ -97,6 +102,7 @@ public class SwerveModule {
 
         CANcoderConfiguration cancoderConfigs = new CANcoderConfiguration();
         cancoderConfigs.MagnetSensor.MagnetOffset = _constants.m_CANcoderOffset_deg;
+        //cancoderConfigs.MagnetSensor.MagnetOffset = 0.0;
         m_cancoder.getConfigurator().apply(cancoderConfigs);
 
         m_drivePosition = m_driveMotor.getPosition();
@@ -160,6 +166,7 @@ public class SwerveModule {
         SmartDashboard.putNumber(m_name+"_set_mps", m_driveSetVelocity_mps);
         SmartDashboard.putNumber(m_name+"_act_deg", m_steerActualAngle_deg);
         SmartDashboard.putNumber(m_name+"_act_mps", m_driveActualVelocity_mps);
+        SmartDashboard.putNumber(m_name+"_CC_rot", m_steerPosition.getValueAsDouble());
         
     }
     BaseStatusSignal[] getSignals() {

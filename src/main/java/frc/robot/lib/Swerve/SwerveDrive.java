@@ -142,16 +142,18 @@ public class SwerveDrive {
                 17, // Only apply 24 stator amps to prevent slip
                 m_steerGains, // Use the specified steer gains
                 m_driveGains, // Use the specified drive gains
-                true // CANcoder not reversed from the steer motor. For WCP Swerve X this should be
+                true,
+                false // CANcoder not reversed from the steer motor. For WCP Swerve X this should be
                      // true.
         );
         SwerveModuleConstants m_frontRight = m_constantsCreator.createModuleConstants( "fr",
-            23, 13, 3, -0.538818,k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, -k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
+            23, 13, 3, -0.15942,k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, -k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0)
+            .withDriveMotorReversed(true);
     
         SwerveModuleConstants m_frontLeft = m_constantsCreator.createModuleConstants( "fl",
-            22, 12, 2, -0.474609, k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
+            22, 12, 2, -0.033936, k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
         SwerveModuleConstants m_back = m_constantsCreator.createModuleConstants( "b",
-            21, 11, 1, -0.928467, -k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, 0.0);
+            21, 11, 1, -0.085205, -k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, 0.0);
         initialize(m_drivetrainConstants, m_frontLeft, m_frontRight, m_back);    
             
     }

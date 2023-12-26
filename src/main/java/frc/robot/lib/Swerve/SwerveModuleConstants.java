@@ -41,6 +41,7 @@ public class SwerveModuleConstants {
 
     /** True if the steering motor is reversed from the CANcoder */
     public boolean m_isSteerMotorReversed = false;
+    public boolean m_isDriveMotorReversed = false;
     public SwerveModuleConstants withName(String _name){
         this.m_name = _name;
         return this;
@@ -105,8 +106,12 @@ public class SwerveModuleConstants {
         return this;
     }
 
-    public SwerveModuleConstants withSteerMotorReversed(boolean _isSteerMotorReversed) {
-        this.m_isSteerMotorReversed = _isSteerMotorReversed;
+    public SwerveModuleConstants withSteerMotorReversed(boolean _isrMotorReversed) {
+        this.m_isSteerMotorReversed = _isrMotorReversed;
+        return this;
+    }
+      public SwerveModuleConstants withDriveMotorReversed(boolean _isMotorReversed) {
+        this.m_isDriveMotorReversed = _isMotorReversed;
         return this;
     }
 }
