@@ -5,12 +5,15 @@ package frc.robot.commands.Drive;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
+import frc.robot.lib.ICommand;
 import frc.robot.lib.k;
+import frc.robot.lib.k.CONVERT;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
-public class DrivetrainDefaultCommand extends Command {
+public class DrivetrainDefaultCommand extends Command implements ICommand{
 
   private DrivetrainSubsystem m_drive;
   ChassisSpeeds m_speeds = new ChassisSpeeds();
@@ -82,5 +85,12 @@ public class DrivetrainDefaultCommand extends Command {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  @Override
+  public void updateDashboard() {
+    SmartDashboard.putNumber("ChassisSpeeds(Command) MPS(X)", m_speeds.vxMetersPerSecond);
+    SmartDashboard.putNumber("ChassisSpeeds(Command) MPS(Y)", m_speeds.vyMetersPerSecond);
+    SmartDashboard.putNumber("ChassisSpeeds(Command) Deg/Sec", m_speeds.omegaRadiansPerSecond * k.CONVERT.RADIANS_TO_DEGREES);
   }
 }

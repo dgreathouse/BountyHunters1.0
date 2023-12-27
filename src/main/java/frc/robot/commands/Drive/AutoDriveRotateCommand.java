@@ -4,10 +4,12 @@ package frc.robot.commands.Drive;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.lib.ICommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
-public class AutoDriveRotateCommand extends Command {
+public class AutoDriveRotateCommand extends Command implements ICommand{
   DrivetrainSubsystem m_drivetrain;
   Timer m_timer = new Timer();
   double m_timeOut;
@@ -57,5 +59,9 @@ public class AutoDriveRotateCommand extends Command {
       return true;
     }
     return false;
+  }
+  @Override
+  public void updateDashboard() {
+    
   }
 }

@@ -3,9 +3,10 @@
 package frc.robot.commands.Elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.lib.ICommand;
 import frc.robot.subsystems.ElevatorSubsystem;
 
-public class ElevatorDefaultCommand extends Command {
+public class ElevatorDefaultCommand extends Command  implements ICommand{
   ElevatorSubsystem m_elevator;
 
   /** Creates a new ElevatorDefaultCommand. */
@@ -30,5 +31,9 @@ public class ElevatorDefaultCommand extends Command {
   @Override
   public boolean isFinished() {
     return false;
+  }
+  @Override
+  public void updateDashboard() {
+
   }
 }

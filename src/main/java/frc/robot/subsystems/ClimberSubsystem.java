@@ -4,8 +4,11 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.lib.ICommand;
 import frc.robot.lib.ISubsystem;
 import frc.robot.lib.k;
 
@@ -13,7 +16,10 @@ public class ClimberSubsystem extends SubsystemBase  implements ISubsystem{
   TalonFX m_motor;
 
   public void updateDashboard() {
-
+    if(this.getCurrentCommand() != null){
+      ((ICommand)this.getCurrentCommand()).updateDashboard();
+      SmartDashboard.putString("ClimberSubsystem", this.getCurrentCommand().getName());
+    }
   }
 
   /** Creates a new ClimberSubsystem. */
@@ -26,9 +32,9 @@ public class ClimberSubsystem extends SubsystemBase  implements ISubsystem{
   private void initialize(){
     RobotContainer.subsystems.add(this);
   }
-  public void setTestVoltage(double _volts){
+  // public void setTestVoltage(double _volts){
     
-  }
+  // }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

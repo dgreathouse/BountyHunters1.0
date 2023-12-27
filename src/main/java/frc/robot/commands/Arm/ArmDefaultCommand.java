@@ -3,9 +3,10 @@
 package frc.robot.commands.Arm;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.lib.ICommand;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmDefaultCommand extends Command {
+public class ArmDefaultCommand extends Command  implements ICommand{
   ArmSubsystem m_arm;
   /** Creates a new ArmDefaultCommand. */
   public ArmDefaultCommand(ArmSubsystem _subsystem) {
@@ -29,5 +30,9 @@ public class ArmDefaultCommand extends Command {
   @Override
   public boolean isFinished() {
     return false;
+  }
+  @Override
+  public void updateDashboard() {
+
   }
 }

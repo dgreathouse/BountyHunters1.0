@@ -3,9 +3,10 @@
 package frc.robot.commands.Extension;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.lib.ICommand;
 import frc.robot.subsystems.ExtensionSubsystem;
 
-public class ExtensionDefaultCommand extends Command {
+public class ExtensionDefaultCommand extends Command implements ICommand {
   ExtensionSubsystem m_extension;
   /** Creates a new ExtensionDefaultCommand. */
   public ExtensionDefaultCommand(ExtensionSubsystem _subsystem) {
@@ -30,5 +31,9 @@ public class ExtensionDefaultCommand extends Command {
   @Override
   public boolean isFinished() {
     return false;
+  }
+  @Override
+  public void updateDashboard() {
+
   }
 }

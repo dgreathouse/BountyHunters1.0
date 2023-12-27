@@ -3,9 +3,10 @@
 package frc.robot.commands.Turret;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.lib.ICommand;
 import frc.robot.subsystems.TurretSubsystem;
 
-public class TurretDefaultCommand extends Command {
+public class TurretDefaultCommand extends Command  implements ICommand{
   TurretSubsystem m_turret;
   /** Creates a new TurretDefaultCommand. */
   public TurretDefaultCommand(TurretSubsystem _subsystem) {
@@ -29,5 +30,9 @@ public class TurretDefaultCommand extends Command {
   @Override
   public boolean isFinished() {
     return false;
+  }
+  @Override
+  public void updateDashboard() {
+
   }
 }

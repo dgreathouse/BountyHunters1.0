@@ -10,8 +10,10 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.lib.ICommand;
 import frc.robot.lib.ISubsystem;
 import frc.robot.lib.k;
 
@@ -30,11 +32,14 @@ public class ArmSubsystem extends SubsystemBase  implements ISubsystem{
   double m_currentAngle;
   
   public void updateDashboard() {
-
+    if(this.getCurrentCommand() != null){
+      ((ICommand)this.getCurrentCommand()).updateDashboard();
+      SmartDashboard.putString("ArmSubsystem", this.getCurrentCommand().getName());
+    }
   }
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
-    m_motor = new TalonFX(20, k.ROBOT.CANVORE_CANFD_NAME);
+    m_motor = new TalonFX(200, k.ROBOT.CANVORE_CANFD_NAME);
     m_VoltageOut = new VoltageOut(0, true, false);
     // PID values are the velocity of the motor scaled to Voltage.
     m_rotPid = new PIDController(k.ARM.ROTATION_PID_Kp, k.ARM.ROTATION_PID_Ki, k.ARM.ROTATION_PID_Kd);
@@ -75,9 +80,9 @@ public class ArmSubsystem extends SubsystemBase  implements ISubsystem{
     
     m_motor.setControl(m_VoltageOut.withOutput(ff + rotPID));
   }
-  public void setTestVoltage(double _volts){
-    m_motor.setVoltage(_volts);
-  }
+  // public void setTestVoltage(double _volts){
+  //   m_motor.setVoltage(_volts);
+  // }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

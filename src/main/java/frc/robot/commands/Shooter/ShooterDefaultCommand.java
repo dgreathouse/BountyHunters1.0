@@ -3,9 +3,10 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.lib.ICommand;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class ShooterDefaultCommand extends Command {
+public class ShooterDefaultCommand extends Command implements ICommand {
   ShooterSubsystem m_shooter;
   /** Creates a new ShooterDefaultCommand. */
   public ShooterDefaultCommand(ShooterSubsystem _subsystem) {
@@ -29,5 +30,9 @@ public class ShooterDefaultCommand extends Command {
   @Override
   public boolean isFinished() {
     return false;
+  }
+  @Override
+  public void updateDashboard() {
+
   }
 }

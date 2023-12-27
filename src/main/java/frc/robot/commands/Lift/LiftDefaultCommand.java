@@ -3,9 +3,10 @@
 package frc.robot.commands.Lift;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.lib.ICommand;
 import frc.robot.subsystems.LiftSubsystem;
 
-public class LiftDefaultCommand extends Command {
+public class LiftDefaultCommand extends Command  implements ICommand{
   LiftSubsystem m_lift;
   /** Creates a new LiftDefaultCommand. */
   public LiftDefaultCommand(LiftSubsystem _subsystem) {
@@ -29,5 +30,9 @@ public class LiftDefaultCommand extends Command {
   @Override
   public boolean isFinished() {
     return false;
+  }
+  @Override
+  public void updateDashboard() {
+
   }
 }

@@ -3,9 +3,10 @@
 package frc.robot.commands.Claw;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.lib.ICommand;
 import frc.robot.subsystems.ClawSubsystem;
 
-public class ClawDefaultCommand extends Command {
+public class ClawDefaultCommand extends Command  implements ICommand{
   ClawSubsystem m_claw;
   /** Creates a new ClawDefaultCommand. */
   public ClawDefaultCommand(ClawSubsystem _claw) {
@@ -30,5 +31,9 @@ public class ClawDefaultCommand extends Command {
   @Override
   public boolean isFinished() {
     return false;
+  }
+  @Override
+  public void updateDashboard() {
+
   }
 }

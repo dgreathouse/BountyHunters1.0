@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.lib.EDriveMode;
+import frc.robot.lib.ICommand;
 import frc.robot.lib.ISubsystem;
 import frc.robot.lib.k;
 import frc.robot.lib.Swerve.SwerveDrive;
@@ -29,11 +30,9 @@ public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
   public void updateDashboard(){
     SmartDashboard.putString(k.DRIVE.T_DRIVER_MODE, m_driveMode.toString());
     if(this.getCurrentCommand() != null){
-      String ds = this.getCurrentCommand().getName();
-      SmartDashboard.putString("DriveCommand", ds);
+      ((ICommand)this.getCurrentCommand()).updateDashboard();
+      SmartDashboard.putString("DrivetrainSubsystem", this.getCurrentCommand().getName());
     }
-    
-
     m_robotDrive.updateDashboard();
   }
   public void driveStopMotion(){
@@ -81,7 +80,7 @@ public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
   public void resetYaw(){
     m_robotDrive.resetYaw();
   }
-  public void setTestVoltage(double _volts){}
+  //public void setTestVoltage(double _volts){}
   public void setLastTargetAngle(Rotation2d _targetAngle){
     m_lastTargetAngle = _targetAngle;
   }

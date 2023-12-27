@@ -72,7 +72,7 @@ public class RobotContainer {
     SmartDashboard.putString("RobotMode", GD.G_RobotMode.toString());
     Iterator<ISubsystem> it = subsystems.iterator();
     while(it.hasNext()){
-      it.next().updateDashboard();
+      it.next().updateDashboard(); // Comment this line out if you want ALL smartdashboard data to be stopped.
     }
   }
   /** This is the constructor for the class. */

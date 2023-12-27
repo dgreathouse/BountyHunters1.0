@@ -2,14 +2,19 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.lib.ICommand;
 import frc.robot.lib.ISubsystem;
 
 public class TurretSubsystem extends SubsystemBase implements ISubsystem {
 
   public void updateDashboard() {
-
+    if(this.getCurrentCommand() != null){
+      ((ICommand)this.getCurrentCommand()).updateDashboard();
+      SmartDashboard.putString("TurretSubsystem", this.getCurrentCommand().getName());
+    }
   }
 
   /** Creates a new TurretSubsystem. */
@@ -21,9 +26,9 @@ public class TurretSubsystem extends SubsystemBase implements ISubsystem {
   public void initialize() {
     RobotContainer.subsystems.add(this);
   }
-  public void setTestVoltage(double _volts){
+  // public void setTestVoltage(double _volts){
     
-  }
+  // }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
