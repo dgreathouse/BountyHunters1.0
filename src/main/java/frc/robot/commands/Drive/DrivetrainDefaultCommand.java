@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotContainer;
 import frc.robot.lib.ICommand;
 import frc.robot.lib.k;
-import frc.robot.lib.k.CONVERT;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class DrivetrainDefaultCommand extends Command implements ICommand{
