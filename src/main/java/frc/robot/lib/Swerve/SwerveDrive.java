@@ -21,7 +21,6 @@ import frc.robot.lib.k;
 
 public class SwerveDrive {
     private int m_moduleCount;
-
     private SwerveModule[] m_modules;
     private Pigeon2 m_pigeon2;
     private SwerveDriveKinematics m_kinematics;
@@ -32,18 +31,7 @@ public class SwerveDrive {
     private Field2d m_field;
     private PIDController m_turnPid;
 
-    /* Put smartdashboard calls in separate thread to reduce performance impact */
-    public void updateDashboard() {
-        SmartDashboard.putNumber("Successful Daqs", m_odometryThread.getSuccessfulDaqs());
-        SmartDashboard.putNumber("Failed Daqs", m_odometryThread.getFailedDaqs());
-        SmartDashboard.putNumber("X Pos", m_odometry.getPoseMeters().getX());
-        SmartDashboard.putNumber("Y Pos", m_odometry.getPoseMeters().getY());
-        SmartDashboard.putNumber("Angle", m_odometry.getPoseMeters().getRotation().getDegrees());
-        SmartDashboard.putNumber("Odometry Loop Time", m_odometryThread.getTime());
-        for (int i = 0; i < m_moduleCount; ++i) {
-            m_modules[i].updateDashboard();
-        }
-    }
+
 
     /* Perform swerve module updates in a separate thread to minimize latency */
     private class OdometryThread extends Thread {
@@ -130,12 +118,8 @@ public class SwerveDrive {
                 .withTurnKi(0.1);
 
         SwerveDriveConstantsCreator m_constantsCreator = new SwerveDriveConstantsCreator(
-                // k.DRIVE.GEAR_RATIO, // ratio for the drive motor
-                // k.STEER.GEAR_RATIO_TO_CANCODER, // ratio for the steer motor
-                // k.DRIVE.WHEEL_DIAMETER_m, // 4 inch diameter for the wheels
                 true,
-                false // CANcoder not reversed from the steer motor. For WCP Swerve X this should be
-                     // true.
+                false 
         );
         SwerveModuleConstants m_frontRight = m_constantsCreator.createModuleConstants( "fr",
             23, 13, 3, -0.15942,k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, -k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0)
@@ -146,18 +130,25 @@ public class SwerveDrive {
             21, 11, 1, -0.085205, -k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, 0.0);
         initialize(m_drivetrainConstants, m_frontLeft, m_frontRight, m_back);    
     }
- 
+     /* Put smartdashboard calls in separate thread to reduce performance impact */
+    public void updateDashboard() {
+        SmartDashboard.putNumber("Successful Daqs", m_odometryThread.getSuccessfulDaqs());
+        SmartDashboard.putNumber("Failed Daqs", m_odometryThread.getFailedDaqs());
+        SmartDashboard.putNumber("X Pos", m_odometry.getPoseMeters().getX());
+        SmartDashboard.putNumber("Y Pos", m_odometry.getPoseMeters().getY());
+        SmartDashboard.putNumber("Angle", m_odometry.getPoseMeters().getRotation().getDegrees());
+        SmartDashboard.putNumber("Odometry Loop Time", m_odometryThread.getTime());
+        for (int i = 0; i < m_moduleCount; ++i) {
+            m_modules[i].updateDashboard();
+        }
+    }
     public void initialize(SwerveDriveTrainConstants _driveTrainConstants, SwerveModuleConstants... _modules){
         m_moduleCount = _modules.length;
-
         m_pigeon2 = new Pigeon2(_driveTrainConstants.m_pigeon2Id, _driveTrainConstants.m_canBusName);
-
         m_modules = new SwerveModule[m_moduleCount];
         m_modulePositions = new SwerveModulePosition[m_moduleCount];
         m_moduleLocations = new Translation2d[m_moduleCount];
-
-  
-        //for (SwerveModuleConstants module : _modules) {
+ 
         for(int i = 0; i < m_moduleCount; i++)  {
             m_modules[i] = new SwerveModule(_modules[i], _driveTrainConstants.m_canBusName);
             m_moduleLocations[i] = new Translation2d(_modules[i].m_locationX_m, _modules[i].m_locationY_m);

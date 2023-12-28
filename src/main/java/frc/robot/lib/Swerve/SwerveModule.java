@@ -82,11 +82,6 @@ public class SwerveModule {
         m_signals[1] = m_driveVelocity;
         m_signals[2] = m_steerPosition;
         m_signals[3] = m_steerVelocity;
-
-        /* Calculate the ratio of drive motor rotation to meter on ground */
-        // double rotationsPerWheelRotation = k.DRIVE.GEAR_RATIO;
-        // double metersPerWheelRotation = Math.PI * k.DRIVE.WHEEL_DIAMETER_m;
-        // m_driveRotationsPerMeter = rotationsPerWheelRotation / metersPerWheelRotation;
     }
 
     public SwerveModulePosition getPosition(boolean _refresh) {
