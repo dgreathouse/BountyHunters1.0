@@ -111,21 +111,21 @@ public class SwerveDrive {
     }
    
     public SwerveDrive() {
-        SwerveModuleConstantsCreator m_constantsCreator = new SwerveModuleConstantsCreator();
-        SwerveModuleConstants m_frontRight = m_constantsCreator.createModuleConstants( 
+        //SwerveModuleConstantsCreator m_constantsCreator = new SwerveModuleConstantsCreator();
+        SwerveModuleConstants m_frontRight = new SwerveModuleConstants( 
             "fr",
             23, false,
             13, true, 
             3, -0.15942,
             k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, -k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
 
-        SwerveModuleConstants m_frontLeft = m_constantsCreator.createModuleConstants( 
+        SwerveModuleConstants m_frontLeft = new SwerveModuleConstants(
             "fl",
             22, false,
             12, false,  
             2, -0.033936, 
             k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
-        SwerveModuleConstants m_back = m_constantsCreator.createModuleConstants( 
+        SwerveModuleConstants m_back = new SwerveModuleConstants(
             "b",
             21, false,  
             11, false, 
@@ -134,18 +134,7 @@ public class SwerveDrive {
 
         initialize(m_frontLeft, m_frontRight, m_back);    
     }
-     /* Put smartdashboard calls in separate thread to reduce performance impact */
-    public void updateDashboard() {
-        SmartDashboard.putNumber("Successful Daqs", m_odometryThread.getSuccessfulDaqs());
-        SmartDashboard.putNumber("Failed Daqs", m_odometryThread.getFailedDaqs());
-        SmartDashboard.putNumber("X Pos", m_odometry.getPoseMeters().getX());
-        SmartDashboard.putNumber("Y Pos", m_odometry.getPoseMeters().getY());
-        SmartDashboard.putNumber("Angle", m_odometry.getPoseMeters().getRotation().getDegrees());
-        SmartDashboard.putNumber("Odometry Loop Time", m_odometryThread.getTime());
-        for (int i = 0; i < m_moduleCount; ++i) {
-            m_modules[i].updateDashboard();
-        }
-    }
+
     public void initialize(SwerveModuleConstants... _modules){
         m_moduleCount = _modules.length;
         m_pigeon2 = new Pigeon2(k.ROBOT.PIGEON2_CANID, k.ROBOT.CANVORE_CANFD_NAME);
@@ -154,7 +143,7 @@ public class SwerveDrive {
         m_moduleLocations = new Translation2d[m_moduleCount];
  
         for(int i = 0; i < m_moduleCount; i++)  {
-            m_modules[i] = new SwerveModule(_modules[i], k.ROBOT.CANVORE_CANFD_NAME);
+            m_modules[i] = new SwerveModule(_modules[i]);
             m_moduleLocations[i] = new Translation2d(_modules[i].m_locationX_m, _modules[i].m_locationY_m);
             m_modulePositions[i] = m_modules[i].getPosition(true);
         }
@@ -234,5 +223,17 @@ public class SwerveDrive {
 
     public boolean isTurnPIDatSetpoint() {
         return m_turnPid.atSetpoint();
+    }
+         /* Put smartdashboard calls in separate thread to reduce performance impact */
+    public void updateDashboard() {
+        SmartDashboard.putNumber("Successful Daqs", m_odometryThread.getSuccessfulDaqs());
+        SmartDashboard.putNumber("Failed Daqs", m_odometryThread.getFailedDaqs());
+        SmartDashboard.putNumber("X Pos", m_odometry.getPoseMeters().getX());
+        SmartDashboard.putNumber("Y Pos", m_odometry.getPoseMeters().getY());
+        SmartDashboard.putNumber("Angle", m_odometry.getPoseMeters().getRotation().getDegrees());
+        SmartDashboard.putNumber("Odometry Loop Time", m_odometryThread.getTime());
+        for (int i = 0; i < m_moduleCount; ++i) {
+            m_modules[i].updateDashboard();
+        }
     }
 }

@@ -23,49 +23,26 @@ public class SwerveModuleConstants {
      */
     public double m_locationY_m = 0;
 
-    /** True if the steering motor is reversed from the CANcoder */
+    /** True if the motors are reversed  */
     public boolean m_isSteerMotorReversed = false;
     public boolean m_isDriveMotorReversed = false;
-    public SwerveModuleConstants withName(String _name){
-        this.m_name = _name;
-        return this;
-    }
-    public SwerveModuleConstants withDriveMotorId(int _id) {
-        this.m_driveMotorId = _id;
-        return this;
-    }
+    public SwerveModuleConstants(){
 
-    public SwerveModuleConstants withSteerMotorId(int _id) {
-        this.m_steerMotorId = _id;
-        return this;
     }
-
-    public SwerveModuleConstants withCANcoderId(int _id) {
-        this.m_CANcoderId = _id;
-        return this;
+    public SwerveModuleConstants(String _name, 
+        int _driveMotorID, boolean _isDriveReversed, 
+        int _steerMotorID, boolean _steerMotorReveresed, 
+        int _canCoderID, double _canCoderOffset, 
+        double _locationX, double _locationY){
+            m_name = _name;
+            m_driveMotorId = _driveMotorID;
+            m_isDriveMotorReversed = _isDriveReversed;
+            m_steerMotorId = _steerMotorID;
+            m_isSteerMotorReversed = _steerMotorReveresed;
+            m_CANcoderId = _canCoderID;
+            m_CANcoderOffset_deg = _canCoderOffset;
+            m_locationX_m = _locationX;
+            m_locationY_m = _locationY;
     }
-
-    public SwerveModuleConstants withCANcoderOffset(double _offset_deg) {
-        this.m_CANcoderOffset_deg = _offset_deg;
-        return this;
-    }
-
-    public SwerveModuleConstants withLocationX(double _locationX_m) {
-        this.m_locationX_m = _locationX_m;
-        return this;
-    }
-
-    public SwerveModuleConstants withLocationY(double locationY_m) {
-        this.m_locationY_m = locationY_m;
-        return this;
-    }
-
-    public SwerveModuleConstants withSteerMotorReversed(boolean _isrMotorReversed) {
-        this.m_isSteerMotorReversed = _isrMotorReversed;
-        return this;
-    }
-      public SwerveModuleConstants withDriveMotorReversed(boolean _isMotorReversed) {
-        this.m_isDriveMotorReversed = _isMotorReversed;
-        return this;
-    }
+ 
 }
