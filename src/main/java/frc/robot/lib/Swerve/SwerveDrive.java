@@ -111,28 +111,28 @@ public class SwerveDrive {
     }
    
     public SwerveDrive() {
-        SwerveDriveTrainConstants m_drivetrainConstants = new SwerveDriveTrainConstants()
-                .withPigeon2Id(5)
-                .withCANbusName(k.ROBOT.CANVORE_CANFD_NAME)
-                .withTurnKp(5)
-                .withTurnKi(0.1);
-
         SwerveModuleConstantsCreator m_constantsCreator = new SwerveModuleConstantsCreator();
-        SwerveModuleConstants m_frontRight = m_constantsCreator.createModuleConstants( "fr",
+        SwerveModuleConstants m_frontRight = m_constantsCreator.createModuleConstants( 
+            "fr",
             23, false,
             13, true, 
             3, -0.15942,
             k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, -k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
 
-        SwerveModuleConstants m_frontLeft = m_constantsCreator.createModuleConstants( "fl",
+        SwerveModuleConstants m_frontLeft = m_constantsCreator.createModuleConstants( 
+            "fl",
             22, false,
             12, false,  
-            2, -0.033936, k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
-        SwerveModuleConstants m_back = m_constantsCreator.createModuleConstants( "b",
+            2, -0.033936, 
+            k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
+        SwerveModuleConstants m_back = m_constantsCreator.createModuleConstants( 
+            "b",
             21, false,  
             11, false, 
-            1, -0.085205, -k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, 0.0);
-        initialize(m_drivetrainConstants, m_frontLeft, m_frontRight, m_back);    
+            1, -0.085205, 
+            -k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, 0.0);
+
+        initialize(m_frontLeft, m_frontRight, m_back);    
     }
      /* Put smartdashboard calls in separate thread to reduce performance impact */
     public void updateDashboard() {
@@ -146,15 +146,15 @@ public class SwerveDrive {
             m_modules[i].updateDashboard();
         }
     }
-    public void initialize(SwerveDriveTrainConstants _driveTrainConstants, SwerveModuleConstants... _modules){
+    public void initialize(SwerveModuleConstants... _modules){
         m_moduleCount = _modules.length;
-        m_pigeon2 = new Pigeon2(_driveTrainConstants.m_pigeon2Id, _driveTrainConstants.m_canBusName);
+        m_pigeon2 = new Pigeon2(k.ROBOT.PIGEON2_CANID, k.ROBOT.CANVORE_CANFD_NAME);
         m_modules = new SwerveModule[m_moduleCount];
         m_modulePositions = new SwerveModulePosition[m_moduleCount];
         m_moduleLocations = new Translation2d[m_moduleCount];
  
         for(int i = 0; i < m_moduleCount; i++)  {
-            m_modules[i] = new SwerveModule(_modules[i], _driveTrainConstants.m_canBusName);
+            m_modules[i] = new SwerveModule(_modules[i], k.ROBOT.CANVORE_CANFD_NAME);
             m_moduleLocations[i] = new Translation2d(_modules[i].m_locationX_m, _modules[i].m_locationY_m);
             m_modulePositions[i] = m_modules[i].getPosition(true);
         }
@@ -164,7 +164,7 @@ public class SwerveDrive {
         m_field = new Field2d();
         SmartDashboard.putData("Field", m_field);
 
-        m_turnPid = new PIDController(_driveTrainConstants.m_rotateKp, 0, _driveTrainConstants.m_rotateKd);
+        m_turnPid = new PIDController(k.DRIVEBASE.TURN_KP, k.DRIVEBASE.TURN_KI, k.DRIVEBASE.TURN_KD);
         m_turnPid.enableContinuousInput(-Math.PI, Math.PI);
         m_turnPid.setTolerance(Math.toRadians(1));
         

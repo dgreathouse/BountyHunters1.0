@@ -32,9 +32,9 @@ public final class k {
     public static final int CANCODER_RIGHT_CANID = 2;
     public static final int CANCODER_BACK_CANID = 3;
 
-    public static final int PIGEON2_CANID = 20;
+    public static final int PIGEON2_CANID = 5;
     public static final int PD_CANID = 1;  // Power Distribution, Rev or CTRE
-  
+    
   }
   public static class OI {
     public static final int DRIVER_CONTROLLER_PORT = 0;
@@ -46,7 +46,9 @@ public final class k {
     private static final double WHEEL_BASE_XY_AVG_m = (WHEEL_BASE_Y_m + WHEEL_BASE_X_m)/2.0;
     private static final double WHEEL_BASE_CIRCUMFERENCE_m = Math.PI * WHEEL_BASE_XY_AVG_m;
     private static final double WHEEL_BASE_MeterPerRad = WHEEL_BASE_CIRCUMFERENCE_m/(2* Math.PI);
-    
+    public static final double TURN_KP = 5.0;
+    public static final double TURN_KI = 1.0;
+    public static final double TURN_KD = 0.0;
   }
   public static class DRIVE {
     public static final String T_DRIVER_MODE = "DriveMode";
