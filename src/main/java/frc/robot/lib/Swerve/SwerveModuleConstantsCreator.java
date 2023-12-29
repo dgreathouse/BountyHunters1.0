@@ -2,29 +2,21 @@
 
 package frc.robot.lib.Swerve;
 
-public class SwerveDriveConstantsCreator {
-    /** Gear ratio between drive motor and wheel */
-    public double DriveMotorGearRatio;
-    /** Gear ratio between steer motor and CANcoder An example ratio for the SDS Mk4:12.8  */
-    public double SteerMotorGearRatio;
-    /** Wheel radius of the driving wheel in inches */
-    public double WheelRadius;
+public class SwerveModuleConstantsCreator {
+
     /** True if the steering motor is reversed from the CANcoder */
-    public boolean SteerMotorReversed;
-    public boolean DriveMotorReversed;
 
-    public SwerveDriveConstantsCreator(
 
-            boolean SteerMotorReversed,
-            boolean DriveMotorReversed) {
-        this.SteerMotorReversed = SteerMotorReversed;
-        this.DriveMotorReversed = DriveMotorReversed;
+    public SwerveModuleConstantsCreator() {
+
     }
 
     public SwerveModuleConstants createModuleConstants(
             String name,
             int steerId,
+            boolean SteerMotorReversed,
             int driveId,
+            boolean DriveMotorReversed,
             int cancoderId,
             double cancoderOffset,
             double locationX,

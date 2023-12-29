@@ -117,17 +117,21 @@ public class SwerveDrive {
                 .withTurnKp(5)
                 .withTurnKi(0.1);
 
-        SwerveDriveConstantsCreator m_constantsCreator = new SwerveDriveConstantsCreator(
-                true,
-                false 
-        );
+        SwerveModuleConstantsCreator m_constantsCreator = new SwerveModuleConstantsCreator();
         SwerveModuleConstants m_frontRight = m_constantsCreator.createModuleConstants( "fr",
-            23, 13, 3, -0.15942,k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, -k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0)
-            .withDriveMotorReversed(true);
+            23, false,
+            13, true, 
+            3, -0.15942,
+            k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, -k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
+
         SwerveModuleConstants m_frontLeft = m_constantsCreator.createModuleConstants( "fl",
-            22, 12, 2, -0.033936, k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
+            22, false,
+            12, false,  
+            2, -0.033936, k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, k.DRIVEBASE.WHEEL_BASE_Y_m / 2.0);
         SwerveModuleConstants m_back = m_constantsCreator.createModuleConstants( "b",
-            21, 11, 1, -0.085205, -k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, 0.0);
+            21, false,  
+            11, false, 
+            1, -0.085205, -k.DRIVEBASE.WHEEL_BASE_X_m / 2.0, 0.0);
         initialize(m_drivetrainConstants, m_frontLeft, m_frontRight, m_back);    
     }
      /* Put smartdashboard calls in separate thread to reduce performance impact */
