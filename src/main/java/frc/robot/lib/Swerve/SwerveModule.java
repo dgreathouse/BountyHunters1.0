@@ -45,7 +45,7 @@ public class SwerveModule {
     // TODO Determine FF kv,ks for Volts per mps. First no load single motor test showed .11 volts per RPS
     // TODO Test by setting various voltages and measuring drive velocity to get kv. ks is the amount it takes to move the robot 
     private SimpleMotorFeedforward m_driveFF = new SimpleMotorFeedforward(k.DRIVE.PID_Ks, k.DRIVE.PID_Kv);
-    private VoltageOut m_angleVoltageOut = new VoltageOut(0.0);
+    private VoltageOut m_steerVoltageOut = new VoltageOut(0.0);
     private VoltageOut m_driveVoltageOut = new VoltageOut(0.0);
     private SwerveModulePosition m_internalState = new SwerveModulePosition();
 
@@ -69,7 +69,7 @@ public class SwerveModule {
         // Configure Steer Motor
         m_steerProPID.enableContinuousInput(-180.0, +180.0);                    // Set the PID to allow role overs and adjust for optimization
         TalonFXConfiguration talonSteerConfigs = new TalonFXConfiguration();    // Create a new Talon configuration object to store the changes
-
+        
         talonSteerConfigs.MotorOutput.Inverted = 
             _constants.m_isSteerMotorReversed 
             ? InvertedValue.Clockwise_Positive 
@@ -78,14 +78,16 @@ public class SwerveModule {
         m_steerMotor.getConfigurator().apply(talonSteerConfigs);
 
         CANcoderConfiguration cancoderConfigs = new CANcoderConfiguration();
-        cancoderConfigs.MagnetSensor.MagnetOffset = _constants.m_CANcoderOffset_deg;
+        cancoderConfigs.MagnetSensor.MagnetOffset = _constants.m_CANcoderOffset_deg; // Set the CANCoder to the straight ahead value in rotations
         //cancoderConfigs.MagnetSensor.MagnetOffset = 0.0; // Uncomment to check actual offset. Comment the above line
         m_cancoder.getConfigurator().apply(cancoderConfigs);
 
+        m_steerMotor.setPosition(m_cancoder.getPosition().getValueAsDouble() * k.STEER.GEAR_RATIO);
+        // TODO: remove CANCoder reliance for position. Use it only for initialization of steer motor encoder
         m_drivePosition = m_driveMotor.getPosition();
         m_driveVelocity = m_driveMotor.getVelocity();
-        m_steerPosition = m_cancoder.getPosition();
-        m_steerVelocity = m_cancoder.getVelocity();
+        m_steerPosition = m_steerMotor.getPosition();         // Set Steer position to what the CANCoder has been offset to. This is the initialization of the steering postion
+        m_steerVelocity = m_steerMotor.getVelocity();
 
         m_signals = new BaseStatusSignal[4];
         m_signals[0] = m_drivePosition;
@@ -100,6 +102,9 @@ public class SwerveModule {
      */
     public void setDesiredState(SwerveModuleState _state) {
         // Optimize the angle so the wheel will not rotate more than 90 deg
+        // m_internalState is updated in the Odometry thread at a higher rate.
+        // m_internalState uses the CANCoder that has been offset for the position. 
+        // TODO: Change this to use the motor encoder. Then offset the motor encoder by the CANCoder that has been offset at init.
         SwerveModuleState optimized = SwerveModuleState.optimize(_state, m_internalState.angle);
         
         m_steerSetAngle_deg = optimized.angle.getDegrees(); // Get the angle in degrees that we want to set
@@ -109,11 +114,13 @@ public class SwerveModule {
         m_driveActualVelocity_mps = m_driveMotor.getVelocity().getValueAsDouble() /  k.DRIVE.WHEEL_RotPerMeter;
         m_steerActualAngle_deg = m_steerMotor.getPosition().getValueAsDouble() * 360.0 / k.STEER.GEAR_RATIO;
         
+        // m_driveActualVelocity_mps = m_driveVelocity.getValueAsDouble() /  k.DRIVE.WHEEL_RotPerMeter;
+        // m_steerActualAngle_deg = m_steerPosition.getValueAsDouble() * 360.0 / k.STEER.GEAR_RATIO;
         // Calculate the PID value for the angle in Degrees
         m_steerVolts = m_steerProPID.calculate(m_steerActualAngle_deg,m_steerSetAngle_deg);
         // Limit the voltage for the steer
         m_steerVolts = MathUtil.clamp(m_steerVolts, -5, 5);  // TODO test this on the real robot when fully weighted 
-        m_steerMotor.setControl(m_angleVoltageOut.withOutput(m_steerVolts));
+        m_steerMotor.setControl(m_steerVoltageOut.withOutput(m_steerVolts));
 
         // Calculate the PID value of velocity in MPS
         m_driveVolts = m_drivePID.calculate(m_driveActualVelocity_mps, m_driveSetVelocity_mps);
@@ -135,7 +142,8 @@ public class SwerveModule {
         /* Now latency-compensate our signals */
         double drive_rot = BaseStatusSignal.getLatencyCompensatedValue(m_drivePosition, m_driveVelocity);
         double angle_rot = BaseStatusSignal.getLatencyCompensatedValue(m_steerPosition, m_steerVelocity);
-
+        // anagle_rot is the Motor rotations. Apply the gear ratio to get wheel rotations for steer
+        angle_rot = angle_rot / k.STEER.GEAR_RATIO;
         /* And push them into a SwerveModuleState object to return */
         m_internalState.distanceMeters = drive_rot / k.DRIVE.WHEEL_RotPerMeter;
         /* Angle is already in terms of steer rotations */

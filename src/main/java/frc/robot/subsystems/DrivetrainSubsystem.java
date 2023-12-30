@@ -27,26 +27,23 @@ public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
   public void initialize(){
     RobotContainer.subsystems.add(this);
   }
-  public void updateDashboard(){
-    SmartDashboard.putString(k.DRIVE.T_DRIVER_MODE, m_driveMode.toString());
-    if(this.getCurrentCommand() != null){
-      ((ICommand)this.getCurrentCommand()).updateDashboard();
-      SmartDashboard.putString("DrivetrainSubsystem", this.getCurrentCommand().getName());
-    }
-    m_robotDrive.updateDashboard();
-  }
+
   public void driveStopMotion(){
     m_robotDrive.driveStopMotion();
   }
+
   public void driveRobotCentric(ChassisSpeeds _speeds){
     m_robotDrive.driveRobotCentric(_speeds);
   }
+
   public void driveFieldCentric(ChassisSpeeds _speeds){
     m_robotDrive.driveFieldCentric(_speeds);
   }
+
   public void driveAngleFieldCentric(double _x, double _y){
     m_robotDrive.driveAngleFieldCentric(_x, _y, m_lastTargetAngle);
   }
+
   public void drivePolarFieldCentric(double _driveAngle_deg, double _speed, double _robotAngle_deg){
     double x = Math.sin(Units.degreesToRadians(_driveAngle_deg)) * _speed;
     double y = Math.cos(Units.degreesToRadians(_driveAngle_deg)) * _speed;
@@ -55,7 +52,6 @@ public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
   }
 
   public void changeDriveMode(){
-
     switch(m_driveMode){
       case FIELD_CENTRIC:
         m_driveMode = EDriveMode.ANGLE_FIELD_CENTRIC;
@@ -71,19 +67,32 @@ public class DrivetrainSubsystem extends SubsystemBase implements ISubsystem{
       break;
     }
   }
+
   public EDriveMode getDriveMode(){
     return m_driveMode;
   }
+
   public double getRobotAngle(){
     return m_robotDrive.getRobotYaw();
   }
+
   public void resetYaw(){
     m_robotDrive.resetYaw();
   }
-  //public void setTestVoltage(double _volts){}
+
   public void setLastTargetAngle(Rotation2d _targetAngle){
     m_lastTargetAngle = _targetAngle;
   }
+
+  public void updateDashboard(){
+    SmartDashboard.putString(k.DRIVE.T_DRIVER_MODE, m_driveMode.toString());
+    if(this.getCurrentCommand() != null){
+      ((ICommand)this.getCurrentCommand()).updateDashboard();
+      SmartDashboard.putString("DrivetrainSubsystem", this.getCurrentCommand().getName());
+    }
+    m_robotDrive.updateDashboard();
+  }
+
   @Override
   public void periodic() {
     
